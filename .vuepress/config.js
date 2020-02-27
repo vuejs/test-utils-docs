@@ -1,5 +1,5 @@
 module.exports = {
-  base: '/vue-test-utils-next/',
+  base: '/vue-test-utils-docs-next/',
   title: 'Vue Test Utils',
   locales: {
     '/': {
