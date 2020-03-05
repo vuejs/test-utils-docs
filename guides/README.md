@@ -80,12 +80,101 @@ If we run this test now, it fails with the following error message: `Cannot call
 
 With this change, the test is passing. Congratulations! You wrote your first component test.
 
+## Adding a new todo
+
+The next feature we will be adding is for the uesr to be able to create a new todo. To do so, we will have a `<form>` element with a `<input>` for the user to type some text. When the user submits the form, we expect the new todo to be rendered. Let's take a look at the test:
+
+```js
+test('creates a todo', () => {
+  const wrapper = mount(TodoApp)
+  expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(1)
+
+  wrapper.find('[data-test="new-todo"]').element.value = 'New todo'
+  wrapper.find('[data-test="form"]').trigger('submit')
+
+  expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
+})
+```
+
+As usual, we start of by using `mount` to render the element. We are also asseting that only 1 todo is rendered - this makes it clear that we are adding an additional todo, as the final line of the test suggests. 
+
+To update the `<input>`, we use `element` - this accesses the original DOM element wrapper, which is returned by `find`. `element` is useful to manipulate a DOM element in a manner that VTU does not provide any methods for.
+
+After updating the `<input>`, we use the `trigger` method to simulate the user submitting the form. Finally, we assert the number of todos has increased from 1 to 2. 
+
+Let's update `TodoApp.vue` to have the `<form>` and `<input>` described in the test:
+
+```vue
+<template>
+  <div>
+    <div v-for="todo in todos" :key="todo.id" data-test="todo">
+      {{ todo.text }}
+    </div>
+
+    <form data-test="form" @submit.prevent="createTodo">
+      <input data-test="new-todo" v-model="newTodo" />
+    </form>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'TodoApp',
+
+  data() {
+    return {
+      newTodo: '',
+      todos: [
+        {
+          id: 1,
+          text: 'Learn Vue.js 3',
+          completed: false
+        }
+      ]
+    }
+  },
+
+  methods: {
+    createTodo() {
+      this.todos.push({
+        id: 2,
+        text: this.newTodo,
+        completed: false
+      })
+    }
+  }
+}
+</script>
+```
+
+We are using `v-model` to bind to the `<input>` and `@submit` to listen for the form submission. When the form is submitted, `createTodo` is called and inserts a new todo into the `todos` array.
+
+While this looks good, running the test showsn an error:
+
+```
+expect(received).toHaveLength(expected)
+
+    Expected length: 2
+    Received length: 1
+    Received array:  [{"element": <div data-test="todo">Learn Vue.js 3</div>}]
+```
+
+The number of todos has no increased. The problem is that Jest executes tests in a synchronous manner, ending the test as soon as the final function is called. Vue, however, updates the DOM asynchronously. We need to mark the test `async`, and call `await` on any methods that might cause the DOM to change. `trigger` is one such method - we can simply prepend `await` to the `trigger` call:
+
+```js
+test('creates a todo', async () => {
+  const wrapper = mount(TodoApp)
+
+  wrapper.find('[data-test="new-todo"]').element.value = 'New todo'
+  await wrapper.find('[data-test="form"]').trigger('submit')
+
+  expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
+})
+```
+
+Now the test is passing.
+
 ## Completing a todo with `setChecked`
 
 - introduce `setChecked`
 - introduce `await`, discuss async updating of the DOM
-
-## Adding a new todo
-
-- using `element` to access the raw element
-- trigger to submit a form
