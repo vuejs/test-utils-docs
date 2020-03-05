@@ -71,7 +71,11 @@ If we run this test now, it fails with the following error message: `Cannot call
 ```vue
 <template>
   <div>
-    <div v-for="todo in todos" :key="todo.id" data-test="todo">
+    <div 
+      v-for="todo in todos" 
+      :key="todo.id" 
+      data-test="todo"
+    >
       {{ todo.text }}
     </div>
   </div>
@@ -107,7 +111,11 @@ Let's update `TodoApp.vue` to have the `<form>` and `<input>` described in the t
 ```vue
 <template>
   <div>
-    <div v-for="todo in todos" :key="todo.id" data-test="todo">
+    <div 
+      v-for="todo in todos" 
+      :key="todo.id" 
+      data-test="todo"
+    >
       {{ todo.text }}
     </div>
 
@@ -176,5 +184,81 @@ Now the test is passing.
 
 ## Completing a todo with `setChecked`
 
-- introduce `setChecked`
-- introduce `await`, discuss async updating of the DOM
+Now we can create todos, let's give the user some way to complete them. The way we will accomplish this is an `<input type="checkbox">` which the user can click to complete, or uncomplete, a todo. As previously, let's start with the failing test:
+
+```js
+test('completes a todo', async () => {
+  const wrapper = mount(TodoApp)
+
+  await wrapper.find('[data-test="todo-checkbox"]').setChecked()
+
+  expect(wrapper.find('[data-test="todo"]').classes()).toContain('completed')
+})
+```
+
+This test is similar to the previous two; we find an element, interact with in in same way (in this test we use `setChecked`, since we are interacting with a `<input type="checkbox">`. Again, since the DOM will be changing (the checkbox `checked` value will be updated) we need to prepand `await` to the interaction. 
+
+Lastly, we make an assertion. We will be applying a `completed` class to completed todos - we can then use this to add some styling, such as `line-decoration: stroke-through` to visually indiate the status of a todo.
+
+We can get this test to pass by updating the `<template>` to include the `<input type="checkbox">` and a class binding on the todo element:
+
+```vue
+<template>
+  <div>
+    <div 
+      v-for="todo in todos" 
+      :key="todo.id" 
+      data-test="todo"
+      :class="[ todo.completed ? 'completed' : '' ]"  
+    >
+      {{ todo.text }}
+      <input 
+        type="checkbox" 
+        v-model="todo.completed" 
+        data-test="todo-checkbox" 
+      />
+    </div>
+
+    <form data-test="form" @submit.prevent="createTodo">
+      <input data-test="new-todo" v-model="newTodo" />
+    </form>
+  </div>
+</template>
+```
+
+Congratulations! You wrote your first component test.
+
+## Arrange, Act, Assert
+
+You may have noticed some new lines between the code in each of the tests. Let's look at the second test again, in detail:
+
+```js
+test('creates a todo', async () => {
+  const wrapper = mount(TodoApp)
+
+  wrapper.find('[data-test="new-todo"]').element.value = 'New todo'
+  await wrapper.find('[data-test="form"]').trigger('submit')
+
+  expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
+})
+```
+
+The test is split into three distinct stages, separated by new lines. The three stages represent the three phases of a test: arrange, act and assert.
+
+In the *arrange* phase, we are setting up the scenario for the test. A more complex example may require creating a Vuex store, or populating a database.
+
+In the *act* phase, we act out the scenario, simulating how a user would interact with the component or application.
+
+In the *assert* phase, we make assertions about how we expect the current state of the component to be. 
+
+Almost all test will follow these three phases. You don't need to separate them with new lines like this guide does, but it is good to keep these three phases in mind as you write your tests.
+
+## Conclusion
+
+This guide demonstrates the basics of Vue Test Utils, including:
+
+- `mount` to render a component
+- `find` and `findAll` to query the DOM
+- `trigger` and `setChecked` to simulate user input
+- `async and `await` to ensure the DOM is rerendered prior to an assertion
+- the three phases of testing; act, arrange and assert
