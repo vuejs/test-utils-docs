@@ -52,11 +52,13 @@ import TodoApp from './TodoApp.vue'
 test('renders a todo', () => {
   const wrapper = mount(TodoApp)
 
-  expect(wrapper.find('[data-test="todo"]').text()).toBe('Learn Vue.js 3')
+  const todo = wrapper.find('[data-test="todo"]')
+
+  expect(todo.text()).toBe('Learn Vue.js 3')
 })
 ```
 
-We start off by importing `mount` - this is the main way to render a component in VTU. You declare a test by using the `test` function with a short description of the test. The `test` function is globally available in most test runners (this example uses Jest). 
+We start off by importing `mount` - this is the main way to render a component in VTU. You declare a test by using the `test` function with a short description of the test. The `test` and `expect` functions are globally available in most test runners (this example uses [Jest](https://jestjs.io/en/)). If `test` and `expect` look confusing, the Jest documentation has a [more simple example](https://jestjs.io/docs/en/getting-started) of how to use them and how they work.
 
 Next, we call `mount` and pass the component as the first argument - this is something almost every test you write will do. By convention, we assign the result to a variable called `wrapper`, since `mount` provides a simple "wrapper" around the app with some convinient methods for testing.
 
@@ -86,7 +88,7 @@ With this change, the test is passing. Congratulations! You wrote your first com
 
 ## Adding a new todo
 
-The next feature we will be adding is for the uesr to be able to create a new todo. To do so, we will have a `<form>` element with a `<input>` for the user to type some text. When the user submits the form, we expect the new todo to be rendered. Let's take a look at the test:
+The next feature we will be adding is for the user to be able to create a new todo. To do so, we need a form with an input for the user to type some text. When the user submits the form, we expect the new todo to be rendered. Let's take a look at the test:
 
 ```js
 test('creates a todo', () => {
@@ -106,7 +108,7 @@ To update the `<input>`, we use `element` - this accesses the original DOM eleme
 
 After updating the `<input>`, we use the `trigger` method to simulate the user submitting the form. Finally, we assert the number of todos has increased from 1 to 2. 
 
-Let's update `TodoApp.vue` to have the `<form>` and `<input>` described in the test:
+If we run this test, it will obviously fail. Let's update `TodoApp.vue` to have the `<form>` and `<input>` elements and make the test pass:
 
 ```vue
 <template>
@@ -157,7 +159,7 @@ export default {
 
 We are using `v-model` to bind to the `<input>` and `@submit` to listen for the form submission. When the form is submitted, `createTodo` is called and inserts a new todo into the `todos` array.
 
-While this looks good, running the test showsn an error:
+While this looks good, running the test shows an error:
 
 ```
 expect(received).toHaveLength(expected)
@@ -167,7 +169,7 @@ expect(received).toHaveLength(expected)
     Received array:  [{"element": <div data-test="todo">Learn Vue.js 3</div>}]
 ```
 
-The number of todos has no increased. The problem is that Jest executes tests in a synchronous manner, ending the test as soon as the final function is called. Vue, however, updates the DOM asynchronously. We need to mark the test `async`, and call `await` on any methods that might cause the DOM to change. `trigger` is one such method - we can simply prepend `await` to the `trigger` call:
+The number of todos has not increased. The problem is that Jest executes tests in a synchronous manner, ending the test as soon as the final function is called. Vue, however, updates the DOM asynchronously. We need to mark the test `async`, and call `await` on any methods that might cause the DOM to change. `trigger` is one such method - we can simply prepend `await` to the `trigger` call:
 
 ```js
 test('creates a todo', async () => {
@@ -180,11 +182,11 @@ test('creates a todo', async () => {
 })
 ```
 
-Now the test is passing.
+Now the test is finally passing!
 
-## Completing a todo with `setChecked`
+## Completing a todo
 
-Now we can create todos, let's give the user some way to complete them. The way we will accomplish this is an `<input type="checkbox">` which the user can click to complete, or uncomplete, a todo. As previously, let's start with the failing test:
+Now that we can create todos, let's give the user the ability to mark a todo item as completed/uncompleted with a checkbox. As previously, let's start with the failing test:
 
 ```js
 test('completes a todo', async () => {
@@ -198,7 +200,7 @@ test('completes a todo', async () => {
 
 This test is similar to the previous two; we find an element, interact with in in same way (in this test we use `setChecked`, since we are interacting with a `<input type="checkbox">`. Again, since the DOM will be changing (the checkbox `checked` value will be updated) we need to prepand `await` to the interaction. 
 
-Lastly, we make an assertion. We will be applying a `completed` class to completed todos - we can then use this to add some styling, such as `line-decoration: stroke-through` to visually indiate the status of a todo.
+Lastly, we make an assertion. We will be applying a `completed` class to completed todos - we can then use this to add some styling to visually indicate the status of a todo.
 
 We can get this test to pass by updating the `<template>` to include the `<input type="checkbox">` and a class binding on the todo element:
 
@@ -226,7 +228,7 @@ We can get this test to pass by updating the `<template>` to include the `<input
 </template>
 ```
 
-Congratulations! You wrote your first component test.
+Congratulations! You wrote your first component tests.
 
 ## Arrange, Act, Assert
 
@@ -243,7 +245,7 @@ test('creates a todo', async () => {
 })
 ```
 
-The test is split into three distinct stages, separated by new lines. The three stages represent the three phases of a test: arrange, act and assert.
+The test is split into three distinct stages, separated by new lines. The three stages represent the three phases of a test: **arrange**, **act** and **assert**.
 
 In the *arrange* phase, we are setting up the scenario for the test. A more complex example may require creating a Vuex store, or populating a database.
 
