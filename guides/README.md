@@ -262,5 +262,5 @@ This guide demonstrates the basics of Vue Test Utils, including:
 - `mount` to render a component
 - `find` and `findAll` to query the DOM
 - `trigger` and `setChecked` to simulate user input
-- `async and `await` to ensure the DOM is rerendered prior to an assertion
+- `async` and `await` to ensure the DOM is rerendered prior to an assertion
 - the three phases of testing; act, arrange and assert
