@@ -1,8 +1,4 @@
-# Guides
-
-Todo: Write useful guides. See [this issue](https://github.com/lmiller1990/vue-testing-framework/issues/11) for some guidance and inspiration. Remember, we are not just teaching people "this is how to use Vue Test Utils" but "this is how to test your Vue.js components".
-
-## A Crash Course
+# A Crash Course
 
 Let's jump write into it, and learn Vue Test Utils (VTU) by building a simple Todo app, and writing tests as we go. This guide will cover:
 

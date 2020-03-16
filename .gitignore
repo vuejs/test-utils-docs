@@ -1,1 +1,11 @@
-node_modules
+node_modules/
+
+.vuepress/dist
+
+.yarn-integrity
+
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
