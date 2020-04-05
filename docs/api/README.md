@@ -91,7 +91,11 @@ test('slots - default and named', () => {
 })
 ```
 
-## `provides`
+## `global`
+
+Global is an object of options that is applied to the component and all it's children.
+
+### `provide`
 
 Provides data to be received in a `setup` function via `inject`.
 
@@ -117,8 +121,10 @@ export default {
 ```js
 test('injects dark theme via provide mounting option', () => {
   const wrapper = mount(Component, {
-    provides: {
-      'Theme': 'dark'
+    global: {
+      provide: {
+        'Theme': 'dark'
+      }
     }
   })
 
@@ -132,8 +138,10 @@ Note: If you are using a ES6 `Symbol` for your provide key, you can use it as a 
 const ThemeSymbol = Symbol()
 
 mount(Component, {
-  provides: {
-    [ThemeSymbol]: 'value'
+  global: {
+    provides: {
+      [ThemeSymbol]: 'value'
+    }
   }
 })
 ```
@@ -161,7 +169,9 @@ test('adds a lifecycle mixin', () => {
   }
 
   const wrapper = mount(Component, {
-    mixins: [mixin]
+    global: {
+      mixins: [mixin]
+    }
   })
 
   // 'Component was created!' will be logged
@@ -194,7 +204,9 @@ test('installs a plugin via `plugins`', () => {
     render() { return h('div') }
   }
   mount(Component, {
-    plugins: [Plugin]
+    global: {
+      plugins: [Plugin]
+    }
   })
 
   expect(installed).toHaveBeenCalled()
@@ -203,7 +215,7 @@ test('installs a plugin via `plugins`', () => {
 
 ## Wrapper
 
-When you use `mount`, a `VueWrapper` is returned with a number of useful methods for testing. Methods like `find` return a `DOMWrapper`. Both implement the same API.
+When you use `mount`, a `VueWrapper` is returned with a number of useful methods for testing. A `VueWrapper` is a thin wrapper around your component instance. Methods like `find` return a `DOMWrapper`, which is a thin wrapper around the DOM nodes in your component and it's children. Both implement a similar same API.
 
 
 ### `html`
@@ -297,7 +309,7 @@ test('findAll', () => {
 
 ### `trigger`
 
-Simulates an event, for example `click`, `submit` or `keyup`. Since events often cause a re-render, `trigger` returs `Vue.nextTick`. If you expect the event to trigger a re-render, you should use `await` when you call `trigger` to ensure that Vue updates the DOM before you make an assertion.
+Triggers an event, for example `click`, `submit` or `keyup`. Since events often cause a re-render, `trigger` returns `Vue.nextTick`. If you expect the event to trigger a re-render, you should use `await` when you call `trigger` to ensure that Vue updates the DOM before you make an assertion.
 
 ```vue
 <template>
@@ -368,9 +380,37 @@ test('exists', () => {
 })
 ```
 
+### `attributes`
+
+Returns attributes on a DOM node (via `element.attributes`). Note: this will not work for custom attributes using `v-bind`, since those do not appear in the DOM.
+
+```vue
+<template>
+  <div id="foo" :class="className" />
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      className: 'bar'
+    }
+  }
+}
+```
+
+```js
+test('attributes', () => {
+  const wrapper = mount(Component)
+
+  expect(wrapper.attributes('id')).toBe('foo')
+  expect(wrapper.attributes('class')).toBe('bar')
+})
+```
+
 ### `emitted`
 
-Returns an object mapping events emitted from the `wrapper`. The arguments are stored in an array, so you can verify which arguments were emitted each time the event is emitted.
+A function that returns an object mapping events emitted from the `wrapper`. The arguments are stored in an array, so you can verify which arguments were emitted each time the event is emitted.
 
 ```vue
 <template>
@@ -400,9 +440,13 @@ test('emitted', () => {
 })
 ```
 
-### `setChecked`
+### `setValue`
 
-Set an input (either `type="checkbox" or `type="radio"`) to be checked or not checked. Since this will often result in a DOM re-render, `setChecked` returns `Vue.nextTick`, so you will often have to call this with `await` to ensure the DOM has been updated before making an assertion. 
+Sets a value on DOM element, including:
+- `<input>` (either `type="checkbox" or `type="radio"`) 
+- `<select>`
+
+Since this will often result in a DOM re-render, `setValue` returns `Vue.nextTick`, so you will often have to call this with `await` to ensure the DOM has been updated before making an assertion. 
 
 ```vue
 <template>
