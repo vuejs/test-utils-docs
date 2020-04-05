@@ -382,7 +382,7 @@ test('exists', () => {
 
 ### `attributes`
 
-Returns attributes on a DOM node (via `element.attributes`). Note: this will not work for custom attributes using `v-bind`, since those do not appear in the DOM.
+Returns attributes on a DOM node (via `element.attributes`).
 
 ```vue
 <template>
