@@ -8,6 +8,13 @@ const sidebar = {
         '/guide/introduction',
         '/guide/a-crash-course'
       ]
+    },
+    {
+      title: 'API Reference',
+      collapsable: false,
+      children: [
+        '/api/'
+      ]
     }
   ],
   api: [
