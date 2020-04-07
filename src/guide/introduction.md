@@ -1,6 +1,6 @@
 ## Introduction
 
-Welcome to Vue Test Utils. This is the documentation for the `vue-test-utils-next` repository, found [here](https://github.com/vuejs/vue-test-utils-next/), which targets Vue.js 3 (aka `vue-next`, found [here](https://github.com/vuejs/vue-next/)).
+Welcome to Vue Test Utils! This is the documentation for the `vue-test-utils-next` repository, found [here](https://github.com/vuejs/vue-test-utils-next/), which targets Vue.js 3 (aka `vue-next`, found [here](https://github.com/vuejs/vue-next/)).
 
 ## What is Vue Test Utils?
 

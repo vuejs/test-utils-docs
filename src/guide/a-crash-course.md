@@ -7,6 +7,8 @@ Let's jump write into it, and learn Vue Test Utils (VTU) by building a simple To
 - filling out forms
 - triggering events
 
+A working repository with this example can be found [here](https://github.com/lmiller1990/vtu-next-demo). The component file is [here](https://github.com/lmiller1990/vtu-next-demo/blob/master/src/TodoApp.vue) and the the test is [here](https://github.com/lmiller1990/vtu-next-demo/blob/master/src/TodoApp.spec.js).
+
 ## Getting Started
 
 We will start off with a simple `TodoApp` component with a single todo:
@@ -64,7 +66,7 @@ Finally, we use another global function common to many tests runner - Jest inclu
 
 ## Making the test pass
 
-If we run this test now, it fails with the following error message: `Cannot call text on an empty wrapper.`. That's because we aren't rendering any todos, so the `find` call is failing to return a wrapper (remember, VTU wraps all components, and DOM elements, in a "wrapper" with some convinient methods). Let's update `<template>` in `TodoApp.vue` to render the `todos` array:
+If we run this test now, it fails with the following error message: `Cannot call text on an empty wrapper`. That's because we aren't rendering any todos, so the `find` call is failing to return a wrapper (remember, VTU wraps all components, and DOM elements, in a "wrapper" with some convinient methods). Let's update `<template>` in `TodoApp.vue` to render the `todos` array:
 
 ```vue
 <template>
