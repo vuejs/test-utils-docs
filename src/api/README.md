@@ -483,9 +483,13 @@ test('emitted', () => {
 })
 ```
 
-### `setChecked`
+### `setValue`
 
-Set an input (either `type="checkbox"` or `type="radio"`) to be checked or not checked. Since this will often result in a DOM re-render, `setChecked` returns `Vue.nextTick`, so you will often have to call this with `await` to ensure the DOM has been updated before making an assertion.
+Sets a value on DOM element, including:
+- `<input>` (either `type="checkbox" or `type="radio"`)
+- `<select>`
+
+Since this will often result in a DOM re-render, `setValue` returns `Vue.nextTick`, so you will often have to call this with `await` to ensure the DOM has been updated before making an assertion.
 
 ```vue
 <template>
