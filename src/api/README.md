@@ -97,6 +97,55 @@ You can provide properties to the App instance using the properties under the `g
 
 ### `global.provide`
 
+Provides data to be received in a `setup` function via `inject`.
+
+```vue
+<template>
+  <div>Theme is {{ theme }}</div>
+</template>
+
+<script>
+import { inject } from 'vue'
+
+export default {
+  setup() {
+    const theme = inject('Theme')
+    return {
+      theme
+    }
+  }
+}
+</script>
+```
+
+```js
+test('injects dark theme via provide mounting option', () => {
+  const wrapper = mount(Component, {
+    global: {
+      provide: {
+        'Theme': 'dark'
+      }
+    }
+  })
+
+  console.log(wrapper.html()) //=> <div>Theme is dark</div>
+})
+```
+
+Note: If you are using a ES6 `Symbol` for your provide key, you can use it as a dynamic key:
+
+```js
+const ThemeSymbol = Symbol()
+
+mount(Component, {
+  global: {
+    provide: {
+      [ThemeSymbol]: 'value'
+    }
+  }
+})
+```
+
 ### `global.mixins`
 
 Applies mixins via `app.mixin(...)`.
@@ -210,57 +259,6 @@ test('installs a directive globally', () => {
   expect(wrapper.classes()).toContain('added-by-bar')
 })
 ```
-
-
-Provides data to be received in a `setup` function via `inject`.
-
-```vue
-<template>
-  <div>Theme is {{ theme }}</div>
-</template>
-
-<script>
-import { inject } from 'vue'
-
-export default {
-  setup() {
-    const theme = inject('Theme')
-    return {
-      theme
-    }
-  }
-}
-</script>
-```
-
-```js
-test('injects dark theme via provide mounting option', () => {
-  const wrapper = mount(Component, {
-    global: {
-      provide: {
-        'Theme': 'dark'
-      }
-    }
-  })
-
-  console.log(wrapper.html()) //=> <div>Theme is dark</div>
-})
-```
-
-Note: If you are using a ES6 `Symbol` for your provide key, you can use it as a dynamic key:
-
-```js
-const ThemeSymbol = Symbol()
-
-mount(Component, {
-  global: {
-    provide: {
-      [ThemeSymbol]: 'value'
-    }
-  }
-})
-```
-
 
 ## Wrapper
 
