@@ -424,6 +424,7 @@ export default {
     this.$emit('greet', 'goodbye')
   }
 }
+</script>
 ```
 
 ```js

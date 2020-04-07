@@ -9,6 +9,15 @@ const sidebar = {
         '/guide/a-crash-course'
       ]
     }
+  ],
+  api: [
+    {
+      title: 'API Reference',
+      collapsable: false,
+      children: [
+        '/api/'
+      ]
+    }
   ]
 }
 
@@ -25,7 +34,8 @@ module.exports = {
     editLinks: true,
     sidebarDepth: 2,
     sidebar: {
-      '/guide/': sidebar.guide
+      '/guide/': sidebar.guide,
+      '/api/': sidebar.api
     },
     nav: [
       { text: 'Guide', link: '/guide/introduction' },
