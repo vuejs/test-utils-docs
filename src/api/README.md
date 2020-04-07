@@ -91,11 +91,11 @@ test('slots - default and named', () => {
 })
 ```
 
-## `global`
+## Global
 
-Global is an object of options that is applied to the component and all it's children.
+You can provide properties to the App instance using the properties under the `global` mount property.
 
-### `provide`
+### `global.provide`
 
 Provides data to be received in a `setup` function via `inject`.
 
@@ -139,14 +139,14 @@ const ThemeSymbol = Symbol()
 
 mount(Component, {
   global: {
-    provides: {
+    provide: {
       [ThemeSymbol]: 'value'
     }
   }
 })
 ```
 
-### `mixins`
+### `global.mixins`
 
 Applies mixins via `app.mixin(...)`.
 
@@ -178,7 +178,7 @@ test('adds a lifecycle mixin', () => {
 })
 ```
 
-### `plugins`
+### `global.plugins`
 
 Installs plugins on the component.
 
@@ -210,6 +210,53 @@ test('installs a plugin via `plugins`', () => {
   })
 
   expect(installed).toHaveBeenCalled()
+})
+```
+
+
+### `global.components`
+
+Registers components globally to all components
+
+```js
+test('installs a component globally', () => {
+  import GlobalComponent from '@/components/GlobalComponent'
+
+  const Component = {
+    template: '<div><global-component/></div>'
+  }
+  const wrapper = mount(Component, {
+    global: {
+      components: {
+        GlobalComponent
+      }
+    }
+  })
+
+  expect(wrapper.find('.global-component').exists()).toBe(true)
+})
+```
+
+### `global.directives`
+
+Registers a directive globally to all components
+
+```js
+test('installs a directive globally', () => {
+  import Directive from '@/directives/Directive'
+
+  const Component = {
+    template: '<div v-bar>Foo</div>'
+  }
+  const wrapper = mount(Component, {
+    global: {
+      directives: {
+        Bar: Directive
+      }
+    }
+  })
+
+  expect(wrapper.classes()).toContain('added-by-bar')
 })
 ```
 
@@ -288,7 +335,7 @@ Similar to `find`, but instead returns an array of `DOMWrapper`.
 ```vue
 <template>
   <div>
-    <span 
+    <span
       v-for="number in [1, 2, 3]"
       :key="number"
       data-test="number"
@@ -431,8 +478,8 @@ export default {
 test('emitted', () => {
   const wrapper = mount(Component)
 
-  console.log(wrapper.emitted()) 
-  // { 
+  console.log(wrapper.emitted())
+  // {
   //   greet: [ ['hello'], ['goodbye'] ]
   // }
 
@@ -444,10 +491,10 @@ test('emitted', () => {
 ### `setValue`
 
 Sets a value on DOM element, including:
-- `<input>` (either `type="checkbox" or `type="radio"`) 
+- `<input>` (either `type="checkbox"` or `type="radio"`)
 - `<select>`
 
-Since this will often result in a DOM re-render, `setValue` returns `Vue.nextTick`, so you will often have to call this with `await` to ensure the DOM has been updated before making an assertion. 
+Since this will often result in a DOM re-render, `setValue` returns `Vue.nextTick`, so you will often have to call this with `await` to ensure the DOM has been updated before making an assertion.
 
 ```vue
 <template>
