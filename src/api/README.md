@@ -95,6 +95,8 @@ test('slots - default and named', () => {
 
 You can provide properties to the App instance using the properties under the `global` mount property.
 
+### `global.provide`
+
 ### `global.mixins`
 
 Applies mixins via `app.mixin(...)`.
@@ -209,8 +211,6 @@ test('installs a directive globally', () => {
 })
 ```
 
-
-### `global.provide`
 
 Provides data to be received in a `setup` function via `inject`.
 
