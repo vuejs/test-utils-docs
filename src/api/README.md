@@ -6,6 +6,10 @@ When using `mount`, you can predefine the component's state using mounting optio
 
 ### `props`
 
+Used to set props on a component when mounted.
+
+`Component.vue`:
+
 ```vue
 <template>
   <span>Count: {{ count }}</span>
@@ -23,6 +27,8 @@ export default {
 </script>
 ```
 
+`Component.spec.js`:
+
 ```js
 test('props', () => {
   const wrapper = mount(Component, {
@@ -38,6 +44,8 @@ test('props', () => {
 ### `data`
 
 Overrides a component's default `data`. Must be a function:
+
+`Component.vue`
 
 ```vue
 <template>
@@ -55,6 +63,8 @@ export default {
 </script>
 ```
 
+`Component.spec.js`:
+
 ```js
 test('overrides data', () => {
   const wrapper = mount(Component, {
@@ -71,23 +81,33 @@ test('overrides data', () => {
 
 ### `slots`
 
+Provide values for slots on a component. Slots can be a component imported from a `.vue` file or a render function. Currently providing an object with a `template` key is not supported. This may be supported in the future.
+
+`Component.vue`:
+
 ```vue
 <template>
   <slot name="foo" />
   <slot />
+  <slot name="bar" />
 </template>
 ```
 
+`Component.spec.js`:
+
 ```js
+import Bar from './Bar.vue'
+
 test('slots - default and named', () => {
   const wrapper = mount(Component, {
     slots: {
       default: 'Default',
-      foo: h('h1', {}, 'Named Slot')
+      foo: h('h1', {}, 'Named Slot'),
+      bar: Bar
     }
   })
 
-  console.log(wrapper.html()) //=> '<h1>Named Slot</h1>Default'
+  console.log(wrapper.html()) //=> '<h1>Named Slot</h1>Default<div>Bar</div>'
 })
 ```
 
@@ -98,6 +118,8 @@ You can provide properties to the App instance using the properties under the `g
 ### `global.provide`
 
 Provides data to be received in a `setup` function via `inject`.
+
+`Component.vue`:
 
 ```vue
 <template>
@@ -118,6 +140,8 @@ export default {
 </script>
 ```
 
+`Component.spec.js`:
+
 ```js
 test('injects dark theme via provide mounting option', () => {
   const wrapper = mount(Component, {
@@ -133,6 +157,8 @@ test('injects dark theme via provide mounting option', () => {
 ```
 
 Note: If you are using a ES6 `Symbol` for your provide key, you can use it as a dynamic key:
+
+`Component.spec.js`:
 
 ```js
 const ThemeSymbol = Symbol()
@@ -150,6 +176,8 @@ mount(Component, {
 
 Applies mixins via `app.mixin(...)`.
 
+`Component.vue`:
+
 ```vue
 <template>
   <div />
@@ -159,6 +187,8 @@ Applies mixins via `app.mixin(...)`.
 export default {}
 </script>
 ```
+
+`Component.spec.js`:
 
 ```js
 test('adds a lifecycle mixin', () => {
@@ -182,6 +212,8 @@ test('adds a lifecycle mixin', () => {
 
 Installs plugins on the component.
 
+`Component.vue`:
+
 ```vue
 <template>
   <div />
@@ -192,6 +224,8 @@ export default {}
 </script>
 ```
 
+`Component.spec.js`:
+
 ```js
 test('installs a plugin via `plugins`', () => {
   const installed = jest.fn()
@@ -200,9 +234,7 @@ test('installs a plugin via `plugins`', () => {
       installed()
     }
   }
-  const Component = {
-    render() { return h('div') }
-  }
+
   mount(Component, {
     global: {
       plugins: [Plugin]
@@ -217,6 +249,8 @@ test('installs a plugin via `plugins`', () => {
 ### `global.components`
 
 Registers components globally to all components
+
+`Component.spec.js`:
 
 ```js
 test('installs a component globally', () => {
@@ -241,6 +275,8 @@ test('installs a component globally', () => {
 
 Registers a directive globally to all components
 
+`Component.spec.js`:
+
 ```js
 test('installs a directive globally', () => {
   import Directive from '@/directives/Directive'
@@ -260,6 +296,65 @@ test('installs a directive globally', () => {
 })
 ```
 
+### `global.mocks`
+
+Mocks a global instance property. Usefor for mocking `this.$store`, `this.$router` etc.
+
+> Note: this is designed to mock variables injected by third party plugins, not Vue's native properties such as $root, $children, etc.
+
+`Component.vue`:
+
+```vue
+<template>
+  <p>{{ count }}</p>
+  <button @click="increment" />
+</template>
+
+<script>
+export default {
+  computed: {
+    count() {
+      return this.$store.state.count
+    }
+  },
+
+  methods: {
+    increment() {
+      this.$store.dispatch('inc')
+    }
+  }
+}
+</script>
+```
+
+`Component.spec.js`:
+
+```js
+test('mocks a vuex store', async () => {
+  const $store = {
+    state: {
+      count: 1
+    },
+    dispatch: jest.fn()
+  }
+
+  const wrapper = mount(Component, {
+    global: {
+      mocks: {
+        $store
+      }
+    }
+  })
+
+  expect(wrapper.html()).toContain('count: 1')
+
+  await wrapper.find('button').trigger('click')
+
+  expect($store.dispatch).toHaveBeenCalledWith('inc')
+})
+```
+
+
 ## Wrapper
 
 When you use `mount`, a `VueWrapper` is returned with a number of useful methods for testing. A `VueWrapper` is a thin wrapper around your component instance. Methods like `find` return a `DOMWrapper`, which is a thin wrapper around the DOM nodes in your component and it's children. Both implement a similar same API.
@@ -269,6 +364,8 @@ When you use `mount`, a `VueWrapper` is returned with a number of useful methods
 
 Returns the HTML (via `outerHTML`) of an element. Useful for debugging.
 
+`Component.vue`:
+
 ```vue
 <template>
   <div>
@@ -276,6 +373,8 @@ Returns the HTML (via `outerHTML`) of an element. Useful for debugging.
   </div>
 </template>
 ```
+
+`Component.spec.js`:
 
 ```js
 test('html', () => {
@@ -289,6 +388,8 @@ test('html', () => {
 
 Find the text (via `textContent`) of an element.
 
+`Component.vue`:
+
 ```vue
 <template>
   <div>
@@ -296,6 +397,8 @@ Find the text (via `textContent`) of an element.
   </div>
 </template>
 ```
+
+`Component.spec.js`:
 
 ```js
 test('text', () => {
@@ -309,6 +412,8 @@ test('text', () => {
 
 Finds an element and returns a `DOMWrapper` if one is found. You can use the same syntax `querySelector` implements - `find` is basically an alias for `querySelector`.
 
+`Component.vue`:
+
 ```vue
 <template>
   <div>
@@ -317,6 +422,8 @@ Finds an element and returns a `DOMWrapper` if one is found. You can use the sam
   </div>
 </template>
 ```
+
+`Component.spec.js`:
 
 ```js
 test('find', () => {
@@ -332,6 +439,8 @@ test('find', () => {
 
 Similar to `find`, but instead returns an array of `DOMWrapper`.
 
+`Component.vue`:
+
 ```vue
 <template>
   <div>
@@ -346,6 +455,8 @@ Similar to `find`, but instead returns an array of `DOMWrapper`.
 </template>
 ```
 
+`Component.spec.js`:
+
 ```js
 test('findAll', () => {
   const wrapper = mount(Component)
@@ -357,6 +468,8 @@ test('findAll', () => {
 ### `trigger`
 
 Triggers an event, for example `click`, `submit` or `keyup`. Since events often cause a re-render, `trigger` returns `Vue.nextTick`. If you expect the event to trigger a re-render, you should use `await` when you call `trigger` to ensure that Vue updates the DOM before you make an assertion.
+
+`Component.vue`:
 
 ```vue
 <template>
@@ -377,6 +490,8 @@ export default {
 </script>
 ```
 
+`Component.spec.js`:
+
 ```js
 test('trigger', async () => {
   const wrapper = mount(Component)
@@ -391,6 +506,8 @@ test('trigger', async () => {
 
 Returns an array of classes on an element (via `classList`).
 
+`Component.vue`:
+
 ```vue
 <template>
   <div>
@@ -398,6 +515,8 @@ Returns an array of classes on an element (via `classList`).
   </div>
 </template>
 ```
+
+`Component.spec.js`:
 
 ```js
 test('classes', () => {
@@ -411,6 +530,8 @@ test('classes', () => {
 
 Verify whether or not an element found via `find` exists or not.
 
+`Component.vue`:
+
 ```vue
 <template>
   <div>
@@ -418,6 +539,8 @@ Verify whether or not an element found via `find` exists or not.
   </div>
 </template>
 ```
+
+`Component.spec.js`:
 
 ```js
 test('exists', () => {
@@ -430,6 +553,8 @@ test('exists', () => {
 ### `attributes`
 
 Returns attributes on a DOM node (via `element.attributes`).
+
+`Component.vue`:
 
 ```vue
 <template>
@@ -446,6 +571,8 @@ export default {
 }
 ```
 
+`Component.spec.js`:
+
 ```js
 test('attributes', () => {
   const wrapper = mount(Component)
@@ -458,6 +585,8 @@ test('attributes', () => {
 ### `emitted`
 
 A function that returns an object mapping events emitted from the `wrapper`. The arguments are stored in an array, so you can verify which arguments were emitted each time the event is emitted.
+
+`Component.vue`:
 
 ```vue
 <template>
@@ -473,6 +602,8 @@ export default {
 }
 </script>
 ```
+
+`Component.spec.js`:
 
 ```js
 test('emitted', () => {
@@ -496,6 +627,8 @@ Sets a value on DOM element, including:
 
 Since this will often result in a DOM re-render, `setValue` returns `Vue.nextTick`, so you will often have to call this with `await` to ensure the DOM has been updated before making an assertion.
 
+`Component.vue`:
+
 ```vue
 <template>
   <input type="checkbox" v-model="checked" />
@@ -511,6 +644,8 @@ export default {
   }
 }
 ```
+
+`Component.spec.js`:
 
 ```js
 test('checked', async () => {
