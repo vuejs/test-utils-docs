@@ -643,6 +643,7 @@ export default {
     }
   }
 }
+</script>
 ```
 
 `Component.spec.js`:
