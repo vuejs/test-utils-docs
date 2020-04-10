@@ -1,9 +1,7 @@
 ## Installation
 
-`vue-test-utils-next` is available on NPM. 
-
-- npm: `npm install --save-dev vue-test-utils-next`
-- yarn: `yarn add --dev vue-test-utils-next`
+- npm: `npm install --save-dev @vue/test-utils@next`
+- yarn: `yarn add --dev @vue/test-utils@next`
 
 ## Usage 
 
@@ -15,4 +13,4 @@ You can install it with `vue-jest@next`. Then you need to configure it with Jest
 
 If you dont want to configure it yourself, you can get a minimal repository with everything set up [here](https://github.com/lmiller1990/vtu-next-demo).
 
-Continue reading to learn more about `vue-test-utils-next`!
+Continue reading to learn more about Vue Test Utils.

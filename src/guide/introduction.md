@@ -7,7 +7,7 @@ Welcome to Vue Test Utils! This is the documentation for the `vue-test-utils-nex
 Vue Test Utils (VTU) is a set of utility functions that aim to simplify the process of testing Vue.js components. It provides some methods to render and interact with your components in an isolated manner. Let's see an example:
 
 ```js
-import { mount } from 'vue-test-utils-next'
+import { mount } from '@vue/test-utils'
 
 const Hello = {
   template: '<div>{{ msg }}</div>',

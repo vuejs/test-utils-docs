@@ -43,8 +43,7 @@ export default {
 The first test we will write verifies a todo is rendered. Let's see the test first, then discuss each part:
 
 ```js
-import { mount } from '@vue/test-utils-next'
-
+import { mount } from '@vue/test-utils'
 import TodoApp from './TodoApp.vue'
 
 test('renders a todo', () => {
@@ -89,6 +88,9 @@ With this change, the test is passing. Congratulations! You wrote your first com
 The next feature we will be adding is for the user to be able to create a new todo. To do so, we need a form with an input for the user to type some text. When the user submits the form, we expect the new todo to be rendered. Let's take a look at the test:
 
 ```js
+import { mount } from '@vue/test-utils'
+import TodoApp from './TodoApp.vue'
+
 test('creates a todo', () => {
   const wrapper = mount(TodoApp)
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(1)
@@ -170,6 +172,9 @@ expect(received).toHaveLength(expected)
 The number of todos has not increased. The problem is that Jest executes tests in a synchronous manner, ending the test as soon as the final function is called. Vue, however, updates the DOM asynchronously. We need to mark the test `async`, and call `await` on any methods that might cause the DOM to change. `trigger` is one such method - we can simply prepend `await` to the `trigger` call:
 
 ```js
+import { mount } from '@vue/test-utils'
+import TodoApp from './TodoApp.vue'
+
 test('creates a todo', async () => {
   const wrapper = mount(TodoApp)
 
@@ -187,6 +192,9 @@ Now the test is finally passing!
 Now that we can create todos, let's give the user the ability to mark a todo item as completed/uncompleted with a checkbox. As previously, let's start with the failing test:
 
 ```js
+import { mount } from '@vue/test-utils'
+import TodoApp from './TodoApp.vue'
+
 test('completes a todo', async () => {
   const wrapper = mount(TodoApp)
 
@@ -233,6 +241,9 @@ Congratulations! You wrote your first component tests.
 You may have noticed some new lines between the code in each of the tests. Let's look at the second test again, in detail:
 
 ```js
+import { mount } from '@vue/test-utils'
+import TodoApp from './TodoApp.vue'
+
 test('creates a todo', async () => {
   const wrapper = mount(TodoApp)
 
