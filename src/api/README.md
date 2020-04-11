@@ -619,6 +619,42 @@ test('emitted', () => {
 })
 ```
 
+### `setProps`
+
+Updates component props.
+
+`setProps` returns `Vue.nextTick`, so you will have to call it with `await` to ensure the DOM has been updated before making an assertion.
+
+`Component.vue`:
+
+```vue
+<template>
+  <div>{{ message }}</div>
+</template>
+
+<script>
+export default {
+  props: ['message'],
+}
+</script>
+```
+
+`Component.spec.js`
+
+```js
+test('updates prop', async () => {
+  const wrapper = mount(Component, {
+    props: {
+      message: 'hello'
+    }
+  })
+  expect(wrapper.html()).toContain('hello')
+
+  await wrapper.setProps({ message: 'goodbye' })
+  expect(wrapper.html()).toContain('goodbye')
+})
+```
+
 ### `setValue`
 
 Sets a value on DOM element, including:
