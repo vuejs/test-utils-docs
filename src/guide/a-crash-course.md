@@ -70,9 +70,9 @@ If we run this test now, it fails with the following error message: `Cannot call
 ```vue
 <template>
   <div>
-    <div 
-      v-for="todo in todos" 
-      :key="todo.id" 
+    <div
+      v-for="todo in todos"
+      :key="todo.id"
       data-test="todo"
     >
       {{ todo.text }}
@@ -95,27 +95,27 @@ test('creates a todo', () => {
   const wrapper = mount(TodoApp)
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(1)
 
-  wrapper.find('[data-test="new-todo"]').element.value = 'New todo'
+  wrapper.find('[data-test="new-todo"]').setValue('New todo')
   wrapper.find('[data-test="form"]').trigger('submit')
 
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
 })
 ```
 
-As usual, we start of by using `mount` to render the element. We are also asseting that only 1 todo is rendered - this makes it clear that we are adding an additional todo, as the final line of the test suggests. 
+As usual, we start of by using `mount` to render the element. We are also asseting that only 1 todo is rendered - this makes it clear that we are adding an additional todo, as the final line of the test suggests.
 
-To update the `<input>`, we use `element` - this accesses the original DOM element wrapper, which is returned by `find`. `element` is useful to manipulate a DOM element in a manner that VTU does not provide any methods for.
+To update the `<input>`, we use `setValue` - this allows us to set the input's value.
 
-After updating the `<input>`, we use the `trigger` method to simulate the user submitting the form. Finally, we assert the number of todos has increased from 1 to 2. 
+After updating the `<input>`, we use the `trigger` method to simulate the user submitting the form. Finally, we assert the number of todos has increased from 1 to 2.
 
 If we run this test, it will obviously fail. Let's update `TodoApp.vue` to have the `<form>` and `<input>` elements and make the test pass:
 
 ```vue
 <template>
   <div>
-    <div 
-      v-for="todo in todos" 
-      :key="todo.id" 
+    <div
+      v-for="todo in todos"
+      :key="todo.id"
       data-test="todo"
     >
       {{ todo.text }}
@@ -169,7 +169,7 @@ expect(received).toHaveLength(expected)
     Received array:  [{"element": <div data-test="todo">Learn Vue.js 3</div>}]
 ```
 
-The number of todos has not increased. The problem is that Jest executes tests in a synchronous manner, ending the test as soon as the final function is called. Vue, however, updates the DOM asynchronously. We need to mark the test `async`, and call `await` on any methods that might cause the DOM to change. `trigger` is one such method - we can simply prepend `await` to the `trigger` call:
+The number of todos has not increased. The problem is that Jest executes tests in a synchronous manner, ending the test as soon as the final function is called. Vue, however, updates the DOM asynchronously. We need to mark the test `async`, and call `await` on any methods that might cause the DOM to change. `trigger` is one such methods, and so is `setValue` - we can simply prepend `await` and the test should work as expected:
 
 ```js
 import { mount } from '@vue/test-utils'
@@ -178,7 +178,7 @@ import TodoApp from './TodoApp.vue'
 test('creates a todo', async () => {
   const wrapper = mount(TodoApp)
 
-  wrapper.find('[data-test="new-todo"]').element.value = 'New todo'
+  await wrapper.find('[data-test="new-todo"]').setValue('New todo')
   await wrapper.find('[data-test="form"]').trigger('submit')
 
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
@@ -198,13 +198,13 @@ import TodoApp from './TodoApp.vue'
 test('completes a todo', async () => {
   const wrapper = mount(TodoApp)
 
-  await wrapper.find('[data-test="todo-checkbox"]').setChecked()
+  await wrapper.find('[data-test="todo-checkbox"]').setValue(true)
 
   expect(wrapper.find('[data-test="todo"]').classes()).toContain('completed')
 })
 ```
 
-This test is similar to the previous two; we find an element, interact with in in same way (in this test we use `setChecked`, since we are interacting with a `<input type="checkbox">`. Again, since the DOM will be changing (the checkbox `checked` value will be updated) we need to prepand `await` to the interaction. 
+This test is similar to the previous two; we find an element and interact with it in same way (we use `setValue` again, since we are interacting with a `<input>`).
 
 Lastly, we make an assertion. We will be applying a `completed` class to completed todos - we can then use this to add some styling to visually indicate the status of a todo.
 
@@ -213,17 +213,17 @@ We can get this test to pass by updating the `<template>` to include the `<input
 ```vue
 <template>
   <div>
-    <div 
-      v-for="todo in todos" 
-      :key="todo.id" 
+    <div
+      v-for="todo in todos"
+      :key="todo.id"
       data-test="todo"
-      :class="[ todo.completed ? 'completed' : '' ]"  
+      :class="[ todo.completed ? 'completed' : '' ]"
     >
       {{ todo.text }}
-      <input 
-        type="checkbox" 
-        v-model="todo.completed" 
-        data-test="todo-checkbox" 
+      <input
+        type="checkbox"
+        v-model="todo.completed"
+        data-test="todo-checkbox"
       />
     </div>
 
@@ -247,7 +247,7 @@ import TodoApp from './TodoApp.vue'
 test('creates a todo', async () => {
   const wrapper = mount(TodoApp)
 
-  wrapper.find('[data-test="new-todo"]').element.value = 'New todo'
+  await wrapper.find('[data-test="new-todo"]').setValue('New todo')
   await wrapper.find('[data-test="form"]').trigger('submit')
 
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
@@ -260,7 +260,7 @@ In the *arrange* phase, we are setting up the scenario for the test. A more comp
 
 In the *act* phase, we act out the scenario, simulating how a user would interact with the component or application.
 
-In the *assert* phase, we make assertions about how we expect the current state of the component to be. 
+In the *assert* phase, we make assertions about how we expect the current state of the component to be.
 
 Almost all test will follow these three phases. You don't need to separate them with new lines like this guide does, but it is good to keep these three phases in mind as you write your tests.
 
