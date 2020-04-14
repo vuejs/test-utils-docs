@@ -658,8 +658,10 @@ test('updates prop', async () => {
 ### `setValue`
 
 Sets a value on DOM element, including:
-- `<input>` (either `type="checkbox"` or `type="radio"`)
+- `<input>`
+  - `type="checkbox"` and `type="radio"` are detected and will have `element.checked` set
 - `<select>`
+  - `<option>` is detected and will have `element.selected` set
 
 Since this will often result in a DOM re-render, `setValue` returns `Vue.nextTick`, so you will often have to call this with `await` to ensure the DOM has been updated before making an assertion.
 
@@ -688,10 +690,10 @@ export default {
 test('checked', async () => {
   const wrapper = mount(Component)
 
-  await wrapper.find('input').setChecked(true)
+  await wrapper.find('input').setValue(true)
   expect(wrapper.find('div')).toBeTruthy()
 
-  await wrapper.find('input').setChecked(false)
+  await wrapper.find('input').setValue(false)
   expect(wrapper.find('div')).toBeFalsy()
 })
 ```
