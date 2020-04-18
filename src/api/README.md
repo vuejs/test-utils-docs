@@ -245,7 +245,6 @@ test('installs a plugin via `plugins`', () => {
 })
 ```
 
-
 ### `global.components`
 
 Registers components globally to all components
@@ -298,7 +297,7 @@ test('installs a directive globally', () => {
 
 ### `global.mocks`
 
-Mocks a global instance property. Usefor for mocking `this.$store`, `this.$router` etc.
+Mocks a global instance property. Can be used for mocking out `this.$store`, `this.$router` etc.
 
 > Note: this is designed to mock variables injected by third party plugins, not Vue's native properties such as $root, $children, etc.
 
@@ -386,7 +385,7 @@ test('html', () => {
 
 ### `text`
 
-Find the text (via `textContent`) of an element.
+Returns the text (via `textContent`) of an element.
 
 `Component.vue`:
 
@@ -569,6 +568,7 @@ export default {
     }
   }
 }
+</script>
 ```
 
 `Component.spec.js`:
