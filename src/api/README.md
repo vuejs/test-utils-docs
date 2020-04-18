@@ -353,6 +353,62 @@ test('mocks a vuex store', async () => {
 })
 ```
 
+### `global.stubs`
+
+Stubs a component for all Vue Instances.
+
+`Component.vue`:
+
+```vue
+<template>
+  <div><foo/></div>
+</template>
+
+<script>
+import Foo from '@/Foo.vue'
+export default {
+  components: { Foo }
+}
+</script>
+```
+
+`Component.spec.js`:
+
+```js
+test('stubs a component using simple Array', () => {
+  const wrapper = mount(Component, {
+    global: {
+      stubs: ['Foo']
+    }
+  })
+
+  expect(wrapper.html()).toEqual('<div><foo-stub></div>')
+})
+
+test('stubs a component using an Object boolean syntax', () => {
+  const wrapper = mount(Component, {
+    global: {
+      stubs: { Foo: true }
+    }
+  })
+
+  expect(wrapper.html()).toEqual('<div><foo-stub></div>')
+})
+
+test('stubs a component using a custom component', () => {
+  const FooMock = {
+    name: 'Foo',
+    template: 'FakeFoo'
+  }
+  const wrapper = mount(Component, {
+    global: {
+      stubs: { Foo: FooMock }
+    }
+  })
+
+  expect(wrapper.html()).toEqual('<div>FakeFoo</div>')
+})
+```
 
 ## Wrapper
 
