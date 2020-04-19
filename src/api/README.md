@@ -576,7 +576,6 @@ Similar to `findComponent` but finds all Vue Component instances that match the 
  
 **Note** - `Ref` is not supported here.
  
- 
 ```vue
 <template>
   <div>
@@ -714,6 +713,59 @@ test('attributes', () => {
 
   expect(wrapper.attributes('id')).toBe('foo')
   expect(wrapper.attributes('class')).toBe('bar')
+})
+```
+
+### `props`
+
+Returns props applied on a Vue Component. This should be used mostly to assert props applied to a stubbed component.
+
+**Note:** Props on a normally mounted Vue Component should be asserted by their side effects on the DOM or other. 
+
+`Component.vue`:
+```js
+// Foo.vue
+export default {
+  name: 'Foo',
+  props: {
+    truthy: Boolean,
+    object: Object,
+    string: String
+  }
+}
+```
+
+```vue
+<template>
+  <div><foo truthy :object="{}" string="string" /></div>
+</template>
+
+<script>
+import Foo from '@/Foo'
+
+export default {
+  components: { Foo }
+}
+</script>
+```
+
+`Component.spec.js`:
+
+```js
+test('props', () => {
+  const wrapper = mount(Component, { 
+      global: { stubs: ['Foo'] }
+  })
+  const foo = wrapper.findComponent({ name: 'Foo' })
+
+  expect(foo.props('truthy')).toBe(true)
+  expect(foo.props('object')).toEqual({})
+  expect(foo.props('notExisting')).toEqual(undefined)
+  expect(foo.props()).toEqual({
+    truthy: true,
+    object: {},
+    string: 'string'
+  })
 })
 ```
 
