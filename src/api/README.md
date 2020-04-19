@@ -111,11 +111,10 @@ test('slots - default and named', () => {
 })
 ```
 
-## Global
 
-You can provide properties to the App instance using the properties under the `global` mount property.
+### `global.mocks`
 
-### `global.provide`
+Mocks a global instance property. Can be used for mocking out `this.$store`, `this.$router` etc.
 
 ::: warning
 This is designed to mock variables injected by third party plugins, not Vue's native properties such as $root, $children, etc.
@@ -125,17 +124,21 @@ This is designed to mock variables injected by third party plugins, not Vue's na
 
 ```vue
 <template>
-  <div>Theme is {{ theme }}</div>
+  <p>{{ count }}</p>
+  <button @click="increment" />
 </template>
 
 <script>
-import { inject } from 'vue'
-
 export default {
-  setup() {
-    const theme = inject('Theme')
-    return {
-      theme
+  computed: {
+    count() {
+      return this.$store.state.count
+    }
+  },
+
+  methods: {
+    increment() {
+      this.$store.dispatch('inc')
     }
   }
 }
@@ -145,32 +148,83 @@ export default {
 `Component.spec.js`:
 
 ```js
-test('injects dark theme via provide mounting option', () => {
+test('mocks a vuex store', async () => {
+  const $store = {
+    state: { count: 1 },
+    dispatch: jest.fn()
+  }
+
   const wrapper = mount(Component, {
     global: {
-      provide: {
-        'Theme': 'dark'
+      mocks: {
+        $store
       }
     }
   })
 
-  console.log(wrapper.html()) //=> <div>Theme is dark</div>
+  expect(wrapper.html()).toContain('count: 1')
+
+  await wrapper.find('button').trigger('click')
+
+  expect($store.dispatch).toHaveBeenCalledWith('inc')
 })
 ```
 
-Note: If you are using a ES6 `Symbol` for your provide key, you can use it as a dynamic key:
+### `global.stubs`
+
+Stubs a component for all Vue Instances.
+
+`Component.vue`:
+
+```vue
+<template>
+  <div><foo /></div>
+</template>
+
+<script>
+import Foo from '@/Foo.vue'
+
+export default {
+  components: { Foo }
+}
+</script>
+```
 
 `Component.spec.js`:
 
 ```js
-const ThemeSymbol = Symbol()
-
-mount(Component, {
-  global: {
-    provide: {
-      [ThemeSymbol]: 'value'
+test('stubs a component using an array', () => {
+  const wrapper = mount(Component, {
+    global: {
+      stubs: ['Foo']
     }
+  })
+
+  expect(wrapper.html()).toEqual('<div><foo-stub></div>')
+})
+
+test('stubs a component using an Object boolean syntax', () => {
+  const wrapper = mount(Component, {
+    global: {
+      stubs: { Foo: true }
+    }
+  })
+
+  expect(wrapper.html()).toEqual('<div><foo-stub></div>')
+})
+
+test('stubs a component using a custom component', () => {
+  const FooMock = {
+    name: 'Foo',
+    template: 'FakeFoo'
   }
+  const wrapper = mount(Component, {
+    global: {
+      stubs: { Foo: FooMock }
+    }
+  })
+
+  expect(wrapper.html()).toEqual('<div>FakeFoo</div>')
 })
 ```
 
@@ -178,17 +232,6 @@ mount(Component, {
 
 Applies mixins via `app.mixin(...)`.
 
-`Component.vue`:
-
-```vue
-<template>
-  <div />
-</template>
-
-<script>
-export default {}
-</script>
-```
 
 `Component.spec.js`:
 
@@ -199,6 +242,8 @@ test('adds a lifecycle mixin', () => {
       console.log('Component was created!')
     }
   }
+
+  const Component = { template: '<div></div>' }
 
   const wrapper = mount(Component, {
     global: {
@@ -254,12 +299,13 @@ Registers components globally to all components
 `Component.spec.js`:
 
 ```js
-test('installs a component globally', () => {
-  import GlobalComponent from '@/components/GlobalComponent'
+import GlobalComponent from '@/components/GlobalComponent'
 
+test('installs a component globally', () => {
   const Component = {
     template: '<div><global-component/></div>'
   }
+
   const wrapper = mount(Component, {
     global: {
       components: {
@@ -279,12 +325,13 @@ Registers a directive globally to all components
 `Component.spec.js`:
 
 ```js
-test('installs a directive globally', () => {
-  import Directive from '@/directives/Directive'
+import Directive from '@/directives/Directive'
 
+test('installs a directive globally', () => {
   const Component = {
     template: '<div v-bar>Foo</div>'
   }
+
   const wrapper = mount(Component, {
     global: {
       directives: {
@@ -297,31 +344,26 @@ test('installs a directive globally', () => {
 })
 ```
 
-### `global.mocks`
 
-Mocks a global instance property. Can be used for mocking out `this.$store`, `this.$router` etc.
+### `global.provide`
 
-> Note: this is designed to mock variables injected by third party plugins, not Vue's native properties such as $root, $children, etc.
+Provides data to be received in a `setup` function via `inject`.
 
 `Component.vue`:
 
 ```vue
 <template>
-  <p>{{ count }}</p>
-  <button @click="increment" />
+  <div>Theme is {{ theme }}</div>
 </template>
 
 <script>
-export default {
-  computed: {
-    count() {
-      return this.$store.state.count
-    }
-  },
+import { inject } from 'vue'
 
-  methods: {
-    increment() {
-      this.$store.dispatch('inc')
+export default {
+  setup() {
+    const theme = inject('Theme')
+    return {
+      theme
     }
   }
 }
@@ -331,84 +373,32 @@ export default {
 `Component.spec.js`:
 
 ```js
-test('mocks a vuex store', async () => {
-  const $store = {
-    state: {
-      count: 1
-    },
-    dispatch: jest.fn()
-  }
-
+test('injects dark theme via provide mounting option', () => {
   const wrapper = mount(Component, {
     global: {
-      mocks: {
-        $store
+      provide: {
+        'Theme': 'dark'
       }
     }
   })
 
-  expect(wrapper.html()).toContain('count: 1')
-
-  await wrapper.find('button').trigger('click')
-
-  expect($store.dispatch).toHaveBeenCalledWith('inc')
+  console.log(wrapper.html()) //=> <div>Theme is dark</div>
 })
 ```
 
-### `global.stubs`
-
-Stubs a component for all Vue Instances.
-
-`Component.vue`:
-
-```vue
-<template>
-  <div><foo/></div>
-</template>
-
-<script>
-import Foo from '@/Foo.vue'
-export default {
-  components: { Foo }
-}
-</script>
-```
+Note: If you are using a ES6 `Symbol` for your provide key, you can use it as a dynamic key:
 
 `Component.spec.js`:
 
 ```js
-test('stubs a component using simple Array', () => {
-  const wrapper = mount(Component, {
-    global: {
-      stubs: ['Foo']
+const ThemeSymbol = Symbol()
+
+mount(Component, {
+  global: {
+    provide: {
+      [ThemeSymbol]: 'value'
     }
-  })
-
-  expect(wrapper.html()).toEqual('<div><foo-stub></div>')
-})
-
-test('stubs a component using an Object boolean syntax', () => {
-  const wrapper = mount(Component, {
-    global: {
-      stubs: { Foo: true }
-    }
-  })
-
-  expect(wrapper.html()).toEqual('<div><foo-stub></div>')
-})
-
-test('stubs a component using a custom component', () => {
-  const FooMock = {
-    name: 'Foo',
-    template: 'FakeFoo'
   }
-  const wrapper = mount(Component, {
-    global: {
-      stubs: { Foo: FooMock }
-    }
-  })
-
-  expect(wrapper.html()).toEqual('<div>FakeFoo</div>')
 })
 ```
 
@@ -527,7 +517,7 @@ test('findAll', () => {
 Finds a Vue Component instance and returns a `VueWrapper` if one is found, otherwise returns `ErrorWrapper`.
 
 **Supported syntax:**
- 
+
 * **querySelector** - `findComponent('.component')` - Matches standard query selector.
 * **Name** - `findComponent({ name: 'myComponent' })` - matches PascalCase, snake-case, camelCase
 * **ref** - `findComponent({ ref: 'dropdown' })` - Can be used only on direct ref children of mounted component
@@ -542,8 +532,8 @@ Finds a Vue Component instance and returns a `VueWrapper` if one is found, other
 <script>
 export default { name: 'Foo' }
 </script>
-``` 
- 
+```
+
 ```vue
 <template>
   <div>
@@ -568,20 +558,20 @@ test('find', () => {
 
 ### `findAllComponents`
 
-Similar to `findComponent` but finds all Vue Component instances that match the query and returns an array of `VueWrapper`. 
+Similar to `findComponent` but finds all Vue Component instances that match the query and returns an array of `VueWrapper`.
 
 **Supported syntax:**
- 
+
  * **querySelector** - `findAllComponents('.component')`
  * **Name** - `findAllComponents({ name: 'myComponent' })`
  * **SFC** - `findAllComponents(ImportedComponent)`
- 
+
 **Note** - `Ref` is not supported here.
- 
+
 ```vue
 <template>
   <div>
-    <FooComponent 
+    <FooComponent
       v-for="number in [1, 2, 3]"
       :key="number"
       data-test="number"
@@ -722,7 +712,7 @@ test('attributes', () => {
 
 Returns props applied on a Vue Component. This should be used mostly to assert props applied to a stubbed component.
 
-**Note:** Props on a normally mounted Vue Component should be asserted by their side effects on the DOM or other. 
+**Note:** Props on a normally mounted Vue Component should be asserted by their side effects on the DOM or other.
 
 `Component.vue`:
 ```js
@@ -755,7 +745,7 @@ export default {
 
 ```js
 test('props', () => {
-  const wrapper = mount(Component, { 
+  const wrapper = mount(Component, {
       global: { stubs: ['Foo'] }
   })
   const foo = wrapper.findComponent({ name: 'Foo' })
