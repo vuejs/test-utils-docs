@@ -4,43 +4,6 @@
 
 When using `mount`, you can predefine the component's state using mounting options.
 
-### `props`
-
-Used to set props on a component when mounted.
-
-`Component.vue`:
-
-```vue
-<template>
-  <span>Count: {{ count }}</span>
-</template>
-
-<script>
-export default {
-  props: {
-    count: {
-      type: Number,
-      required: true
-    }
-  }
-}
-</script>
-```
-
-`Component.spec.js`:
-
-```js
-test('props', () => {
-  const wrapper = mount(Component, {
-    props: {
-      count: 5
-    }
-  })
-
-  console.log(wrapper.html()) //=> '<span>Count: 5</span>'
-})
-```
-
 ### `data`
 
 Overrides a component's default `data`. Must be a function:
@@ -79,6 +42,43 @@ test('overrides data', () => {
 })
 ```
 
+### `props`
+
+Used to set props on a component when mounted.
+
+`Component.vue`:
+
+```vue
+<template>
+  <span>Count: {{ count }}</span>
+</template>
+
+<script>
+export default {
+  props: {
+    count: {
+      type: Number,
+      required: true
+    }
+  }
+}
+</script>
+```
+
+`Component.spec.js`:
+
+```js
+test('props', () => {
+  const wrapper = mount(Component, {
+    props: {
+      count: 5
+    }
+  })
+
+  console.log(wrapper.html()) //=> '<span>Count: 5</span>'
+})
+```
+
 ### `slots`
 
 Provide values for slots on a component. Slots can be a component imported from a `.vue` file or a render function. Currently providing an object with a `template` key is not supported. This may be supported in the future.
@@ -111,6 +111,88 @@ test('renders slots content', () => {
 })
 ```
 
+
+
+### `global.components`
+
+Registers components globally to all components
+
+`Component.spec.js`:
+
+```js
+import GlobalComponent from '@/components/GlobalComponent'
+
+test('installs a component globally', () => {
+  const Component = {
+    template: '<div><global-component/></div>'
+  }
+
+  const wrapper = mount(Component, {
+    global: {
+      components: {
+        GlobalComponent
+      }
+    }
+  })
+
+  expect(wrapper.find('.global-component').exists()).toBe(true)
+})
+```
+
+### `global.directives`
+
+Registers a directive globally to all components
+
+`Component.spec.js`:
+
+```js
+import Directive from '@/directives/Directive'
+
+test('installs a directive globally', () => {
+  const Component = {
+    template: '<div v-bar>Foo</div>'
+  }
+
+  const wrapper = mount(Component, {
+    global: {
+      directives: {
+        Bar: Directive
+      }
+    }
+  })
+
+  expect(wrapper.classes()).toContain('added-by-bar')
+})
+```
+
+
+
+### `global.mixins`
+
+Applies mixins via `app.mixin(...)`.
+
+
+`Component.spec.js`:
+
+```js
+test('adds a lifecycle mixin', () => {
+  const mixin = {
+    created() {
+      console.log('Component was created!')
+    }
+  }
+
+  const Component = { template: '<div></div>' }
+
+  const wrapper = mount(Component, {
+    global: {
+      mixins: [mixin]
+    }
+  })
+
+  // 'Component was created!' will be logged
+})
+```
 
 ### `global.mocks`
 
@@ -170,91 +252,6 @@ test('mocks a vuex store', async () => {
 })
 ```
 
-### `global.stubs`
-
-Stubs a component for all Vue Instances.
-
-`Component.vue`:
-
-```vue
-<template>
-  <div><foo /></div>
-</template>
-
-<script>
-import Foo from '@/Foo.vue'
-
-export default {
-  components: { Foo }
-}
-</script>
-```
-
-`Component.spec.js`:
-
-```js
-test('stubs a component using an array', () => {
-  const wrapper = mount(Component, {
-    global: {
-      stubs: ['Foo']
-    }
-  })
-
-  expect(wrapper.html()).toEqual('<div><foo-stub></div>')
-})
-
-test('stubs a component using an Object boolean syntax', () => {
-  const wrapper = mount(Component, {
-    global: {
-      stubs: { Foo: true }
-    }
-  })
-
-  expect(wrapper.html()).toEqual('<div><foo-stub></div>')
-})
-
-test('stubs a component using a custom component', () => {
-  const FooMock = {
-    name: 'Foo',
-    template: 'FakeFoo'
-  }
-  const wrapper = mount(Component, {
-    global: {
-      stubs: { Foo: FooMock }
-    }
-  })
-
-  expect(wrapper.html()).toEqual('<div>FakeFoo</div>')
-})
-```
-
-### `global.mixins`
-
-Applies mixins via `app.mixin(...)`.
-
-
-`Component.spec.js`:
-
-```js
-test('adds a lifecycle mixin', () => {
-  const mixin = {
-    created() {
-      console.log('Component was created!')
-    }
-  }
-
-  const Component = { template: '<div></div>' }
-
-  const wrapper = mount(Component, {
-    global: {
-      mixins: [mixin]
-    }
-  })
-
-  // 'Component was created!' will be logged
-})
-```
-
 ### `global.plugins`
 
 Installs plugins on the component.
@@ -291,59 +288,6 @@ test('installs a plugin via `plugins`', () => {
   expect(installed).toHaveBeenCalled()
 })
 ```
-
-### `global.components`
-
-Registers components globally to all components
-
-`Component.spec.js`:
-
-```js
-import GlobalComponent from '@/components/GlobalComponent'
-
-test('installs a component globally', () => {
-  const Component = {
-    template: '<div><global-component/></div>'
-  }
-
-  const wrapper = mount(Component, {
-    global: {
-      components: {
-        GlobalComponent
-      }
-    }
-  })
-
-  expect(wrapper.find('.global-component').exists()).toBe(true)
-})
-```
-
-### `global.directives`
-
-Registers a directive globally to all components
-
-`Component.spec.js`:
-
-```js
-import Directive from '@/directives/Directive'
-
-test('installs a directive globally', () => {
-  const Component = {
-    template: '<div v-bar>Foo</div>'
-  }
-
-  const wrapper = mount(Component, {
-    global: {
-      directives: {
-        Bar: Directive
-      }
-    }
-  })
-
-  expect(wrapper.classes()).toContain('added-by-bar')
-})
-```
-
 
 ### `global.provide`
 
@@ -402,45 +346,114 @@ mount(Component, {
 })
 ```
 
+
+### `global.stubs`
+
+Stubs a component for all Vue Instances.
+
+`Component.vue`:
+
+```vue
+<template>
+  <div><foo /></div>
+</template>
+
+<script>
+import Foo from '@/Foo.vue'
+
+export default {
+  components: { Foo }
+}
+</script>
+```
+
+`Component.spec.js`:
+
+```js
+test('stubs a component using an array', () => {
+  const wrapper = mount(Component, {
+    global: {
+      stubs: ['Foo']
+    }
+  })
+
+  expect(wrapper.html()).toEqual('<div><foo-stub></div>')
+})
+
+test('stubs a component using an Object boolean syntax', () => {
+  const wrapper = mount(Component, {
+    global: {
+      stubs: { Foo: true }
+    }
+  })
+
+  expect(wrapper.html()).toEqual('<div><foo-stub></div>')
+})
+
+test('stubs a component using a custom component', () => {
+  const FooMock = {
+    name: 'Foo',
+    template: 'FakeFoo'
+  }
+  const wrapper = mount(Component, {
+    global: {
+      stubs: { Foo: FooMock }
+    }
+  })
+
+  expect(wrapper.html()).toEqual('<div>FakeFoo</div>')
+})
+```
+
 ## Wrapper
 
 When you use `mount`, a `VueWrapper` is returned with a number of useful methods for testing. A `VueWrapper` is a thin wrapper around your component instance. Methods like `find` return a `DOMWrapper`, which is a thin wrapper around the DOM nodes in your component and it's children. Both implement a similar same API.
 
 
-### `html`
+### `attributes`
 
-Returns the HTML (via `outerHTML`) of an element. Useful for debugging.
+Returns attributes on a DOM node (via `element.attributes`).
 
 `Component.vue`:
 
 ```vue
 <template>
-  <div>
-    <p>Hello world</p>
-  </div>
+  <div id="foo" :class="className" />
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      className: 'bar'
+    }
+  }
+}
+</script>
 ```
 
 `Component.spec.js`:
 
 ```js
-test('html', () => {
+test('attributes', () => {
   const wrapper = mount(Component)
 
-  console.log(wrapper.html()) //=> <div><p>Hello world</p></div>
+  expect(wrapper.attributes('id')).toBe('foo')
+  expect(wrapper.attributes('class')).toBe('bar')
 })
 ```
 
-### `text`
 
-Returns the text (via `textContent`) of an element.
+### `classes`
+
+Returns an array of classes on an element (via `classList`).
 
 `Component.vue`:
 
 ```vue
 <template>
   <div>
-    <p>Hello world</p>
+    <span class="my-span" />
   </div>
 </template>
 ```
@@ -448,10 +461,75 @@ Returns the text (via `textContent`) of an element.
 `Component.spec.js`:
 
 ```js
-test('text', () => {
+test('classes', () => {
   const wrapper = mount(Component)
 
-  expect(wrapper.find('p').text()).toBe('Hello world')
+  expect(wrapper.find('.my-span').classes()).toContain('my-span')
+})
+```
+
+### `emitted`
+
+A function that returns an object mapping events emitted from the `wrapper`. The arguments are stored in an array, so you can verify which arguments were emitted along with each event.
+
+`Component.vue`:
+
+```vue
+<template>
+  <div />
+</template>
+
+<script>
+export default {
+  created() {
+    this.$emit('greet', 'hello')
+    this.$emit('greet', 'goodbye')
+  }
+}
+</script>
+```
+
+`Component.spec.js`:
+
+```js
+test('emitted', () => {
+  const wrapper = mount(Component)
+
+  console.log(wrapper.emitted())
+  // {
+  //   greet: [ ['hello'], ['goodbye'] ]
+  // }
+
+  expect(wrapper.emitted()).toHaveProperty('greet')
+  expect(wrapper.emitted().greet[0]).toEqual(['hello'])
+  expect(wrapper.emitted().greet[1]).toEqual(['goodbye'])
+})
+```
+
+
+
+### `exists`
+
+Verify whether or not an element found via `find` exists or not.
+
+`Component.vue`:
+
+```vue
+<template>
+  <div>
+    <span />
+  </div>
+</template>
+```
+
+`Component.spec.js`:
+
+```js
+test('exists', () => {
+  const wrapper = mount(Component)
+
+  expect(wrapper.find('span').exists()).toBe(true)
+  expect(wrapper.find('p').exists()).toBe(false)
 })
 ```
 
@@ -618,57 +696,17 @@ test('findAllComponents', () => {
 })
 ```
 
-### `trigger`
 
-::: tip
-Since events often cause a re-render, `trigger` returns `Vue.nextTick`. You should use `await` when you call `trigger` to ensure that Vue updates the DOM before you make an assertion.
-:::
+### `html`
 
-Triggers an event, for example `click`, `submit` or `keyup`.
+Returns the HTML (via `outerHTML`) of an element. Useful for debugging.
 
 `Component.vue`:
 
 ```vue
 <template>
   <div>
-    <span>Count: {{ count }}</span>
-    <button @click="count++">Click me</button>
-  </div>
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      count: 0
-    }
-  }
-}
-</script>
-```
-
-`Component.spec.js`:
-
-```js
-test('trigger', async () => {
-  const wrapper = mount(Component)
-
-  await wrapper.find('button').trigger('click')
-
-  expect(wrapper.find('span').text()).toBe('Count: 1')
-})
-```
-
-### `classes`
-
-Returns an array of classes on an element (via `classList`).
-
-`Component.vue`:
-
-```vue
-<template>
-  <div>
-    <span class="my-span" />
+    <p>Hello world</p>
   </div>
 </template>
 ```
@@ -676,68 +714,10 @@ Returns an array of classes on an element (via `classList`).
 `Component.spec.js`:
 
 ```js
-test('classes', () => {
+test('html', () => {
   const wrapper = mount(Component)
 
-  expect(wrapper.find('.my-span').classes()).toContain('my-span')
-})
-```
-
-### `exists`
-
-Verify whether or not an element found via `find` exists or not.
-
-`Component.vue`:
-
-```vue
-<template>
-  <div>
-    <span />
-  </div>
-</template>
-```
-
-`Component.spec.js`:
-
-```js
-test('exists', () => {
-  const wrapper = mount(Component)
-
-  expect(wrapper.find('span').exists()).toBe(true)
-  expect(wrapper.find('p').exists()).toBe(false)
-})
-```
-
-### `attributes`
-
-Returns attributes on a DOM node (via `element.attributes`).
-
-`Component.vue`:
-
-```vue
-<template>
-  <div id="foo" :class="className" />
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      className: 'bar'
-    }
-  }
-}
-</script>
-```
-
-`Component.spec.js`:
-
-```js
-test('attributes', () => {
-  const wrapper = mount(Component)
-
-  expect(wrapper.attributes('id')).toBe('foo')
-  expect(wrapper.attributes('class')).toBe('bar')
+  console.log(wrapper.html()) //=> <div><p>Hello world</p></div>
 })
 ```
 
@@ -791,44 +771,6 @@ test('props', () => {
     object: {},
     string: 'string'
   })
-})
-```
-
-### `emitted`
-
-A function that returns an object mapping events emitted from the `wrapper`. The arguments are stored in an array, so you can verify which arguments were emitted along with each event.
-
-`Component.vue`:
-
-```vue
-<template>
-  <div />
-</template>
-
-<script>
-export default {
-  created() {
-    this.$emit('greet', 'hello')
-    this.$emit('greet', 'goodbye')
-  }
-}
-</script>
-```
-
-`Component.spec.js`:
-
-```js
-test('emitted', () => {
-  const wrapper = mount(Component)
-
-  console.log(wrapper.emitted())
-  // {
-  //   greet: [ ['hello'], ['goodbye'] ]
-  // }
-
-  expect(wrapper.emitted()).toHaveProperty('greet')
-  expect(wrapper.emitted().greet[0]).toEqual(['hello'])
-  expect(wrapper.emitted().greet[1]).toEqual(['goodbye'])
 })
 ```
 
@@ -913,5 +855,70 @@ test('checked', async () => {
 
   await wrapper.find('input').setValue(false)
   expect(wrapper.find('div')).toBe(false)
+})
+```
+
+### `text`
+
+Returns the text (via `textContent`) of an element.
+
+`Component.vue`:
+
+```vue
+<template>
+  <div>
+    <p>Hello world</p>
+  </div>
+</template>
+```
+
+`Component.spec.js`:
+
+```js
+test('text', () => {
+  const wrapper = mount(Component)
+
+  expect(wrapper.find('p').text()).toBe('Hello world')
+})
+```
+
+### `trigger`
+
+::: tip
+Since events often cause a re-render, `trigger` returns `Vue.nextTick`. You should use `await` when you call `trigger` to ensure that Vue updates the DOM before you make an assertion.
+:::
+
+Triggers an event, for example `click`, `submit` or `keyup`.
+
+`Component.vue`:
+
+```vue
+<template>
+  <div>
+    <span>Count: {{ count }}</span>
+    <button @click="count++">Click me</button>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      count: 0
+    }
+  }
+}
+</script>
+```
+
+`Component.spec.js`:
+
+```js
+test('trigger', async () => {
+  const wrapper = mount(Component)
+
+  await wrapper.find('button').trigger('click')
+
+  expect(wrapper.find('span').text()).toBe('Count: 1')
 })
 ```
