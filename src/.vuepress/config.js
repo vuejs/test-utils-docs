@@ -34,7 +34,7 @@ module.exports = {
   locales: {
     '/': {
       lang: 'en-US',
-      title: 'Vue Test Utils'
+      title: 'Vue Test Utils (2.X)'
     }
   },
   themeConfig: {
