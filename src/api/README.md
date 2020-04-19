@@ -98,7 +98,7 @@ Provide values for slots on a component. Slots can be a component imported from 
 ```js
 import Bar from './Bar.vue'
 
-test('slots - default and named', () => {
+test('renders slots content', () => {
   const wrapper = mount(Component, {
     slots: {
       default: 'Default',
@@ -523,16 +523,23 @@ Finds a Vue Component instance and returns a `VueWrapper` if one is found, other
 * **ref** - `findComponent({ ref: 'dropdown' })` - Can be used only on direct ref children of mounted component
 * **SFC** - `findComponent(ImportedComponent)` - Pass an imported component directly.
 
+`Foo.vue`
+
 ```vue
 <template>
   <div class="foo">
     Foo
   </div>
 </template>
+
 <script>
-export default { name: 'Foo' }
+export default {
+  name: 'Foo'
+}
 </script>
 ```
+
+`Component.vue`:
 
 ```vue
 <template>
@@ -541,32 +548,50 @@ export default { name: 'Foo' }
     <Foo data-test="foo" ref="foo"/>
   </div>
 </template>
+
+<script>
+import Foo from '@/Foo'
+
+export default {
+  components: { Foo },
+}
+</script>
 ```
 
+`Component.spec.js`
+
 ```js
+import Foo from '@/Foo.vue'
+
 test('find', () => {
   const wrapper = mount(Component)
 
-  wrapper.find('.foo') //=> found; returns VueWrapper
-  wrapper.find('[data-test="foo"]') //=> found; returns VueWrapper
-  wrapper.find({ name: 'Foo' }) //=> found; returns VueWrapper
-  wrapper.find({ name: 'foo' }) //=> found; returns VueWrapper
-  wrapper.find({ ref: 'foo' }) //=> found; returns VueWrapper
-  wrapper.find(Foo) //=> found; returns VueWrapper
+  // All the following queries would return a VueWrapper
+
+  // Using a standard querySelector query
+  wrapper.find('.foo')
+  wrapper.find('[data-test="foo"]')
+
+  // Using component's name
+  wrapper.find({ name: 'Foo' })
+
+  // Using ref attribute. Can be used only on direct children of the mounted component
+  wrapper.find({ ref: 'foo' })
+
+  // Using imported component
+  wrapper.find(Foo)
 })
 ```
 
 ### `findAllComponents`
 
-Similar to `findComponent` but finds all Vue Component instances that match the query and returns an array of `VueWrapper`.
+Similar to `findComponent` but finds all Vue Component instances that match the query. Returns an array of `VueWrapper`.
 
-**Supported syntax:**
+:::warning
+`Ref` syntax is not supported in `findAllComponents`. All other query syntaxes are valid.
+:::
 
- * **querySelector** - `findAllComponents('.component')`
- * **Name** - `findAllComponents({ name: 'myComponent' })`
- * **SFC** - `findAllComponents(ImportedComponent)`
-
-**Note** - `Ref` is not supported here.
+`Component.vue`:
 
 ```vue
 <template>
@@ -582,17 +607,24 @@ Similar to `findComponent` but finds all Vue Component instances that match the 
 </template>
 ```
 
+`Component.spec.js`:
+
 ```js
 test('findAllComponents', () => {
   const wrapper = mount(Component)
 
-  wrapper.findAllComponents('[data-test="number"]') //=> found; returns array of VueWrapper
+  // Returns an array of VueWrapper
+  wrapper.findAllComponents('[data-test="number"]')
 })
 ```
 
 ### `trigger`
 
-Triggers an event, for example `click`, `submit` or `keyup`. Since events often cause a re-render, `trigger` returns `Vue.nextTick`. If you expect the event to trigger a re-render, you should use `await` when you call `trigger` to ensure that Vue updates the DOM before you make an assertion.
+::: tip
+Since events often cause a re-render, `trigger` returns `Vue.nextTick`. You should use `await` when you call `trigger` to ensure that Vue updates the DOM before you make an assertion.
+:::
+
+Triggers an event, for example `click`, `submit` or `keyup`.
 
 `Component.vue`:
 
@@ -600,7 +632,7 @@ Triggers an event, for example `click`, `submit` or `keyup`. Since events often 
 <template>
   <div>
     <span>Count: {{ count }}</span>
-    <button @click="count++">Greet</button>
+    <button @click="count++">Click me</button>
   </div>
 </template>
 
@@ -672,6 +704,7 @@ test('exists', () => {
   const wrapper = mount(Component)
 
   expect(wrapper.find('span').exists()).toBe(true)
+  expect(wrapper.find('p').exists()).toBe(false)
 })
 ```
 
@@ -763,7 +796,7 @@ test('props', () => {
 
 ### `emitted`
 
-A function that returns an object mapping events emitted from the `wrapper`. The arguments are stored in an array, so you can verify which arguments were emitted each time the event is emitted.
+A function that returns an object mapping events emitted from the `wrapper`. The arguments are stored in an array, so you can verify which arguments were emitted along with each event.
 
 `Component.vue`:
 
@@ -793,6 +826,7 @@ test('emitted', () => {
   //   greet: [ ['hello'], ['goodbye'] ]
   // }
 
+  expect(wrapper.emitted()).toHaveProperty('greet')
   expect(wrapper.emitted().greet[0]).toEqual(['hello'])
   expect(wrapper.emitted().greet[1]).toEqual(['goodbye'])
 })
@@ -802,7 +836,9 @@ test('emitted', () => {
 
 Updates component props.
 
-`setProps` returns `Vue.nextTick`, so you will have to call it with `await` to ensure the DOM has been updated before making an assertion.
+::: tip
+You should use `await` when you call `setProps` to ensure that Vue updates the DOM before you make an assertion.
+:::
 
 `Component.vue`:
 
@@ -830,26 +866,29 @@ test('updates prop', async () => {
   expect(wrapper.html()).toContain('hello')
 
   await wrapper.setProps({ message: 'goodbye' })
+
   expect(wrapper.html()).toContain('goodbye')
 })
 ```
 
 ### `setValue`
 
-Sets a value on DOM element, including:
+Sets a value on DOM element. Including:
 - `<input>`
   - `type="checkbox"` and `type="radio"` are detected and will have `element.checked` set
 - `<select>`
   - `<option>` is detected and will have `element.selected` set
 
-Since this will often result in a DOM re-render, `setValue` returns `Vue.nextTick`, so you will often have to call this with `await` to ensure the DOM has been updated before making an assertion.
+::: tip
+You should use `await` when you call `setValue` to ensure that Vue updates the DOM before you make an assertion.
+:::
 
 `Component.vue`:
 
 ```vue
 <template>
   <input type="checkbox" v-model="checked" />
-  <div v-if="checked">Checked</div>
+  <div v-if="checked">The input has been checked!</div>
 </template>
 
 <script>
@@ -870,9 +909,9 @@ test('checked', async () => {
   const wrapper = mount(Component)
 
   await wrapper.find('input').setValue(true)
-  expect(wrapper.find('div')).toBeTruthy()
+  expect(wrapper.find('div')).toBe(true)
 
   await wrapper.find('input').setValue(false)
-  expect(wrapper.find('div')).toBeFalsy()
+  expect(wrapper.find('div')).toBe(false)
 })
 ```
