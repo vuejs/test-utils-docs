@@ -117,7 +117,9 @@ You can provide properties to the App instance using the properties under the `g
 
 ### `global.provide`
 
-Provides data to be received in a `setup` function via `inject`.
+::: warning
+This is designed to mock variables injected by third party plugins, not Vue's native properties such as $root, $children, etc.
+:::
 
 `Component.vue`:
 
