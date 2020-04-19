@@ -46,7 +46,8 @@ module.exports = {
     },
     nav: [
       { text: 'Guide', link: '/guide/introduction' },
-      { text: 'API Reference', link: '/api/' }
+      { text: 'API Reference', link: '/api/' },
+      { text: 'GitHub', link: 'https://github.com/vuejs/vue-test-utils-next' }
     ]
   }
 }
