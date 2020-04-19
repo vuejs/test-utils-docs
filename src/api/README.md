@@ -1,12 +1,31 @@
 # API Reference
 
-## Mounting Options
+## `mount()`
 
-When using `mount`, you can predefine the component's state using mounting options.
+Creates a Wrapper that contains the mounted and rendered Vue component to test.
+
+```js
+import { mount } from '@vue/test-utils'
+
+const Hello = {
+  template: '<div>Hello world</div>',
+}
+
+test('mounts a component', () => {
+  const wrapper = mount(Hello)
+
+  expect(wrapper.html()).toContain('Hello world')
+})
+```
+
+
+## `mount()` options
+
+`mount` accepts a second parameter where you can predefine the component's state.
 
 ### `data`
 
-Overrides a component's default `data`. Must be a function:
+Overrides a component's default `data`. Must be a function.
 
 `Component.vue`
 
@@ -38,7 +57,7 @@ test('overrides data', () => {
     }
   })
 
-  console.log(wrapper.html()) //=> '<div>Foo is bar</div>'
+  expect(wrapper.html()).toContain('Foo is bar')
 })
 ```
 
@@ -75,7 +94,7 @@ test('props', () => {
     }
   })
 
-  console.log(wrapper.html()) //=> '<span>Count: 5</span>'
+  expect(wrapper.html()).toContain('Count: 5')
 })
 ```
 
@@ -405,7 +424,7 @@ test('stubs a component using a custom component', () => {
 })
 ```
 
-## Wrapper
+## Wrapper methods
 
 When you use `mount`, a `VueWrapper` is returned with a number of useful methods for testing. A `VueWrapper` is a thin wrapper around your component instance. Methods like `find` return a `DOMWrapper`, which is a thin wrapper around the DOM nodes in your component and it's children. Both implement a similar same API.
 
