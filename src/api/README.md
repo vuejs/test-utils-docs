@@ -941,3 +941,9 @@ test('trigger', async () => {
   expect(wrapper.find('span').text()).toBe('Count: 1')
 })
 ```
+
+Note that `trigger` accepts a second argument to pass options to the triggered Event:
+
+```js
+await wrapper.trigger('keydown', { keyCode: 65 })
+```
