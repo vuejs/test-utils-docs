@@ -12,18 +12,14 @@ const sidebar = {
     {
       title: 'API Reference',
       collapsable: false,
-      children: [
-        '/api/'
-      ]
+      children: ['/api/']
     }
   ],
   api: [
     {
       title: 'API Reference',
       collapsable: false,
-      children: [
-        '/api/'
-      ]
+      children: ['/api/']
     }
   ]
 }
@@ -34,7 +30,7 @@ module.exports = {
   locales: {
     '/': {
       lang: 'en-US',
-      title: 'Vue Test Utils (2.X)'
+      title: 'Vue Test Utils (2.0.0-alpha-2)'
     }
   },
   themeConfig: {
