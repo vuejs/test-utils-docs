@@ -23,6 +23,47 @@ test('mounts a component', () => {
 
 `mount` accepts a second parameter where you can predefine the component's state.
 
+### `attachTo`
+
+Specify where to mount the component. Useful when testing Vue as part of a larger application.
+
+`Component.vue`
+
+```vue
+<template>
+  <div>Vue Component</div>
+</template>
+
+<script>
+export default {}
+</script>
+```
+
+`Component.spec.js`:
+
+```js
+test('mounts on a specific element', () => {
+  // in a JSDOM environment, such as Jest
+  document.getElementsByTagName('html')[0].innerHTML = `
+    <div>
+      <h1>Non Vue app</h1>
+      <div id="app"></div>
+    </div>
+  `
+  const wrapper = mount(Component, {
+    attachTo: document.getElementById('app')
+  })
+
+  console.log(document.body.innerHTML) 
+  /*
+   * <div>
+   *   <h1>Non Vue app</h1>
+   *   <div>Vue Component</div>
+   * </div>
+  */
+})
+```
+
 ### `data`
 
 Overrides a component's default `data`. Must be a function.
@@ -181,8 +222,6 @@ test('installs a directive globally', () => {
   expect(wrapper.classes()).toContain('added-by-bar')
 })
 ```
-
-
 
 ### `global.mixins`
 
@@ -711,28 +750,6 @@ test('findAllComponents', () => {
 })
 ```
 
-### `unmount`
-
-Unmount the application from the DOM via Vue's `unmount` method. Only works on the root `VueWrapper` returned from `mount`. Useful for manual clean-up after tests.
-
-`Component.vue`:
-
-```vue
-<template>
-  <div />
-</template>
-```
-
-`Component.spec.js`:
-
-```js
-test('unmount', () => {
-  const wrapper = mount(Component)
-
-  wrapper.unmount() // removed from DOM
-})
-```
-
 ### `html`
 
 Returns the HTML (via `outerHTML`) of an element. Useful for debugging.
@@ -963,4 +980,26 @@ Note that `trigger` accepts a second argument to pass options to the triggered E
 
 ```js
 await wrapper.trigger('keydown', { keyCode: 65 })
+```
+
+### `unmount`
+
+Unmount the application from the DOM via Vue's `unmount` method. Only works on the root `VueWrapper` returned from `mount`. Useful for manual clean-up after tests.
+
+`Component.vue`:
+
+```vue
+<template>
+  <div />
+</template>
+```
+
+`Component.spec.js`:
+
+```js
+test('unmount', () => {
+  const wrapper = mount(Component)
+
+  wrapper.unmount() // removed from DOM
+})
 ```
