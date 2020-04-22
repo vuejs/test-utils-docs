@@ -130,8 +130,6 @@ test('renders slots content', () => {
 })
 ```
 
-
-
 ### `global.components`
 
 Registers components globally to all components
@@ -525,8 +523,6 @@ test('emitted', () => {
 })
 ```
 
-
-
 ### `exists`
 
 Verify whether or not an element found via `find` exists or not.
@@ -715,6 +711,27 @@ test('findAllComponents', () => {
 })
 ```
 
+### `unmount`
+
+Unmount the application from the DOM via Vue's `unmount` method. Only works on the root `VueWrapper` returned from `mount`.
+
+`Component.vue`:
+
+```vue
+<template>
+  <div />
+</template>
+```
+
+`Component.spec.js`:
+
+```js
+test('unmount', () => {
+  const wrapper = mount(Component)
+
+  wrapper.unmount() // removed from DOM
+})
+```
 
 ### `html`
 
