@@ -713,7 +713,7 @@ test('findAllComponents', () => {
 
 ### `unmount`
 
-Unmount the application from the DOM via Vue's `unmount` method. Only works on the root `VueWrapper` returned from `mount`.
+Unmount the application from the DOM via Vue's `unmount` method. Only works on the root `VueWrapper` returned from `mount`. Useful for manual clean-up after tests.
 
 `Component.vue`:
 
