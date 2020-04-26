@@ -6,7 +6,8 @@ const sidebar = {
       children: [
         '/guide/installation',
         '/guide/introduction',
-        '/guide/a-crash-course'
+        '/guide/a-crash-course',
+        '/guide/plugins'
       ]
     },
     {
