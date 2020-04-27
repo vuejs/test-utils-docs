@@ -695,23 +695,23 @@ export default {
 ```js
 import Foo from '@/Foo.vue'
 
-test('find', () => {
+test('findComponent', () => {
   const wrapper = mount(Component)
 
   // All the following queries would return a VueWrapper
 
   // Using a standard querySelector query
-  wrapper.find('.foo')
-  wrapper.find('[data-test="foo"]')
+  wrapper.findComponent('.foo')
+  wrapper.findComponent('[data-test="foo"]')
 
   // Using component's name
-  wrapper.find({ name: 'Foo' })
+  wrapper.findComponent({ name: 'Foo' })
 
   // Using ref attribute. Can be used only on direct children of the mounted component
-  wrapper.find({ ref: 'foo' })
+  wrapper.findComponent({ ref: 'foo' })
 
   // Using imported component
-  wrapper.find(Foo)
+  wrapper.findComponent(Foo)
 })
 ```
 
