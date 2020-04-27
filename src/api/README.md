@@ -750,6 +750,33 @@ test('findAllComponents', () => {
 })
 ```
 
+
+### `get`
+
+Similar to `find`, `get` looks for an element and returns a `DOMWrapper` if one is found. Otherwise it throws an error.
+
+`Component.vue`:
+
+```vue
+<template>
+  <span>Span</span>
+  <span data-test="span">Span</span>
+</template>
+```
+
+`Component.spec.js`:
+
+```js
+test('get', () => {
+  const wrapper = mount(Component)
+
+  wrapper.get('span') //=> found; returns DOMWrapper
+  wrapper.get('[data-test="span"]') //=> found; returns DOMWrapper
+
+  expect(() => wrapper.getComponent('p')).toThrowError()
+})
+```
+
 ### `html`
 
 Returns the HTML (via `outerHTML`) of an element. Useful for debugging.
