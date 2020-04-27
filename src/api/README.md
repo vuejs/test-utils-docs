@@ -829,7 +829,7 @@ import Foo from '@/Foo.vue'
 test('find', () => {
   const wrapper = mount(Component)
 
-  wrapper.getComponent({name: 'foo'}) // returns a VueWrapper
+  wrapper.getComponent({ name: 'foo' }) // returns a VueWrapper
   wrapper.getComponent(Foo) // returns a VueWrapper
 
   expect(() => wrapper.getComponent('.not-there')).toThrowError()
