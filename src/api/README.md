@@ -833,6 +833,7 @@ test('find', () => {
   const wrapper = mount(Component)
 
   wrapper.getComponent('.foo') // returns a VueWrapper
+  wrapper.getComponent(Foo) // returns a VueWrapper
 
   expect(() => wrapper.getComponent('.not-there')).toThrowError()
 })
