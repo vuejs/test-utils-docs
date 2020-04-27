@@ -809,10 +809,7 @@ export default {
 
 ```vue
 <template>
-  <div>
-    <span>Span</span>
-    <Foo data-test="foo" ref="foo"/>
-  </div>
+  <Foo />
 </template>
 
 <script>
@@ -832,7 +829,7 @@ import Foo from '@/Foo.vue'
 test('find', () => {
   const wrapper = mount(Component)
 
-  wrapper.getComponent('.foo') // returns a VueWrapper
+  wrapper.getComponent({name: 'foo'}) // returns a VueWrapper
   wrapper.getComponent(Foo) // returns a VueWrapper
 
   expect(() => wrapper.getComponent('.not-there')).toThrowError()
