@@ -54,7 +54,7 @@ test('mounts on a specific element', () => {
     attachTo: document.getElementById('app')
   })
 
-  console.log(document.body.innerHTML) 
+  console.log(document.body.innerHTML)
   /*
    * <div>
    *   <h1>Non Vue app</h1>
@@ -777,6 +777,67 @@ test('get', () => {
 })
 ```
 
+
+### `getComponent`
+
+Similar to `findComponent`, `getComponent` looks for a Vue Component instance and returns a `VueWrapper` if one is found. Otherwise it throws an error.
+
+**Supported syntax:**
+
+* **querySelector** - `getComponent('.component')` - Matches standard query selector.
+* **Name** - `getComponent({ name: 'myComponent' })` - matches PascalCase, snake-case, camelCase
+* **ref** - `getComponent({ ref: 'dropdown' })` - Can be used only on direct ref children of mounted component
+* **SFC** - `getComponent(ImportedComponent)` - Pass an imported component directly.
+
+`Foo.vue`
+
+```vue
+<template>
+  <div class="foo">
+    Foo
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Foo'
+}
+</script>
+```
+
+`Component.vue`:
+
+```vue
+<template>
+  <div>
+    <span>Span</span>
+    <Foo data-test="foo" ref="foo"/>
+  </div>
+</template>
+
+<script>
+import Foo from '@/Foo'
+
+export default {
+  components: { Foo },
+}
+</script>
+```
+
+`Component.spec.js`
+
+```js
+import Foo from '@/Foo.vue'
+
+test('find', () => {
+  const wrapper = mount(Component)
+
+  wrapper.getComponent('.foo') // returns a VueWrapper
+
+  expect(() => wrapper.getComponent('.not-there')).toThrowError()
+})
+```
+
 ### `html`
 
 Returns the HTML (via `outerHTML`) of an element. Useful for debugging.
@@ -841,7 +902,7 @@ test('props', () => {
   const wrapper = mount(Component, {
       global: { stubs: ['Foo'] }
   })
-  const foo = wrapper.findComponent({ name: 'Foo' })
+  const foo = wrapper.getComponent({ name: 'Foo' })
 
   expect(foo.props('truthy')).toBe(true)
   expect(foo.props('object')).toEqual({})
