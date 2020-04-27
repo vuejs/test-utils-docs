@@ -826,7 +826,7 @@ export default {
 ```js
 import Foo from '@/Foo.vue'
 
-test('find', () => {
+test('getComponent', () => {
   const wrapper = mount(Component)
 
   wrapper.getComponent({ name: 'foo' }) // returns a VueWrapper
