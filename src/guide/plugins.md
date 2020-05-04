@@ -78,32 +78,31 @@ const wrapper = mount({ template: `<h1>🔌 Plugin</h1>` })
 console.log(wrapper.$el.innerHTML) // 🔌 Plugin
 ```
 
-### Typescript Plugin
-
 #### Data Test ID Plugin
 
 The below plugin adds a method `findByTestId` to the VueWrapper instance. This encourages using a selector strategy relying on test-only attributes on your Vue Components.
 
 Usage:
 ```vue
+// MyComponent.vue
 <template>
   <MyForm class="form-container" data-testid="form">
     <MyInput data-testid="name-input" v-model="name"/>
   </MyForm>
 </template>
 ...
+
+// MyComponent.spec.js
+
+const wrapper = mount(MyComponent)
+wrapper.findByTestId('name-input') // returns a VueWrapper or DOMWrapper
 ```
 
 Implementation of the plugin:
-```ts
-declare module '@vue/test-utils' {
-  interface VueWrapper<T extends ComponentPublicInstance> {
-    findByTestId: (selector: string) => DOMWrapper<Element> | DOMWrapperError
-  }
-}
-
-const DataTestIdPlugin = (wrapper: VueWrapper<ComponentPublicInstance>) => {
-  function findByTestId(selector: string): DOMWrapper<Element> | DOMWrapperError {
+```js
+import { config } from '@vue/test-utils-next'
+const DataTestIdPlugin = (wrapper) => {
+  function findByTestId(selector) {
     const dataSelector = `[data-testid='${selector}']`
     const element = wrapper.element.querySelector(dataSelector)
     if (element) {
