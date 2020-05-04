@@ -1,6 +1,7 @@
 # A Crash Course
 
-Let's jump write into it, and learn Vue Test Utils (VTU) by building a simple Todo app, and writing tests as we go. This guide will cover:
+Let's jump right into it, and learn Vue Test Utils (VTU) by building a simple Todo app, and writing tests as we go. This
+ guide will cover:
 
 - mounting components
 - finding elements
