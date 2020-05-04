@@ -52,6 +52,8 @@ Check out the [Vue Community Guide](https://vue-community.org/guide/ecosystem
 A Vue Test Utils plugin is simply a function that receives the mounted
  `VueWrapper` or `DOMWrapper` instance and can modify it.
 
+### Basic Plugin
+
 Below is a simple plugin to add a convenient alias to map `wrapper.element` to `wrapper.$el`
 
 ```js
@@ -74,6 +76,49 @@ And in your spec, you'll be able to use your plugin after `mount`.
 // component.spec.js
 const wrapper = mount({ template: `<h1>🔌 Plugin</h1>` })
 console.log(wrapper.$el.innerHTML) // 🔌 Plugin
+```
+
+### Typescript Plugin
+
+#### Data Test ID Plugin
+
+The below plugin adds a method `findByTestId` to the VueWrapper instance. This encourages using a selector strategy relying on test-only attributes on your Vue Components.
+
+Usage:
+```vue
+<template>
+  <MyForm class="form-container" data-testid="form">
+    <MyInput data-testid="name-input" v-model="name"/>
+  </MyForm>
+</template>
+...
+```
+
+Implementation of the plugin:
+```ts
+declare module '@vue/test-utils' {
+  interface VueWrapper<T extends ComponentPublicInstance> {
+    findByTestId: (selector: string) => DOMWrapper<Element> | DOMWrapperError
+  }
+}
+
+const DataTestIdPlugin = (wrapper: VueWrapper<ComponentPublicInstance>) => {
+  function findByTestId(selector: string): DOMWrapper<Element> | DOMWrapperError {
+    const dataSelector = `[data-testid='${selector}']`
+    const element = wrapper.element.querySelector(dataSelector)
+    if (element) {
+      return new DOMWrapper(element)
+    }
+
+    return new DOMWrapperError({ selector: dataSelector })
+  }
+
+  return {
+    findByTestId
+  }
+}
+
+config.plugins.VueWrapper.install(DataTestIdPlugin)
 ```
 
 ## Featuring your Plugin
