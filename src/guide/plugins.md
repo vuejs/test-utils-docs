@@ -50,7 +50,7 @@ Check out the [Vue Community Guide](https://vue-community.org/guide/ecosystem
 ## Writing a Plugin
 
 A Vue Test Utils plugin is simply a function that receives the mounted
- `VueWrapper` or `DomWrapper` instance and can modify it.
+ `VueWrapper` or `DOMWrapper` instance and can modify it.
 
 Below is a simple plugin to add a convenient alias to map `wrapper.element` to `wrapper.$el`
 
