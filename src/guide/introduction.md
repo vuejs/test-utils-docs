@@ -12,7 +12,7 @@ import { mount } from '@vue/test-utils'
 const Hello = {
   template: '<div>{{ msg }}</div>',
   props: ['msg'],
-    }
+}
 
 test('it renders a message', () => {
   const wrapper = mount(Hello, {
@@ -20,12 +20,12 @@ test('it renders a message', () => {
       msg: 'Hello world'
     }
   })
-  
+
   expect(wrapper.html()).toContain('Hello world')
 })
 ```
 
-We use the `mount` method to render the `<Hello>` component. The first argument is the component we want to render - in this case, the `<Hello>` component. The second argument is an object of options. We use the `props` mounting option to set the `msg` prop. 
+We use the `mount` method to render the `<Hello>` component. The first argument is the component we want to render - in this case, the `<Hello>` component. The second argument is an object of options. We use the `props` mounting option to set the `msg` prop.
 
 `mount` returns a "wrapper" - a thin layer around your Vue component, with useful methods such as `html`, which we use to assert that the `msg` prop is rendered correctly.
 
