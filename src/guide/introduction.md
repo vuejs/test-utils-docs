@@ -29,6 +29,13 @@ We use the `mount` method to render the `<Hello>` component. The first argument 
 
 `mount` returns a "wrapper" - a thin layer around your Vue component, with useful methods such as `html`, which we use to assert that the `msg` prop is rendered correctly.
 
+## Vue and Vue Test Utils
+
+In short:
+
+* Vue Test Utils 1.X targets Vue 2.X.
+* Vue Test Utils 2.X targets Vue 3.X.
+
 ## What Next?
 
 If you want to see what else Vue Test Utils can do, take the crash course [here](/guide/a-crash-course/), where we use Test Driven Development (TDD) and Vue Test Utils to build a simple Todo app.
