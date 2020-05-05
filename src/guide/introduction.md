@@ -11,12 +11,8 @@ import { mount } from '@vue/test-utils'
 
 const Hello = {
   template: '<div>{{ msg }}</div>',
-  props: {
-    msg: {
-      type: String
+  props: ['msg'],
     }
-  }
-}
 
 test('it renders a message', () => {
   const wrapper = mount(Hello, {
