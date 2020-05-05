@@ -1,6 +1,6 @@
 # Making HTTP requests
 
-It isn't that tricky, but I feel it is a common paint point.
+It isn't that tricky, but I feel it is a common pain point.
 
 Mostly `jest.mock()`, `trigger()`.
 
