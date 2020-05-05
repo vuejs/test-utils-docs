@@ -1,5 +1,7 @@
-# Passing Data
+# Passing Data to Components
 
-Mostly `mount(Comp, { data() {...} })`, `setProps()`.
+Mostly mounting with `data()` and `props`.
 
-Important note to mention: `setProps()` only works for the mounted component.
+https://github.com/vuejs/vue-test-utils-next-docs/issues/9
+
+We could also fit a complex use case with  `setProps()` (as outlined in the linked issue).

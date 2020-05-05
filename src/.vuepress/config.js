@@ -9,6 +9,7 @@ const sidebar = {
         '/guide/a-crash-course',
         '/guide/conditional-rendering',
         '/guide/event-handling',
+        '/guide/passing-data',
         '/guide/forms'
       ]
     },
@@ -17,9 +18,9 @@ const sidebar = {
       collapsable: false,
       children: [
         '/guide/slots',
-        '/guide/passing-data',
         '/guide/async-suspense',
         '/guide/http-requests',
+        '/guide/transitions',
         '/guide/component-instance',
         '/guide/reusability-composition',
         '/guide/vuex',

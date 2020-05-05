@@ -2,4 +2,6 @@
 
 Mostly `setValue()` and `trigger()`.
 
-Also we should tackle `v-model` here once
+Also we might want to tackle `v-model`.
+
+https://github.com/vuejs/vue-test-utils-next-docs/issues/4
