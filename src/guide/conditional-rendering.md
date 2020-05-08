@@ -1,6 +1,6 @@
 # Conditional Rendering
 
-Vue Test Utils is has a range of features for rendering and make assertions about the state of your components, with the goal of verifying they are behaving as expected. This article we well explore how to render components, as well as verify they are rendering content correctly.
+Vue Test Utils has a range of features for rendering and making assertions about the state of a component, with the goal of verifying it is behaving as correctly. This article will explore how to render components, as well as verify they are rendering content correctly.
 
 ## Mounting Components
 
