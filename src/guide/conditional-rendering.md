@@ -20,13 +20,13 @@ test('mounts a component', () => {
 })
 ```
 
-You may have noticed we assign the return value of `mount` to a component named `wrapper`. Vue Test Utils uses a "wrapper" API, where the Vue component has a thin wrapper with some useful methods for testing.
+You may have noticed we assign value returned from `mount` to a variable named `wrapper`. Vue Test Utils uses a "wrapper" API, where the Vue component has a thin wrapper with some useful methods for testing.
 
-You can also pass a SFC (single file component) to `mount`! You may need to configure your test running to understand `.vue` files. For example, if you are using Jest, like the examples in this guide, you can use [`vue-jest`](https://github.com/vuejs/vue-jest).
+You can also pass a SFC (single file component) to `mount`! You may need to configure your test running to understand `.vue` files. If you are using Jest, like the examples in this guide, you can use [`vue-jest`](https://github.com/vuejs/vue-jest).
 
 ## Finding Elements
 
-One of the most basic features of Vue is the ability to dynamically show, hide and remove elements with `v-if`. Let's look at a component that uses `v-if`, and see how to test it.
+One of the most basic features of Vue is the ability to dynamically show, hide and remove elements with `v-if`. Let's look at how to test a component that uses `v-if`.
 
 ```js
 const Nav = {
@@ -44,7 +44,7 @@ const Nav = {
 }
 ```
 
-In the `<Nav>` component, a link to the user's profile is shown. In addition, if the `admin` value is `true`, we reveal a link to the admin section. In this case, there are three scenarios which we should verify are behaving correctly:
+In the `<Nav>` component, a link to the user's profile is shown. In addition, if the `admin` value is `true`, we reveal a link to the admin section. There are three scenarios which we should verify are behaving correctly:
 
 1. The `/profile` link should be shown.
 2. When the user is an admin, the `/admin` link should be shown.
@@ -61,11 +61,11 @@ test('renders a profile link', () => {
 })
 ```
 
-If `get` does not find an element matching the selector, it will raise an error, and your test will fail.
+If `get` does not return an element matching the selector, it will raise an error, and your test will fail.
 
 ## Using `find` and `exists`
 
-`get` works great for asserting elements do exist, because it throws an error when it can't find an element, you can't use it to assert elements don't exist. For this, we can use `find` and `exists`. This next tests asserts that if `admin` is `false` (which is it by default), the admin link is not present:
+`get` works for asserting elements do exist, because it throws an error when it can't find an element, you can't use it to assert elements don't exist. For this, we can use `find` and `exists`. The next test asserts that if `admin` is `false` (which is it by default), the admin link is not present:
 
 ```js
 test('does not render an admin link', () => {
@@ -75,7 +75,7 @@ test('does not render an admin link', () => {
 })
 ```
 
-Notice we are calling `exists` on the value returned from `wrapper.find`? `find`, like `mount`, also returns a wrapper, similar to `mount`. `mount` has a few extra methods, because it's wrapping a Vue component, and `find()` only returns a regular DOM node, but many of the methods are shared between both. Some other methods include `classes()`, which gets the classes a DOM node has, and `trigger()` for simulating user interaction. You can find a list of methods supported [here](/api/#wrapper-methods).
+Notice we are calling `exists()` on the value returned from `.find()`? `find()`, like `mount()`, also returns a wrapper, similar to `mount()`. `mount()` has a few extra methods, because it's wrapping a Vue component, and `find()` only returns a regular DOM node, but many of the methods are shared between both. Some other methods include `classes()`, which gets the classes a DOM node has, and `trigger()` for simulating user interaction. You can find a list of methods supported [here](/api/#wrapper-methods).
 
 ## Using `data`
 
