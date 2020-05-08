@@ -4,11 +4,10 @@ Vue Test Utils has a range of features for rendering and making assertions about
 
 ## Mounting Components
 
-The majority of your component tests will make use of the `mount` function. It takes a component as the first argument, and an object of options as the second. Here are some examples:
+The majority of your component tests will make use of the `mount` function. It takes a component as the first argument, and an object of options as the second. Here are an example:
 
 ```js
 import { mount } from '@vue/test-utils'
-import Component from './Component.vue'
 
 test('mounts a component', () => {
   const Component = {
