@@ -11,11 +11,7 @@ import { mount } from '@vue/test-utils'
 
 const Hello = {
   template: '<div>{{ msg }}</div>',
-  props: {
-    msg: {
-      type: String
-    }
-  }
+  props: ['msg'],
 }
 
 test('it renders a message', () => {
@@ -24,14 +20,21 @@ test('it renders a message', () => {
       msg: 'Hello world'
     }
   })
-  
+
   expect(wrapper.html()).toContain('Hello world')
 })
 ```
 
-We use the `mount` method to render the `<Hello>` component. The first argument is the component we want to render - in this case, the `<Hello>` component. The second argument is an object of options. We use the `props` mounting option to set the `msg` prop. 
+We use the `mount` method to render the `<Hello>` component. The first argument is the component we want to render - in this case, the `<Hello>` component. The second argument is an object of options. We use the `props` mounting option to set the `msg` prop.
 
 `mount` returns a "wrapper" - a thin layer around your Vue component, with useful methods such as `html`, which we use to assert that the `msg` prop is rendered correctly.
+
+## Vue and Vue Test Utils
+
+In short:
+
+* Vue Test Utils 1.X targets Vue 2.X.
+* Vue Test Utils 2.X targets Vue 3.X.
 
 ## What Next?
 

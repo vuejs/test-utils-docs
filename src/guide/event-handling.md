@@ -1,0 +1,3 @@
+# Event Handling
+
+Mostly `emitted()`.
