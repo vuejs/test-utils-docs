@@ -2,28 +2,6 @@
 
 Vue Test Utils has a range of features for rendering and making assertions about the state of a component, with the goal of verifying it is behaving correctly. This article will explore how to render components, as well as verify they are rendering content correctly.
 
-## Mounting Components
-
-The majority of your component tests will make use of the `mount` function. It takes a component as the first argument, and an object of options as the second. Here are an example:
-
-```js
-import { mount } from '@vue/test-utils'
-
-test('mounts a component', () => {
-  const Component = {
-    template: '<div>Hello Vue Test Utils</div>'
-  }
-  const wrapper = mount(Component)
-
-  // You can inspect the html with `wrapper.html()`
-  console.log(wrapper.html()) //=> <div>Hello Vue Test Utils</div>
-})
-```
-
-You may have noticed we assign value returned from `mount` to a variable named `wrapper`. Vue Test Utils uses a "wrapper" API, where the Vue component has a thin wrapper with some useful methods for testing.
-
-You can also pass a SFC (single file component) to `mount`! You may need to configure your test running to understand `.vue` files. If you are using Jest, like the examples in this guide, you can use [`vue-jest`](https://github.com/vuejs/vue-jest).
-
 ## Finding Elements
 
 One of the most basic features of Vue is the ability to dynamically show, hide and remove elements with `v-if`. Let's look at how to test a component that uses `v-if`.
@@ -101,8 +79,6 @@ To learn what other mounting options exist, see [`Passing Data`](/guide/passing-
 
 ## Conclusion
 
-- `mount()` is used to render components.
-- `get()` searches for a DOM node using `querySelector` syntax, and throws an error if one is not found.
-- `find()` also uses the `querySelector` syntax, returns a `wrapper`, even if a matching element is not found.
-- `exists()` verifies whether an element is in the DOM.
-- the `data` mounting option can be used to set default values on a component.
+- Use `find()` along with `exists()` to verify whether if an element is in the DOM.
+- Use `get()` if you expect the DOM element to be in the DOM.
+- The `data` mounting option can be used to set default values on a component.
