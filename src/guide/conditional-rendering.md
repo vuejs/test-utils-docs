@@ -28,9 +28,9 @@ In the `<Nav>` component, a link to the user's profile is shown. In addition, if
 2. When the user is an admin, the `/admin` link should be shown.
 3. When the user is not an admin, the `/admin` link should not be shown.
 
-## Using `get`
+## Using `get()`
 
-`wrapper` has a `get` method for asserting an element exists. It uses [`querySelector`](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) syntax. We can assert the profile link is present using `get`:
+`wrapper` has a `get()` method for asserting an element exists. It uses [`querySelector`](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) syntax. We can assert the profile link is present using `get()`:
 
 ```js
 test('renders a profile link', () => {
@@ -39,11 +39,11 @@ test('renders a profile link', () => {
 })
 ```
 
-If `get` does not return an element matching the selector, it will raise an error, and your test will fail.
+If `get()` does not return an element matching the selector, it will raise an error, and your test will fail.
 
-## Using `find` and `exists`
+## Using `find()` and `exists()`
 
-`get` works for asserting elements do exist, because it throws an error when it can't find an element, you can't use it to assert elements don't exist. For this, we can use `find` and `exists`. The next test asserts that if `admin` is `false` (which is it by default), the admin link is not present:
+`get()` works for asserting elements do exist, because it throws an error when it can't find an element, you can't use it to assert elements don't exist. For this, we can use `find()` and `exists()`. The next test asserts that if `admin` is `false` (which is it by default), the admin link is not present:
 
 ```js
 test('does not render an admin link', () => {
