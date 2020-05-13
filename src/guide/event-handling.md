@@ -1,6 +1,6 @@
 # Event Handling
 
-Vue components interacts with each other via props and by emitting events by calling `$emit`. In this guide, we look at how to verify events are correctly emitted using the `emitted()` function.
+Vue components interact with each other via props and by emitting events by calling `$emit`. In this guide, we look at how to verify events are correctly emitted using the `emitted()` function.
 
 ## The Counter component
 
