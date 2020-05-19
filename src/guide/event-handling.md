@@ -4,7 +4,7 @@ Vue components interact with each other via props and by emitting events by call
 
 ## The Counter component
 
-Here is a simple `<Counter>` component. It has a button that increments a `count` property when it is clicked. It also emits a `increment` event with the latest value of `count` by calling `this.$emit('increment', this.count)`:
+Here is a simple `<Counter>` component. It has a button that increments a `count` property when it is clicked. It also emits an `increment` event with the latest value of `count` by calling `this.$emit('increment', this.count)`:
 
 ```js
 const Counter = {
