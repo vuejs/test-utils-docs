@@ -26,7 +26,7 @@ const Counter = {
 }
 ```
 
-To full test this component, we should verify that when the button is clicked, the `count` shown in the template is updated. We can also verify an `increment` event with the latest `count` value is emitted. We will start with the latter.
+To fully test this component, we should verify that when the button is clicked, the `count` shown in the template is updated. We can also verify that an `increment` event with the latest `count` value is emitted. We will start with the latter.
 
 ## `VueWrapper.emitted()`
 
