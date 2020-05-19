@@ -98,5 +98,5 @@ If you are using the Composition API, you will be calling `context.emit()` inste
 ## Conclusion
 
 - Use `emitted()` to access the events emitted from a Vue component.
-- `emitted().event` returns an array, where each element represents one event emitted.
+- `emitted()[eventName]` returns an array, where each element represents one event emitted.
 - Arguments are stored in `emitted().event[index]` in an array, in the same order they are emitted.
