@@ -29,36 +29,30 @@ The first requirement we will add is a minimum length.
 
 We want to reuse this component in all our projects, each of which may have different requirements. For this reason, we will make the `minLength` a **prop** which we pass to `<Password>`:
 
-```js
-props: {
-  minLength: {
-    type: Number
-  }
-}
-```
-
 We will show an error is `password` is less than `minLength`. We can do this by creating an `error` computed property, and conditionally rendering it using `v-if`:
 
 ```js
-computed: {
-  error() {
-    if (this.password.length < this.minLength) {
-      return `Password must be at least ${this.minLength} characters.`
+const Password = {
+  template: `
+    <div>
+      <input v-model="password">
+      <div v-if="error">{{ error }}</div>
+    </div>
+  `,
+  props: {
+    minLength: {
+      type: Number
     }
-    return
+  },
+  computed: {
+    error() {
+      if (this.password.length < this.minLength) {
+        return `Password must be at least ${this.minLength} characters.`
+      }
+      return
+    }
   }
 }
-```
-
-Finally, use `v-if` to render it:
-
-```js
-template: `
-  <div>
-    <input v-model="password">
-    <div v-if="error">{{ error }}</div>
-  </div>
-`
 ```
 
 To test this, we need to set the `minLength`, as well as a `password` that is less than that number. We can do this using the `data` and `props` mounting options. Finally, we will assert the correct error message is rendered:
@@ -80,15 +74,15 @@ test('renders an error if length is too short', () => {
 })
 ```
 
-Writing a test for a `maxLength` rule is left as an exercise for the reader!
+Writing a test for a `maxLength` rule is left as an exercise for the reader! Another way to write this would be using `setValue` to update the input with a password that is too short. You can learn more in [Forms](/guide/forms). 
 
 ## Using `setProps`
 
-Sometimes you may need to write a test for a side effect of a prop changing. This simple `<Post>` component renders a `postId` prop. Using `watch`, it fetches a resource using the `axios` HTTP client:
+Sometimes you may need to write a test for a side effect of a prop changing. This simple `<Show>` component renders a greeting if the `show` prop is `true`. 
 
 ```vue
 <template>
-  <div>{{ postId }}</div>
+  <div v-if="show">{{ greeting }}</div>
 </template>
 
 <script>
@@ -96,46 +90,37 @@ import axios from 'axios'
 
 export default {
   props: {
-    postId: {
-      type: Number
+    show: {
+      type: Boolean,
+      default: true
     }
   },
-  watch: {
-    postId(id) {
-      axios.get(`/api/posts/${id}`)
+  data() {
+    return {
+      greeting: 'Hello'
     }
   }
 }
 </script>
 ```
 
-To test this fully, we might want to verify the original `postId` prop is rendered, and when the `postId` prop changes, the `axios` request is triggered, the new `propId` is rendered in the DOM. We are able to update a prop using `setProps()`:
+To test this fully, we might want to verify that `greeting` is rendered by default. We are able to update the `show` prop using `setProps()`, which causes `greeting` to be hidden:
 
 ```js
 import { mount } from '@vue/test-utils'
-import axios from 'axios'
-import Post from './Post.vue'
+import Show from './Show.vue'
 
-jest.mock('axios', () => ({
-  get: jest.fn()
-}))
+test('renders a greeting when show is true', async () => {
+  const wrapper = mount(Show)
+  expect(wrapper.html()).toContain('Hello')
 
-test('fetches a post when postId changes', async () => {
-  const wrapper = mount(Post, {
-    props: {
-      postId: 1
-    }
-  })
-  expect(wrapper.html()).toContain(1)
+  await wrapper.setProps({ show: false })
 
-  await wrapper.setProps({ postId: 2 })
-
-  expect(wrapper.html()).toContain(2)
-  expect(axios.get).toHaveBeenCalledWith('/api/posts/2')
+  expect(wrapper.html()).not.toContain('Hello')
 })
 ```
 
-We also use the `await` keyword when calling `setProps()`, to ensure that the DOM has been updated before the assertions run. We also used `jest.mock` to mock the `axios` module. This let's us easily verify that `axios.get()` was called with the correct URL, as well as avoid needing a real HTTP server to run the test.
+We also use the `await` keyword when calling `setProps()`, to ensure that the DOM has been updated before the assertions run.
 
 ## Conclusion
 
