@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     async getPosts() {
-      this.posts = await axios.get('/posts')
+      this.posts = await axios.get('/api/posts')
     }
   }
 }
@@ -72,7 +72,7 @@ test('loads posts on button click', async () => {
   // Let's assert that we've called axios.get the right amount of times and
   // with the right parameters
   expect(axios.get).toHaveBeenCalledTimes(1)
-  expect(axios.get).toHaveBeenCalledWith('/posts')
+  expect(axios.get).toHaveBeenCalledWith('/api/posts')
 
   // Wait until the DOM updates
   await flushPromises()
@@ -124,7 +124,7 @@ export default {
     async getPosts() {
       this.loading = true
 
-      this.posts = await axios.get('/posts')
+      this.posts = await axios.get('/api/posts')
 
       this.loading = false
     }
