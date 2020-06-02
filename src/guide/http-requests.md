@@ -143,20 +143,20 @@ test('displays loading state on button click', async () => {
   // Initially, we're in a state where the button has not triggered the API call,
   // so the component should not render any loading-related element.
   expect(wrapper.find('[role="alert"]').exists()).toBe(false)
-  expect(wrapper.find('button').attributes()).not.toHaveProperty('disabled')
+  expect(wrapper.get('button').attributes()).not.toHaveProperty('disabled')
 
   // Now let's trigger it as usual
   await wrapper.get('button').trigger('click')
 
   // We assert for "Loading state" before flushing all promises
   expect(wrapper.find('[role="alert"]').exists()).toBe(true)
-  expect(wrapper.find('button').attributes()).toHaveProperty('disabled')
+  expect(wrapper.get('button').attributes()).toHaveProperty('disabled')
 
   await flushPromises()
 
   // After flushing promises, we're back at "Loaded state"
   expect(wrapper.find('[role="alert"]').exists()).toBe(false)
-  expect(wrapper.find('button').attributes()).not.toHaveProperty('disabled')
+  expect(wrapper.get('button').attributes()).not.toHaveProperty('disabled')
 })
 ```
 
