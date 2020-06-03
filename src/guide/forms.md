@@ -48,7 +48,7 @@ it('sets the value', async () => {
 
   await input.setValue('my@mail.com')
 
-  expect(input.element.value).toEqual('my@mail.com')
+  expect(input.element.value).toBe('my@mail.com')
 })
 ```
 
@@ -175,7 +175,7 @@ that can save you time later on, if you do assertions but changes are not applie
 If you dont pass a parameter to `setValue` for `OPTION`, `CHECKBOX` or `RADIO` inputs, they will set as `checked`.
 :::
 
-We have set values in our form, now its time to submit the form and do some assertions.
+We have set values in our form, now it's time to submit the form and do some assertions.
 
 ### Triggering complex event listeners
 
@@ -189,7 +189,7 @@ To trigger the `submit` handler, we will use the `trigger` method again.
 test('submits the form', async () => {
   // ... previous test code
   await wrapper.find('form').trigger('submit.prevent')
-  expect(wrapper.emitted('submit')[0][0]).toEqual("")
+  expect(wrapper.emitted('submit')[0][0]).toBe("")
 })
 ```
 
