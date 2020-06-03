@@ -127,3 +127,4 @@ We also use the `await` keyword when calling `setProps()`, to ensure that the DO
 - use the `props` and `data` mounting options to pre-set the state of a component.
 - Use `setProps()` to update a prop during a test.
 - Use the `await` keyword before `setProps()` to ensure the Vue will update the DOM before the test continues.
+- Directly interacting with your component can give you greater coverage. Consider using `setValue` or `trigger` in combination with `data` to ensure everything works correctly.
