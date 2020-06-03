@@ -42,7 +42,7 @@ and the props it accepts, making it easy for us to work with form elements.
 To change the value of an input in VTU, you can use the `setValue()` method. It accepts a parameter, most often a `String` or a `Boolean`, and returns a `Promise`, which resolves after Vue has updated the DOM.
 
 ```js
-it('sets the value', async () => {
+test('sets the value', async () => {
   const wrapper = mount(Component)
   const input = wrapper.find('input')
 
@@ -230,11 +230,39 @@ VTU will read the even and apply the appropriate properties to the event object.
 #### Adding extra data to an event
 
 Let's say your code needs something from inside the `event` object. You can test such scenarios by passing extra data as a second parameter.
-
+```vue
+<template>
+  <form>
+    <input type="text" v-model="value" @blur="handleBlur">
+    <button>Submit</button>
+  </form>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      value: ''
+    }
+  },
+  methods: {
+    submit() {
+      // some logic  
+    },
+    handleBlur(event) {
+      if(event.relatedTarget.tagName === 'BUTTON'){ 
+        this.$emit('focus-lost')
+      }
+    }
+  }
+}
+</script>
+```
 ```js
+import Form from './Form.vue'
 test('emits an event only if you lose focus to a button', () => {
-  const componentToGetFocus = wrapper.find('.someButton')
-  wrapper.find(input).trigger('blur', {
+  const wrapper = mount(Form)
+  const componentToGetFocus = wrapper.find('button')
+  wrapper.find('input').trigger('blur', {
     relatedTarget: componentToGetFocus
   })
   expect(wrapper.emitted('focus-lost')).toBeTruthy()
@@ -276,9 +304,9 @@ This Vue component adds a label and emits back whatever you type. To use it you 
 Most of these Vue components have a real `button` or `input` in them. You can just as easily find that element and act on it:
 
 ```js
-test('fills in the form', () => {
+test('fills in the form', async () => {
   // ... some extra test code 
-  wrapper.find('.text-input input').setValue('text')
+  await wrapper.find('.text-input input').setValue('text')
   // continue with assertions or actions like submit the form, assert DOM.
 })
 ```
@@ -300,9 +328,9 @@ Assume we have a form that uses the Vuetify textarea.
 We can update set it's value by simply finding it using `findComponent` and setting the value.
 
 ```js
-test('sets data in the form', () => {
+test('sets data in the form', async () => {
   // init wrapper, do other tasks
-  wrapper.findComponent({ ref: 'description' }).setValue('Some very long text...')
+  await wrapper.findComponent({ ref: 'description' }).setValue('Some very long text...')
   wrapper.find('.submit').trigger('click')
   expect(wrapper.emitted('submit')[0][0]).toEqual({
     model: 'Some very long text...'
