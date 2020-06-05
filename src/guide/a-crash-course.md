@@ -66,7 +66,7 @@ Finally, we use another global function common to many tests runner - Jest inclu
 
 ## Making the test pass
 
-If we run this test now, it fails with the following error message: `Cannot call text on an empty wrapper`. That's because we aren't rendering any todo item, so the `find` call is failing to return a wrapper (remember, VTU wraps all components, and DOM elements, in a "wrapper" with some convenient methods). Let's update `<template>` in `TodoApp.vue` to render the `todos` array:
+If we run this test now, it fails with the following error message: `Cannot call text on an empty wrapper`. That's because we aren't rendering any todo item, so the `find()` call is failing to return a wrapper (remember, VTU wraps all components, and DOM elements, in a "wrapper" with some convenient methods). Let's update `<template>` in `TodoApp.vue` to render the `todos` array:
 
 ```vue
 <template>
@@ -269,6 +269,6 @@ Almost all test will follow these three phases. You don't need to separate them 
 
 - Use `mount()` to render a component.
 - Use `get()` and `findAll()` to query the DOM.
-- `trigger()` and `setChecked()` helps you simulate user input.
+- `trigger()` and `setChecked()` are helpers to simulate user input.
 - Updating the DOM is an async operation, so make sure to use `async` and `await`.
 - Testing usually consists of 3 phases; act, arrange and assert.
