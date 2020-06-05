@@ -50,7 +50,7 @@ import TodoApp from './TodoApp.vue'
 test('renders a todo', () => {
   const wrapper = mount(TodoApp)
 
-  const todo = wrapper.find('[data-test="todo"]')
+  const todo = wrapper.get('[data-test="todo"]')
 
   expect(todo.text()).toBe('Learn Vue.js 3')
 })
@@ -96,8 +96,8 @@ test('creates a todo', () => {
   const wrapper = mount(TodoApp)
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(1)
 
-  wrapper.find('[data-test="new-todo"]').setValue('New todo')
-  wrapper.find('[data-test="form"]').trigger('submit')
+  wrapper.get('[data-test="new-todo"]').setValue('New todo')
+  wrapper.get('[data-test="form"]').trigger('submit')
 
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
 })
@@ -179,8 +179,8 @@ import TodoApp from './TodoApp.vue'
 test('creates a todo', async () => {
   const wrapper = mount(TodoApp)
 
-  await wrapper.find('[data-test="new-todo"]').setValue('New todo')
-  await wrapper.find('[data-test="form"]').trigger('submit')
+  await wrapper.get('[data-test="new-todo"]').setValue('New todo')
+  await wrapper.get('[data-test="form"]').trigger('submit')
 
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
 })
@@ -199,9 +199,9 @@ import TodoApp from './TodoApp.vue'
 test('completes a todo', async () => {
   const wrapper = mount(TodoApp)
 
-  await wrapper.find('[data-test="todo-checkbox"]').setValue(true)
+  await wrapper.get('[data-test="todo-checkbox"]').setValue(true)
 
-  expect(wrapper.find('[data-test="todo"]').classes()).toContain('completed')
+  expect(wrapper.get('[data-test="todo"]').classes()).toContain('completed')
 })
 ```
 
@@ -248,8 +248,8 @@ import TodoApp from './TodoApp.vue'
 test('creates a todo', async () => {
   const wrapper = mount(TodoApp)
 
-  await wrapper.find('[data-test="new-todo"]').setValue('New todo')
-  await wrapper.find('[data-test="form"]').trigger('submit')
+  await wrapper.get('[data-test="new-todo"]').setValue('New todo')
+  await wrapper.get('[data-test="form"]').trigger('submit')
 
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
 })
@@ -270,7 +270,7 @@ Almost all test will follow these three phases. You don't need to separate them 
 This guide demonstrates the basics of Vue Test Utils, including:
 
 - `mount` to render a component
-- `find` and `findAll` to query the DOM
+- `get` and `findAll` to query the DOM
 - `trigger` and `setChecked` to simulate user input
 - `async` and `await` to ensure the DOM is rerendered prior to an assertion
 - the three phases of testing; act, arrange and assert
