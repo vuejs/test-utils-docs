@@ -1,8 +1,10 @@
 # Making HTTP requests
 
-Vue Test Utils does not offer any unique feature when it comes to handling HTTP requests. However, it is an important feature to test, and there are a few gotchas we want to highlight.
+Modern test runners already provide lots of great features when it comes to test HTTP requests. Thus, Vue Test Utils doesn't feature any unique tool to do so.
 
-In this section, we explore some possibilities to perform, mock, and assert HTTP requests.
+However, it is an important feature to test, and there are a few gotchas we want to highlight.
+
+In this section, we explore some patterns to perform, mock, and assert HTTP requests.
 
 ## A list of blog posts
 
@@ -58,7 +60,7 @@ const fakePostList = [
   { id: 2, title: 'title2' }
 ]
 
-// This tells Jest to mock any call to `axios.get` – and that it should return
+// Let's tell Jest to mock any call to `axios.get` – and to return
 // `fakePostList` instead
 jest.mock('axios', () => ({
   get: jest.fn(() => fakePostList)
