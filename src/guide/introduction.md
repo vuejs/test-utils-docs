@@ -1,43 +1,48 @@
-## Introduction
+## Vue Test Utils Documentation
 
-Welcome to Vue Test Utils! This is the documentation for the `vue-test-utils-next` repository, found [here](https://github.com/vuejs/vue-test-utils-next/), which targets Vue.js 3 (aka `vue-next`, found [here](https://github.com/vuejs/vue-next/)).
+Welcome to Vue Test Utils, the official testing utility library for Vue.js!
+
+<!-- content to be removed when we merge VTU repos -->
+This is the documentation for Vue Test Utils v2, which targets Vue 3.
+
+In short:
+* [Vue Test Utils 1](https://github.com/vuejs/vue-test-utils/) targets [Vue 2](https://github.com/vuejs/vue/).
+* [Vue Test Utils 2](https://github.com/vuejs/vue-test-utils-next/) targets [Vue 3](https://github.com/vuejs/vue-next/).
 
 ## What is Vue Test Utils?
 
-Vue Test Utils (VTU) is a set of utility functions that aim to simplify the process of testing Vue.js components. It provides some methods to render and interact with your components in an isolated manner. Let's see an example:
+Vue Test Utils (VTU) is a set of utility functions aimed to simplify testing Vue.js components. It provides some methods to mount and interact with Vue components in an isolated manner.
+
+Let's see an example:
 
 ```js
 import { mount } from '@vue/test-utils'
 
-const Hello = {
-  template: '<div>{{ msg }}</div>',
+// The component to test
+const MessageComponent = {
+  template: '<p>{{ msg }}</p>',
   props: ['msg'],
 }
 
-test('it renders a message', () => {
-  const wrapper = mount(Hello, {
+test('displays message', () => {
+  const wrapper = mount(MessageComponent, {
     props: {
       msg: 'Hello world'
     }
   })
 
-  expect(wrapper.html()).toContain('Hello world')
+  // Assert the rendered text of the component
+  expect(wrapper.text()).toContain('Hello world')
 })
 ```
 
-We use the `mount` method to render the `<Hello>` component. The first argument is the component we want to render - in this case, the `<Hello>` component. The second argument is an object of options. We use the `props` mounting option to set the `msg` prop.
-
-`mount` returns a "wrapper" - a thin layer around your Vue component, with useful methods such as `html`, which we use to assert that the `msg` prop is rendered correctly.
-
-## Vue and Vue Test Utils
-
-In short:
-
-* Vue Test Utils 1.X targets Vue 2.X.
-* Vue Test Utils 2.X targets Vue 3.X.
-
 ## What Next?
 
-If you want to see what else Vue Test Utils can do, take the crash course [here](/guide/a-crash-course/), where we use Test Driven Development (TDD) and Vue Test Utils to build a simple Todo app.
+To see Vue Test Utils in action, [take the Crash Course](/guide/a-crash-course/), where we build a simple Todo app using a test-first approach.
 
-Alternatively, explore the full API [here](/api/).
+Docs are split into two main sections:
+
+* **Essentials**, to cover common uses cases you'll face when testing Vue components.
+* **Vue Test Utils in Depth**, to explore other advanced features of the library.
+
+Alternatively, you can explore the full [API](/api/).
