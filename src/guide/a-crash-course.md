@@ -50,7 +50,7 @@ import TodoApp from './TodoApp.vue'
 test('renders a todo', () => {
   const wrapper = mount(TodoApp)
 
-  const todo = wrapper.find('[data-test="todo"]')
+  const todo = wrapper.get('[data-test="todo"]')
 
   expect(todo.text()).toBe('Learn Vue.js 3')
 })
@@ -58,7 +58,7 @@ test('renders a todo', () => {
 
 We start off by importing `mount` - this is the main way to render a component in VTU. You declare a test by using the `test` function with a short description of the test. The `test` and `expect` functions are globally available in most test runners (this example uses [Jest](https://jestjs.io/en/)). If `test` and `expect` look confusing, the Jest documentation has a [more simple example](https://jestjs.io/docs/en/getting-started) of how to use them and how they work.
 
-Next, we call `mount` and pass the component as the first argument - this is something almost every test you write will do. By convention, we assign the result to a variable called `wrapper`, since `mount` provides a simple "wrapper" around the app with some convinient methods for testing.
+Next, we call `mount` and pass the component as the first argument - this is something almost every test you write will do. By convention, we assign the result to a variable called `wrapper`, since `mount` provides a simple "wrapper" around the app with some convenient methods for testing.
 
 Finally, we use another global function common to many tests runner - Jest included - `expect`. The idea is we are asserting, or *expecting*, the actual output to match what we think it should be. In this case, we are finding an element with the selector `data-test="todo"` - in the DOM, this will look like `<div data-test="todo">...</div>`. We then call the `text` method to get the content, which we expect to be `'Learn Vue.js 3'`.
 
@@ -66,7 +66,7 @@ Finally, we use another global function common to many tests runner - Jest inclu
 
 ## Making the test pass
 
-If we run this test now, it fails with the following error message: `Cannot call text on an empty wrapper`. That's because we aren't rendering any todos, so the `find` call is failing to return a wrapper (remember, VTU wraps all components, and DOM elements, in a "wrapper" with some convinient methods). Let's update `<template>` in `TodoApp.vue` to render the `todos` array:
+If we run this test now, it fails with the following error message: `Cannot call text on an empty wrapper`. That's because we aren't rendering any todo item, so the `find()` call is failing to return a wrapper (remember, VTU wraps all components, and DOM elements, in a "wrapper" with some convenient methods). Let's update `<template>` in `TodoApp.vue` to render the `todos` array:
 
 ```vue
 <template>
@@ -96,18 +96,18 @@ test('creates a todo', () => {
   const wrapper = mount(TodoApp)
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(1)
 
-  wrapper.find('[data-test="new-todo"]').setValue('New todo')
-  wrapper.find('[data-test="form"]').trigger('submit')
+  wrapper.get('[data-test="new-todo"]').setValue('New todo')
+  wrapper.get('[data-test="form"]').trigger('submit')
 
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
 })
 ```
 
-As usual, we start of by using `mount` to render the element. We are also asseting that only 1 todo is rendered - this makes it clear that we are adding an additional todo, as the final line of the test suggests.
+As usual, we start of by using `mount` to render the element. We are also asserting that only 1 todo is rendered - this makes it clear that we are adding an additional todo, as the final line of the test suggests.
 
 To update the `<input>`, we use `setValue` - this allows us to set the input's value.
 
-After updating the `<input>`, we use the `trigger` method to simulate the user submitting the form. Finally, we assert the number of todos has increased from 1 to 2.
+After updating the `<input>`, we use the `trigger` method to simulate the user submitting the form. Finally, we assert the number of todo items has increased from 1 to 2.
 
 If we run this test, it will obviously fail. Let's update `TodoApp.vue` to have the `<form>` and `<input>` elements and make the test pass:
 
@@ -179,8 +179,8 @@ import TodoApp from './TodoApp.vue'
 test('creates a todo', async () => {
   const wrapper = mount(TodoApp)
 
-  await wrapper.find('[data-test="new-todo"]').setValue('New todo')
-  await wrapper.find('[data-test="form"]').trigger('submit')
+  await wrapper.get('[data-test="new-todo"]').setValue('New todo')
+  await wrapper.get('[data-test="form"]').trigger('submit')
 
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
 })
@@ -199,9 +199,9 @@ import TodoApp from './TodoApp.vue'
 test('completes a todo', async () => {
   const wrapper = mount(TodoApp)
 
-  await wrapper.find('[data-test="todo-checkbox"]').setValue(true)
+  await wrapper.get('[data-test="todo-checkbox"]').setValue(true)
 
-  expect(wrapper.find('[data-test="todo"]').classes()).toContain('completed')
+  expect(wrapper.get('[data-test="todo"]').classes()).toContain('completed')
 })
 ```
 
@@ -248,8 +248,8 @@ import TodoApp from './TodoApp.vue'
 test('creates a todo', async () => {
   const wrapper = mount(TodoApp)
 
-  await wrapper.find('[data-test="new-todo"]').setValue('New todo')
-  await wrapper.find('[data-test="form"]').trigger('submit')
+  await wrapper.get('[data-test="new-todo"]').setValue('New todo')
+  await wrapper.get('[data-test="form"]').trigger('submit')
 
   expect(wrapper.findAll('[data-test="todo"]')).toHaveLength(2)
 })
@@ -267,10 +267,8 @@ Almost all test will follow these three phases. You don't need to separate them 
 
 ## Conclusion
 
-This guide demonstrates the basics of Vue Test Utils, including:
-
-- `mount` to render a component
-- `find` and `findAll` to query the DOM
-- `trigger` and `setChecked` to simulate user input
-- `async` and `await` to ensure the DOM is rerendered prior to an assertion
-- the three phases of testing; act, arrange and assert
+- Use `mount()` to render a component.
+- Use `get()` and `findAll()` to query the DOM.
+- `trigger()` and `setChecked()` are helpers to simulate user input.
+- Updating the DOM is an async operation, so make sure to use `async` and `await`.
+- Testing usually consists of 3 phases; act, arrange and assert.
