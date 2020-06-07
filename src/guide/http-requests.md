@@ -88,7 +88,7 @@ test('loads posts on button click', async () => {
 })
 ```
 
-Notice how we awaited `flushPromises` before asserting that the Component updated with the content from the API.
+Notice how we awaited `flushPromises` and then interacted with the Component. We do so to ensure that the DOM has been updated before the assertions run.
 
 :::tip Alternatives to jest.mock()
 There are several ways of setting mocks in Jest. The one used in the example above is the simplest. For more powerful alternatives, you might want to check out [axios-mock-adapter](https://github.com/ctimmerm/axios-mock-adapter) or [msw](https://github.com/mswjs/msw), among others.
