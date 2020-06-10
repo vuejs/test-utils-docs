@@ -343,22 +343,43 @@ In such cases you can use set the value directly, using the component instance a
 
 Assume we have a form that uses the Vuetify textarea.
 
-```html
-<form>
-  <v-textarea v-model="model" ref="description" />
-</form>
+```vue
+<template>
+  <form>
+    <v-textarea v-model="description" ref="description" />
+    <button @click="handleClick">Send</button>
+  </form>
+</template>
+
+<script>
+export default {
+  name: 'CustomTextarea',
+  data() {
+    return {
+      description: ''
+    }
+  },
+  methods: {
+    handleClick() {
+      this.$emit('submit', this.description)
+    }
+  }
+}
+</script>
 ```
 
-We can update set it's value by simply finding it using `findComponent` and setting the value.
+We can use `findComponent` to find the component instance, and then set its value.
 
 ```js
-test('sets data in the form', async () => {
-  // init wrapper, do other tasks
-  await wrapper.findComponent({ ref: 'description' }).setValue('Some very long text...')
+test('emits textarea value on click', async () => {
+  const wrapper = mount(CustomTextarea)
+  const description = 'Some very long text...'
+
+  await wrapper.findComponent({ ref: 'description' }).setValue(description)
+
   wrapper.find('.submit').trigger('click')
-  expect(wrapper.emitted('submit')[0][0]).toEqual({
-    model: 'Some very long text...'
-  })
+
+  expect(wrapper.emitted('submit')[0][0]).toEqual({ description })
 })
 ```
 
