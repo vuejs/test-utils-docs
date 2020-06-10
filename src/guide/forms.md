@@ -335,13 +335,13 @@ test('fills in the form', async () => {
 })
 ```
 
-### Using setValue on the Vue Component
+### Testing complex Input components
 
-But what if your input is not that simple? What if you are using a UI library, like Vuetify? You cannot just dig inside it, hoping to find the correct input/button and hope those don't change in the next version.
+What happens if your Input component is not that simple? You might be using a UI library, like Vuetify. If you rely on digging inside the markup to find the right element, your tests may break if the external library decides to change their internals.
 
-In such cases you can use set the value directly, using the component instance and, you guessed it, `setValue`.
+In such cases you can use set the value directly, using the component instance and `setValue`.
 
-Assume we have a form that uses the Vuetify textarea.
+Assume we have a form that uses the Vuetify textarea:
 
 ```vue
 <template>
