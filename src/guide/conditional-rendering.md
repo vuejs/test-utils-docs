@@ -30,12 +30,19 @@ In the `<Nav>` component, a link to the user's profile is shown. In addition, if
 
 ## Using `get()`
 
-`wrapper` has a `get()` method for asserting an element exists. It uses [`querySelector`](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) syntax. We can assert the profile link is present using `get()`:
+`wrapper` has a `get()` method that searches for an existing element. It uses [`querySelector`](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) syntax.
+
+We can assert the profile link content by using `get()`:
 
 ```js
 test('renders a profile link', () => {
   const wrapper = mount(Nav)
-  wrapper.get('#profile')
+
+  // Here we are implicitly asserting that the
+  // element #profile exists.
+  const profileLink = wrapper.get('#profile')
+
+  expect(profileLink.text()).toEqual('My Profile')
 })
 ```
 
