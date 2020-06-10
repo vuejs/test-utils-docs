@@ -68,11 +68,13 @@ To trigger a click event, we can use the `trigger` event.
 
 ```js
 test('trigger', async () => {
-  const wrapper = mount(Component)  
+  const wrapper = mount(Component)
+
   // trigger the element
   await wrapper.find('button').trigger('click')
+
   // assert some action has been performed, like an emitted event.
-  expect(wrapper.emitted('submit')).toBeTruthy()
+  expect(wrapper.emitted()).toHaveProperty('submit')
 })
 ```
 
@@ -84,11 +86,14 @@ Let's combine these two to test whether our simple form is emitting the email th
 
 ```js
 test('emits the input to its parent', async () => {
-  const wrapper = mount(Component)  
+  const wrapper = mount(Component)
+
   // set the value
   await wrapper.find('input').setValue('my@mail.com')
+
   // trigger the element
   await wrapper.find('button').trigger('click')
+
   // assert the `submit` event is emitted,
   expect(wrapper.emitted('submit')[0][0]).toBe('my@mail.com')
 })
