@@ -83,6 +83,7 @@ test('emits and event with count when clicked', () => {
 
   wrapper.find('button').trigger('click')
 
+  // Assert emitted() returns an object with the 'increment' key
   expect(wrapper.emitted()).toHaveProperty('increment')
 })
 ```
@@ -97,7 +98,9 @@ test('emits and event with count when clicked', () => {
   wrapper.find('button').trigger('click')
   wrapper.find('button').trigger('click')
 
+  // We clicked three times, so `increment` should contain 3 items
   expect(wrapper.emitted('increment')).toHaveLength(3)
+
   expect(wrapper.emitted('increment')[0]).toEqual([1])
   expect(wrapper.emitted('increment')[1]).toEqual([2])
   expect(wrapper.emitted('increment')[2]).toEqual([3])
@@ -112,4 +115,4 @@ If you are using the Composition API, you will be calling `context.emit()` inste
 
 - Use `emitted()` to access the events emitted from a Vue component.
 - `emitted(eventName)` returns an array, where each element represents one event emitted.
-- Arguments are stored in `emitted(eventName)[index]` in an array, in the same order they are emitted.
+- Arguments are stored in `emitted(eventName)[index]` in an array in the same order they are emitted.
