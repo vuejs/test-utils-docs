@@ -216,10 +216,12 @@ test('submits the form', async () => {
 })
 ```
 
-You probably noticed we have a `.prevent` in there, why? This is so that the page does not refresh when the form is submitted.
- 
-To test it, we directly copy-pasted our event string `submit.prevent` into `trigger`, that is because VTU can read the passed event and all the applied modifiers on it, and selectively apply what is necessary. Native event modifiers like `.prevent`, `.stop` etc, are Vue-specific and as such we dont need to test them, Vue internals do that already.
- 
+To test the event modifier, we directly copy-pasted our event string `submit.prevent` into `trigger`. `trigger` can read the passed event and all its modifiers, and selectively apply what is necessary.
+
+::: tip
+Native event modifiers such as `.prevent` and `.stop` are Vue-specific and as such we don't need to test them, Vue internals do that already.
+:::
+
 We then make a simple assertion, whether the form emitted the correct event and payload.
 
 #### Multiple modifiers on the same event
