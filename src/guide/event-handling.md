@@ -105,7 +105,7 @@ const Counter = {
       this.$emit('increment', {
         count: this.count,
         isEven: this.count % 2 === 0
-})
+      })
     }
   }
 }
