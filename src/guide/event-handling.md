@@ -43,31 +43,31 @@ test('emits and event with count when clicked', () => {
 })
 ```
 
-> If you haven't seen `trigger()` before, don't worry. It's used to simulate user interaction. You can learn more in [Forms](/guide/forms). 
+> If you haven't seen `trigger()` before, don't worry. It's used to simulate user interaction. You can learn more in [Forms](/guide/forms).
 
 The output of `emitted()` might be a little confusing at first. In this test, we are only interested in the `increment` event, so we can access that with `wrapper.emitted('increment')`. This would return `[ [ 1 ], [ 2 ], [ 3 ] ]`. Let's format it a bit more nicely to see what's going on:
 
 ```js
 // console.log(wrapper.emitted('increment'))
-[ 
-  [ 1 ], // first time is it called, `count` is 1
-  [ 2 ], // second time is it called, `count` is 2
-  [ 3 ], // third time is it called, `count` is 3
-] 
+[
+  [ 1 ], // first time it is called, `count` is 1
+  [ 2 ], // second time it is called, `count` is 2
+  [ 3 ], // third time it is called, `count` is 3
+]
 ```
 
 Each entry in the array represents one `increment` event that was emitted. Each entry in the array represents an argument to `this.$emit()`. For example, if the code was `this.$emit('increment, this.count, { status: 'success' })`, and the button was clicked twice, `emitted('increment')` would be:
 
 ```js
-[ 
-  [                       // first `increment` event 
+[
+  [                       // first `increment` event
     1,                    // first argument
     { status: 'success' } // second argument
   ],
-  [                       // second `increment` event 
+  [                       // second `increment` event
     2,                    // first argument
     { status: 'success' } // second argument
-  ] 
+  ]
 ]
 ```
 
@@ -87,7 +87,7 @@ test('emits and event with count when clicked', () => {
 })
 ```
 
-This is good - but we can do better. With the knowledge that `increment` will return an array, where each element represents an event and it's arguments, we can fully test the component by making assertions against the arguments passed when `this.$emit('increment')` is called:
+This is good - but we can do better. With the knowledge that `increment` will return an array, where each element represents an event and its arguments, we can fully test the component by making assertions against the arguments passed when `this.$emit('increment')` is called:
 
 ```js
 test('emits and event with count when clicked', () => {
