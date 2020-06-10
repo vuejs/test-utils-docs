@@ -268,9 +268,6 @@ export default {
     }
   },
   methods: {
-    submit() {
-      // some logic  
-    },
     handleBlur(event) {
       if(event.relatedTarget.tagName === 'BUTTON'){ 
         this.$emit('focus-lost')
