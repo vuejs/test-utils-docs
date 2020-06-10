@@ -188,13 +188,31 @@ Event listeners are not always simple `click` events. Vue allows you to listen t
 
 In our form above, we moved the event from the `button` to the `form` element. This is a good practice to follow, as this allows you to submit a form by hitting the `enter` key, which is a more native approach.
 
-To trigger the `submit` handler, we will use the `trigger` method again.
+To trigger the `submit` handler, we use the `trigger` method again.
 
-```js
+```js {14,16-22}
 test('submits the form', async () => {
-  // ... previous test code
+  const wrapper = mount(FormComponent)
+
+  const email = 'name@mail.com'
+  const description = 'Lorem ipsum dolor sit amet'
+  const city = 'moscow'
+
+  await wrapper.find('input[type=email]').setValue(email)
+  await wrapper.find('textarea').setValue(description)
+  await wrapper.find('select').setValue(city)
+  await wrapper.find('input[type=checkbox]').setValue()
+  await wrapper.find('input[type=radio][value=monthly]').setValue()
+
   await wrapper.find('form').trigger('submit.prevent')
-  expect(wrapper.emitted('submit')[0][0]).toBe("")
+
+  expect(wrapper.emitted('submit')[0][0]).toBe({
+    email,
+    description,
+    city,
+    subscribe: true,
+    interval: 'monthly',
+  })
 })
 ```
 
