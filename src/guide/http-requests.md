@@ -43,9 +43,9 @@ export default {
 
 There are several things we need to do to test this component properly.
 
-Our first goal is to test this component **without actually hitting the API**. This would create a fragile and potentially slow test. You should be able to run your test suite while being offline.
+Our first goal is to test this component **without actually reaching the API**. This would create a fragile and potentially slow test.
 
-Secondly, we need to assert that the component made the right call with the appropriate parameters. We won't be getting posts from that API, but we still need to ensure we requested the right resources.
+Secondly, we need to assert that the component made the right call with the appropriate parameters. We won't be getting results from that API, but we still need to ensure we requested the right resources.
 
 Also, we need to make sure that the DOM has updated accordingly and displays the data. We do so by using `flushPromises()` from the npm package [flush-promises](https://github.com/kentor/flush-promises).
 
@@ -60,8 +60,8 @@ const fakePostList = [
   { id: 2, title: 'title2' }
 ]
 
-// Let's tell Jest to mock any call to `axios.get` – and to return
-// `fakePostList` instead
+// Following lines tell Jest to mock any call to `axios.get`
+// and to return `fakePostList` instead
 jest.mock('axios', () => ({
   get: jest.fn(() => fakePostList)
 }))
@@ -72,14 +72,14 @@ test('loads posts on button click', async () => {
   await wrapper.get('button').trigger('click')
 
   // Let's assert that we've called axios.get the right amount of times and
-  // with the right parameters
+  // with the right parameters.
   expect(axios.get).toHaveBeenCalledTimes(1)
   expect(axios.get).toHaveBeenCalledWith('/api/posts')
 
-  // Wait until the DOM updates
+  // Wait until the DOM updates.
   await flushPromises()
 
-  // Finally, we make sure we've rendered the content from the API
+  // Finally, we make sure we've rendered the content from the API.
   const posts = wrapper.findAll('[data-test="post"]')
 
   expect(posts).toHaveLength(2)
@@ -142,21 +142,22 @@ Let's write a test to assert that all the loading-related elements are rendered 
 test('displays loading state on button click', async () => {
   const wrapper = mount(PostList)
 
-  // Initially, we're in a state where the button has not triggered the API call,
-  // so the component should not render any loading-related element.
+  // Notice that we run the following assertions before clicking on the button
+  // Here, the component should be in a "not loading" state.
   expect(wrapper.find('[role="alert"]').exists()).toBe(false)
   expect(wrapper.get('button').attributes()).not.toHaveProperty('disabled')
 
-  // Now let's trigger it as usual
+  // Now let's trigger it as usual.
   await wrapper.get('button').trigger('click')
 
-  // We assert for "Loading state" before flushing all promises
+  // We assert for "Loading state" before flushing all promises.
   expect(wrapper.find('[role="alert"]').exists()).toBe(true)
   expect(wrapper.get('button').attributes()).toHaveProperty('disabled')
 
+  // As we did before, wait until the DOM updates.
   await flushPromises()
 
-  // After flushing promises, we're back at "Loaded state"
+  // After that, we're back at a "not loading" state.
   expect(wrapper.find('[role="alert"]').exists()).toBe(false)
   expect(wrapper.get('button').attributes()).not.toHaveProperty('disabled')
 })
