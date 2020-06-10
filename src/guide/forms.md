@@ -385,10 +385,7 @@ test('emits textarea value on click', async () => {
 
 ## Conclusion
 
-What did we learn?
-
-* You can use `setValue` to set the value on both DOM inputs and Vue component inputs.
-* You can use `trigger` to trigger DOM events, both with and without modifiers.
-* You can add extra event data to `trigger`, using the second parameter.
-* Dont assert data on the `vm` if possible. Use the DOM, or emitted events instead.
-* Assert the outcome (async submitted data, emitted event, conditional elements in DOM etc).
+* Use `setValue` to set the value on both DOM inputs and Vue components.
+* Use `trigger` to trigger DOM events, both with and without modifiers.
+* Add extra event data to `trigger` using the second parameter.
+* Assert that the DOM changed and the right events got emitted. Try not to assert data on the Component instance.
