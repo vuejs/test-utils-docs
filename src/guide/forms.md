@@ -1,4 +1,4 @@
-# Form handling
+# Form Handling
 
 Forms in Vue can be as simple as plain HTML forms to complicated nested trees of custom Vue component form elements. 
 We will gradually go through the ways of interacting with form elements, setting values and triggering events. 
