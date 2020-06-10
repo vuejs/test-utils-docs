@@ -78,8 +78,8 @@ test('trigger', async () => {
 })
 ```
 
-We trigger the `click` event listener, triggering the `submit` method. Similar to `setValue` we are using `await` to make sure the action is being reflected by Vue.
- 
+> If you haven't seen `emitted()` before, don't worry. It's used to assert the emitted events of a Component. You can learn more in [Event Handling](/guide/event-handling).
+
 We can then assert that some action has been performed, like if the emitted event has been called.
 
 Let's combine these two to test whether our simple form is emitting the email the user inputs.
