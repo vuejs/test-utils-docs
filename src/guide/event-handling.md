@@ -28,13 +28,14 @@ const Counter = {
 
 To fully test this component, we should verify that when the button is clicked, the `count` shown in the template is updated. We can also verify that an `increment` event with the latest `count` value is emitted. We will start with the latter.
 
-## `VueWrapper.emitted()`
+## Asserting the emitted events
 
 `VueWrapper` has an `emitted()` method. It returns an object with all the events the component has emitted, and their arguments in an array. Let's see how it works:
 
 ```js
-test('emits and event with count when clicked', () => {
+test('emits an event with count when clicked', () => {
   const wrapper = mount(Counter)
+
   wrapper.find('button').trigger('click')
   wrapper.find('button').trigger('click')
   wrapper.find('button').trigger('click')
