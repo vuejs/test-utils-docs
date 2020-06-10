@@ -1,9 +1,9 @@
 # Form Handling
 
-Forms in Vue can be as simple as plain HTML forms to complicated nested trees of custom Vue component form elements. 
-We will gradually go through the ways of interacting with form elements, setting values and triggering events. 
+Forms in Vue can be as simple as plain HTML forms to complicated nested trees of custom Vue component form elements.
+We will gradually go through the ways of interacting with form elements, setting values and triggering events.
 
-The methods we will be using the most are `setValue()` and `trigger()`. 
+The methods we will be using the most are `setValue()` and `trigger()`.
 
 ## Interacting with form elements
 
@@ -21,13 +21,13 @@ Let's take a look at a very basic form:
 <script>
 export default {
   data() {
-    return { 
+    return {
       email: ''
     }
   },
   methods: {
     submit() {
-      this.$emit('submit', this.email)  
+      this.$emit('submit', this.email)
     }
   }
 }
@@ -62,7 +62,7 @@ Triggering events is the second most important action when working with forms an
 
 ```html
 <button @click="submit">Submit</button>
-``` 
+```
 
 To trigger a click event, we can use the `trigger` event.
 
@@ -80,9 +80,11 @@ test('trigger', async () => {
 
 > If you haven't seen `emitted()` before, don't worry. It's used to assert the emitted events of a Component. You can learn more in [Event Handling](/guide/event-handling).
 
-We can then assert that some action has been performed, like if the emitted event has been called.
+We trigger the `click` event listener, so that the Component executes the `submit` method. As we did with `setValue`, we use `await` to make sure the action is being reflected by Vue.
 
-Let's combine these two to test whether our simple form is emitting the email the user inputs.
+We can then assert that some action has happened. In this case, that we emitted the right event.
+
+Let's combine these two to test whether our simple form is emitting the user inputs.
 
 ```js
 test('emits the input to its parent', async () => {
@@ -104,7 +106,7 @@ test('emits the input to its parent', async () => {
 Now that we know the basics, let's dive into more complex examples.
 
 ### Working with various form elements
- 
+
 We saw `setValue` works with input elements, but is much more versatile, as it can set the value on various types of input elements.
 
 Let's take a look at a more complicated form, which has more types of inputs.
@@ -125,7 +127,7 @@ Let's take a look at a more complicated form, which has more types of inputs.
 
     <input type="radio" value="weekly" v-model="form.interval"/>
     <input type="radio" value="monthly" v-model="form.interval"/>
-    
+
     <button type="submit">Submit</button>
   </form>
 </template>
@@ -133,8 +135,8 @@ Let's take a look at a more complicated form, which has more types of inputs.
 <script>
 export default {
   data() {
-    return { 
-      form: { 
+    return {
+      form: {
         email: '',
         description: '',
         city: '',
@@ -145,7 +147,7 @@ export default {
   },
   methods: {
     async submit() {
-      this.$emit('submitted')
+      this.$emit('submit', this.form)
     }
   }
 }
@@ -162,6 +164,7 @@ import FormComponent from './FormComponent.vue'
 
 test('submits a form', async () => {
   const wrapper = mount(FormComponent)
+
   await wrapper.find('input[type=email]').setValue('name@mail.com')
   await wrapper.find('textarea').setValue('Lorem ipsum dolor sit amet')
   await wrapper.find('select').setValue('moscow')
@@ -170,14 +173,13 @@ test('submits a form', async () => {
 })
 ```
 
-As you can see, `setValue` is a very versatile method, it can work with all types of form elements.
+As you can see, `setValue` is a very versatile method. It can work with all types of form elements.
 
-We are using `await` everywhere, to make sure that each change has been applied before we trigger the next. This is a good practice to follow,
-that can save you time later on, if you do assertions but changes are not applied to the DOM yet. 
+We are using `await` everywhere, to make sure that each change has been applied before we trigger the next. This is recommended to make sure you do assertions when the DOM has updated.
 
 
 ::: tip
-If you dont pass a parameter to `setValue` for `OPTION`, `CHECKBOX` or `RADIO` inputs, they will set as `checked`.
+If you don't pass a parameter to `setValue` for `OPTION`, `CHECKBOX` or `RADIO` inputs, they will set as `checked`.
 :::
 
 We have set values in our form, now it's time to submit the form and do some assertions.
@@ -232,17 +234,19 @@ Let's assume you have a very detailed and complex form, with special interaction
 <input @keydown.meta.c.exact.prevent="captureCopy" v-model="input" />
 ```
 
-Assume we have an input that handles when the user clicks `cmd` + `c`, and we want to intercept and stop him from copying. Testing this is as easy as copy pasting the event.
+Assume we have an input that handles when the user clicks `cmd` + `c`, and we want to intercept and stop him from copying. Testing this is as easy as copy & pasting the event from the Component to the `trigger()` method.
 
 ```js
 test('handles complex events', async () => {
   const wrapper = mount(Component)
+
   await wrapper.find(input).trigger('keydown.meta.c.exact.prevent')
-  // assert something
+
+  // run your assertions
 })
 ```
 
-VTU will read the even and apply the appropriate properties to the event object. In this case it will match something like this:
+Vue Test Utils reads the event and applies the appropriate properties to the event object. In this case it will match something like this:
 
 ```js
 {
@@ -255,6 +259,7 @@ VTU will read the even and apply the appropriate properties to the event object.
 #### Adding extra data to an event
 
 Let's say your code needs something from inside the `event` object. You can test such scenarios by passing extra data as a second parameter.
+
 ```vue
 <template>
   <form>
@@ -262,6 +267,7 @@ Let's say your code needs something from inside the `event` object. You can test
     <button>Submit</button>
   </form>
 </template>
+
 <script>
 export default {
   data() {
@@ -271,7 +277,7 @@ export default {
   },
   methods: {
     handleBlur(event) {
-      if(event.relatedTarget.tagName === 'BUTTON'){ 
+      if (event.relatedTarget.tagName === 'BUTTON') {
         this.$emit('focus-lost')
       }
     }
@@ -279,27 +285,32 @@ export default {
 }
 </script>
 ```
+
 ```js
 import Form from './Form.vue'
+
 test('emits an event only if you lose focus to a button', () => {
   const wrapper = mount(Form)
+
   const componentToGetFocus = wrapper.find('button')
+
   wrapper.find('input').trigger('blur', {
     relatedTarget: componentToGetFocus
   })
+
   expect(wrapper.emitted('focus-lost')).toBeTruthy()
 })
 ```
 
-Here we assume our code checks inside the `event` object, whether the `relatedTarget` is a button or not. We can simply pass a reference to such an element,mimicking what would happen if the user clicks on a `button` after typing something in the `input`.
+Here we assume our code checks inside the `event` object, whether the `relatedTarget` is a button or not. We can simply pass a reference to such an element, mimicking what would happen if the user clicks on a `button` after typing something in the `input`.
 
 ## Interacting with Vue Component inputs
 
-Inputs are not only plain elements. We often use Vue components that function like inputs. They can add markup, styling and alot of functionality, in an easy to use format.
+Inputs are not only plain elements. We often use Vue components that behave like inputs. They can add markup, styling and lots of functionalities in an easy to use format.
 
 Testing forms that use such inputs can be daunting at first, but with a few simple rules, it quickly becomes a walk in the park.
 
-Take this simple input for example.
+Following is a Component that wraps a `label` and an `input` element:
 
 ```vue
 <template>
@@ -312,14 +323,17 @@ Take this simple input for example.
     >
   </label>
 </template>
+
 <script>
 export default {
+  name: 'CustomInput',
+
   props: ['modelValue', 'label']
 }
 </script>
 ```
 
-This Vue component adds a label and emits back whatever you type. To use it you just do:
+This Vue component also emits back whatever you type. To use it you do:
 
 ```html
 <custom-input v-model="input" label="Text Input" class="text-input"/>
