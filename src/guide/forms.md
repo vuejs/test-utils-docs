@@ -303,7 +303,11 @@ Take this simple input for example.
 <template>
   <label>
     {{ label }}
-    <input type="text" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)">
+    <input
+      type="text"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+    >
   </label>
 </template>
 <script>
