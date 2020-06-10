@@ -104,7 +104,7 @@ Also, let's disable the `<button>` element while loading, too. We don't want use
 <template>
     <button :disabled="loading" @click="getPosts">Get posts</button>
 
-    <p v-if="loading" role="alert" aria-busy="true">Loading your posts…</p>
+    <p v-if="loading" role="alert">Loading your posts…</p>
     <ul v-else>
       <li v-for="post in posts" :key="post.id" data-test="post">
         {{ post.title }}
