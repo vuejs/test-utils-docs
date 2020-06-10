@@ -323,15 +323,15 @@ This Vue component adds a label and emits back whatever you type. To use it you 
 <custom-input v-model="input" label="Text Input" class="text-input"/>
 ```
 
-### Finding the real input element 
-
-Most of these Vue components have a real `button` or `input` in them. You can just as easily find that element and act on it:
+As above, most of these Vue-powered inputs have a real `button` or `input` in them. You can just as easily find that element and act on it:
 
 ```js
 test('fills in the form', async () => {
-  // ... some extra test code 
+  const wrapper = mount(CustomInput)
+
   await wrapper.find('.text-input input').setValue('text')
-  // continue with assertions or actions like submit the form, assert DOM.
+
+  // continue with assertions or actions like submit the form, assert the DOM…
 })
 ```
 
