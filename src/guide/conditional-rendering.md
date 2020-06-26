@@ -30,12 +30,19 @@ In the `<Nav>` component, a link to the user's profile is shown. In addition, if
 
 ## Using `get()`
 
-`wrapper` has a `get()` method for asserting an element exists. It uses [`querySelector`](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) syntax. We can assert the profile link is present using `get()`:
+`wrapper` has a `get()` method that searches for an existing element. It uses [`querySelector`](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) syntax.
+
+We can assert the profile link content by using `get()`:
 
 ```js
 test('renders a profile link', () => {
   const wrapper = mount(Nav)
-  wrapper.get('#profile')
+
+  // Here we are implicitly asserting that the
+  // element #profile exists.
+  const profileLink = wrapper.get('#profile')
+
+  expect(profileLink.text()).toEqual('My Profile')
 })
 ```
 
@@ -43,13 +50,16 @@ If `get()` does not return an element matching the selector, it will raise an er
 
 ## Using `find()` and `exists()`
 
-`get()` works for asserting elements do exist, because it throws an error when it can't find an element, you can't use it to assert elements don't exist. For this, we can use `find()` and `exists()`. The next test asserts that if `admin` is `false` (which is it by default), the admin link is not present:
+`get()` works for asserting elements do exist. However, as we mentioned, it throws an error when it can't find an element, so you can't use it to assert whether if elements exist.
+
+To do so, we use `find()` and `exists()`. The next test asserts that if `admin` is `false` (which is it by default), the admin link is not present:
 
 ```js
 test('does not render an admin link', () => {
   const wrapper = mount(Nav)
-  const adminLink = wrapper.find('#admin')
-  expect(adminLink.exists()).toBe(false)
+
+  // Using `wrapper.get` would throw and make the test fail.
+  expect(wrapper.find('#admin').exists()).toBe(false)
 })
 ```
 
@@ -57,7 +67,9 @@ Notice we are calling `exists()` on the value returned from `.find()`? `find()`,
 
 ## Using `data`
 
-The final test is to assert that the admin link is rendered when `admin` is `true`. It's default by `false`, but we can override that using the second argument to `mount()`, the [`mounting options`](/api/#mount-options). For `data`, we use the aptly named `data` option:
+The final test is to assert that the admin link is rendered when `admin` is `true`. It's `false` by default, but we can override that using the second argument to `mount()`, the [`mounting options`](/api/#mount-options).
+
+For `data`, we use the aptly named `data` option:
 
 ```js
 test('renders an admin link', () => {
@@ -68,8 +80,10 @@ test('renders an admin link', () => {
       }
     }
   })
-  const adminLink = wrapper.find('#admin')
-  expect(adminLink.exists()).toBe(true)
+
+  // Again, by using `get()` we are implicitly asserting that
+  // the element exists.
+  expect(wrapper.get('#admin').text()).toEqual('Admin')
 })
 ```
 
