@@ -6,7 +6,7 @@ By now you know Vue updates reactively; when you change a value, the DOM is auto
 
 ## A Simple Example - Updating with `trigger`
 
-Let's re-use the `<Counter>` component from [event handling](/event-handling) with one change; we now render the `count` in the `template`.
+Let's re-use the `<Counter>` component from [event handling](/guide/event-handling) with one change; we now render the `count` in the `template`.
 
 ```js
 const Counter = {
@@ -108,3 +108,4 @@ test('uses a mocked axios HTTP client and flush-promises', async () => {
 - Vue updates the DOM asynchronously; tests runner execute code synchronously.
 - Use `await nextTick()` to ensure the DOM has updated before the test continues
 - Functions that might update the DOM, like `trigger` and `setValue` return `nextTick`, so you may prepend `await` instead of importing and using `nextTick`.
+- Use `flush-promises` to resolve any unresolved promises from non-Vue dependencies. 
