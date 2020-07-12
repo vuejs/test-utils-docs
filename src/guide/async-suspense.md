@@ -2,7 +2,7 @@
 
 You may have noticed some other parts of the guide using `await` when calling some methods on `wrapper`, such as `trigger` and `setValue`. What's that all about?
 
-By now you know Vue updates reactively; when you change a value, the DOM is automatically updated to reflect the latest value. What you might not have known is that Vue does this *asynchronously*. This is in contrast to a test runner, like Jest, which runs *synchronously*. This can cause some surprsingly results in tests. Let's look at some strategies to ensure Vue is updating the DOM as expected when we run our tests.
+You might know Vue updates reactively; when you change a value, the DOM is automatically updated to reflect the latest value. Vue does this *asynchronously*. In contrast, a test runner like Jest runs *synchronously*. This can cause some surprising results in tests. Let's look at some strategies to ensure Vue is updating the DOM as expected when we run our tests.
 
 ## A Simple Example - Updating with `trigger`
 
