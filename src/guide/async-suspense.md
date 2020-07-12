@@ -86,6 +86,7 @@ Let's see an example:
 
 ```js
 import flushPromises from 'flush-promises'
+import axios from 'axios'
 
 jest.mock('axios', () => ({
   get: () => new Promise(resolve => {
