@@ -43,7 +43,7 @@ Surprisingly, this fails! The reason is although `count` is increased, Vue will 
 
 Implementation details aside, how can we fix this? Vue actually provides a way for us to wait until the DOM is updated: `nextTick`:
 
-```js
+```js {7}
 import { nextTick } from 'vue'
 
 test('increments by 1', async () => {
@@ -58,7 +58,7 @@ test('increments by 1', async () => {
 
 Now the test will pass, because we ensure the next "tick" has executed updated the DOM before the assertion runs. Since `await nextTick()` is common, VTU provides a shortcut. Methods than cause the DOM to update, such as `trigger` and `setValue` return `nextTick`! So you can just `await` those directly:
 
-```js
+```js {4}
 test('increments by 1', async () => {
   const wrapper = mount(Counter)
 
@@ -70,13 +70,11 @@ test('increments by 1', async () => {
 
 ## Resolving Other Asynchronous Behavior
 
-`nextTick` is useful to ensure some change in reactivty data is reflected in the DOM before continuing the test. but sometimes you may want to ensure other, non Vue-related asynchronous behavior is completed, too. A common example is a function that returns a `Promise` that will lead to a change in the DOM. Perhaps you mocked your `axios` HTTP client using `jest.mock`:
+`nextTick` is useful to ensure some change in reactivty data is reflected in the DOM before continuing the test. However, sometimes you may want to ensure other, non Vue-related asynchronous behavior is completed, too. A common example is a function that returns a `Promise` that will lead to a change in the DOM. Perhaps you mocked your `axios` HTTP client using `jest.mock`:
 
 ```js
 jest.mock('axios', () => ({
-  get: () => new Promise(resolve => {
-    resolve({ data: 'some mocked data!' })
-  })
+  get: () => Promise.resolve({ data: 'some mocked data!' })
 }))
 ```
 
