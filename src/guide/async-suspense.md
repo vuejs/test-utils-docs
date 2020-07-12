@@ -80,7 +80,9 @@ jest.mock('axios', () => ({
 }))
 ```
 
-In this case, Vue and `nextTick` has no knowledge of the unresolved promise, so calling `nextTick` will not work - your assertion may run before the `Promise` is resolved. For scenarios like this, you can use `[flush-promises](https://www.npmjs.com/package/flush-promises)`, will causes all outstanding promises to resolve immediately. For example:
+In this case, Vue has no knowledge of the unresolved Promise, so calling `nextTick` will not work - your assertion may run before it is resolved. For scenarios like this, you can use `[flush-promises](https://www.npmjs.com/package/flush-promises)`, which causes all outstanding promises to resolve immediately. 
+
+Let's see an example:
 
 ```js
 import flushPromises from 'flush-promises'
