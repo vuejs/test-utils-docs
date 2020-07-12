@@ -109,5 +109,5 @@ test('uses a mocked axios HTTP client and flush-promises', async () => {
 
 - Vue updates the DOM asynchronously; tests runner execute code synchronously.
 - Use `await nextTick()` to ensure the DOM has updated before the test continues
-- Functions that might update the DOM, like `trigger` and `setValue` return `nextTick`, so you may prepend `await` instead of importing and using `nextTick`.
+- Functions that might update the DOM, like `trigger` and `setValue` return `nextTick`, so you should `await` them.
 - Use `flush-promises` to resolve any unresolved promises from non-Vue dependencies. 
