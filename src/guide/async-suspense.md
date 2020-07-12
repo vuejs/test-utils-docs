@@ -105,6 +105,7 @@ test('uses a mocked axios HTTP client and flush-promises', async () => {
 
 ```
 
+> If you haven't tested Components with API requests before, you can learn more in [HTTP Requests](/guide/http-requests).
 ## Conclusion
 
 - Vue updates the DOM asynchronously; tests runner execute code synchronously.
