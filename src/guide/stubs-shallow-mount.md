@@ -182,7 +182,11 @@ Since this behavior is global, not on a `mount` by `mount` basis, you need to re
 
 ## `mount`, `shallow` and `stubs`: which one and when?
 
-Tests that use `mount` will render the entire component hierarchy, which is closer to what the user will experiene in a real browser. Tests using `shallow` are focused on a specific component. As a rule of thumb, the more your tests resemble the way your software is used, the more confidence they can give you. `shallow` can be useful for testing a specific component in complete isolation. If you just have one or two components that are not relevant to your tests, consider using `mount` in combination with `stubs` instead of `shallow`. The more you stub, the less production-like your test becomes.
+As a rule of thumb, the more your tests resemble the way your software is used, the more confidence they can give you.
+
+Tests that use `mount` will render the entire component hierarchy, which is closer to what the user will experience in a real browser. 
+
+On the other hand, tests using `shallow` are focused on a specific component. `shallow` can be useful for testing advanced components in complete isolation. If you just have one or two components that are not relevant to your tests, consider using `mount` in combination with `stubs` instead of `shallow`. The more you stub, the less production-like your test becomes.
 
 Keep in mind that whether you are doing a full mount or a shallow render, good tests focus on inputs (`props` and user interaction, such as with `trigger`) and outputs (in the case of a component, the DOM elements that are rendered), not implementation details. So regardless of which mounting method you choose, keep these guidelines in mind.
 
