@@ -1,8 +1,8 @@
 # Stubs and Shallow Mount
 
-Vue Test Utils provides some features for *stubbing* components. A *stub* is where you replace an existing implementation of a custom component with a dummy component that doesn't do anything at all, which can simplify an otherwise complex test. Let's see an example.
+Vue Test Utils provides some advanced features for *stubbing* components. A *stub* is where you replace an existing implementation of a custom component with a dummy component that doesn't do anything at all, which can simplify an otherwise complex test. Let's see an example.
 
-## Mocking with `global.stubs`
+## Stubbing a single child component
 
 A common example is when you would like to test something in a component that appers very high in the component hierarchy.
 
@@ -77,7 +77,7 @@ test('stubs', () => {
 
 This will stub out *all* the `<FetchDataFromApi />` components in the entire render tree, regardless of what level they appear at. That's why it is in the `global` mounting option.
 
-## `shallow: true` or `shallowMount`
+## Stubbing all children components
 
 Sometimes you might want to stub out *all* the custom components. For example you might have a component like this:
 
@@ -113,7 +113,7 @@ But that's a lot of boilerplate. VTU has a `shallow` mounting option that will a
 
 ```js {5}
 test('shallow', () => {
-  const wrapper = shallow(ComplexComponent, {
+  const wrapper = monut(ComplexComponent, {
     shallow: true
   })
   console.log(wrapper.html()) // <div><h1>Welcome to Vue.js 3</h1><complex-a-stub></complex-a-stub><complex-b-stub></complex-b-stub><complex-c-stub></complex-c-stub></div>
@@ -124,7 +124,7 @@ test('shallow', () => {
 
 ## Default Slots and `shallow`
 
-Since `shallow` stubs out all the render function of any custom components, any `<slot>` components are not rendered when using `shallow`. While this is not a problem in most cases, there are some scenarios where this isn't ideal. Maybe you have a custom button component in your app:
+Since `shallow` stubs out all the content of a components, any `<slot>` won't get rendered when using `shallow`. While this is not a problem in most cases, there are some scenarios where this isn't ideal.
 
 ```js
 const CustomButton = {
@@ -143,17 +143,10 @@ const App = {
   props: ['authenticated'],
   components: { CustomButton },
   template: `
-    <div>
-      <h1>Welcome!</h1>
-      <custom-button>
-        <div v-if="authenticated">
-          Log out
-        </div>
-        <div v-else>
-          Log in
-        </div>
-      </custom-button>
-    </div>
+    <custom-button>
+      <div v-if="authenticated">Log out</div>
+      <div v-else>Log in</div>
+    </custom-button>
   `
 }
 ```
@@ -185,7 +178,7 @@ test('shallow with stubs', () => {
 
 Since this behavior is global, not on a `mount` by `mount` basis, you need to remember to enable/disable it before and after each test.
 
-If you prefer this behavior, you can enable this globally by importing `config` in your test setup file, and setting `renderStubDefaultSlot` to `true`. Unfortunately, due to technical limitations, this behavior is not extended to slots other than the default slot.
+:::: tip If you prefer this behavior, you can enable this globally by importing `config` in your test setup file, and setting `renderStubDefaultSlot` to `true`. Unfortunately, due to technical limitations, this behavior is not extended to slots other than the default slot.
 
 ## `mount`, `shallow` and `stubs`: which one and when?
 
