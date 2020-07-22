@@ -75,11 +75,11 @@ test('vuex', async () => {
 })
 ```
 
-After installing the plugin, we use `trigger` to click the button and assert that `count` is increased. This kind of test, that fully covers the entire system, is known as an integration test. 
+After installing the plugin, we use `trigger` to click the button and assert that `count` is increased. This kind of test, that covers the interaction between different systems (in this case, the Component and the store), is known as an integration test. 
 
 ## Testing with a Mock Store
 
-In contrast, a unit test might isolate and test the component and the store separately. This can be useful if you have a very large application with a complex store. For this use case, you can just mock the parts of the store you are interested in using `global.mocks`:
+In contrast, a unit test might isolate and test the component and the store separately. This can be useful if you have a very large application with a complex store. For this use case, you can mock the parts of the store you are interested in using `global.mocks`:
 
 ```js
 test('vuex using a mock store', async () => {
@@ -104,7 +104,9 @@ test('vuex using a mock store', async () => {
 })
 ```
 
-Instead of using a real Vuex store and installing it via `global.plugins`, we instead created our own mock store, only implementing the parts of Vuex used in the component (the `state` and `commit` function). While this might seem more convenient, it won't give you any warning if you break your Vuex store. Consider carefully if you want to mock the Vuex store, or use a real one, and understand the trade-offs.
+Instead of using a real Vuex store and installing it via `global.plugins`, we created our own mock store, only implementing the parts of Vuex used in the component (in this case, the `state` and `commit` function).
+
+While it might seem convenient to test the store in isolation, notice that it won't give you any warning if you break your Vuex store. Consider carefully if you want to mock the Vuex store, or use a real one, and understand the trade-offs.
 
 ## Testing Vuex in Isolation
 
@@ -131,7 +133,7 @@ test('increment mutation', () => {
 
 ## Presetting the Vuex State
 
-Sometimes it can be useful to have the Vuex store in a specific state for a test. One useful technique you can use, other that `global.mocks`, is to simply allow your `createStore` function to take an argument that seeds the initial state:
+Sometimes it can be useful to have the Vuex store in a specific state for a test. One useful technique you can use, other that `global.mocks`, is to create a function that wraps `createStore` and takes an argument to seed the initial state:
 
 ```js
 test('increment mutation', () => {
@@ -158,7 +160,7 @@ The [Vue Testing Handbook](https://lmiller1990.github.io/vue-testing-handbook/te
 
 ## Conclusion
 
-- Use `global.plugins` to install a plugin
+- Use `global.plugins` to install Vuex as a plugin
 - Use `global.mocks` to mock a global object, such as Vuex, for advanced use cases
 - Consider testing complex Vuex mutations and actions in isolation 
-- Allow your `createStore` function to take an `initialState` argument to set up specific test scenarios
+- Wrap `createStore` with a function that takes an argument to set up specific test scenarios
