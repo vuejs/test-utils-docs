@@ -62,6 +62,21 @@ This is because Vuex is a plugin. Plugins are applied by calling `app.use` and p
 Vue Test Utils allows you to install plugins as well, using the `global.plugins` mounting option.
 
 ```js
+import { createStore } from 'vuex'
+
+const store = createStore({
+  state() {
+    return {
+      count: 0
+    }
+  },
+  mutations: {
+    increment(state: any) {
+      state.count += 1
+    }
+  }
+})
+
 test('vuex', async () => {
   const wrapper = mount(App, {
     global: {
@@ -85,7 +100,7 @@ In contrast, a unit test might isolate and test the component and the store sepa
 test('vuex using a mock store', async () => {
   const $store = {
     state: {
-      count: 1
+      count: 25
     },
     commit: jest.fn()
   }
@@ -98,7 +113,7 @@ test('vuex using a mock store', async () => {
     }
   })
 
-  expect(wrapper.html()).toContain('Count: 1')
+  expect(wrapper.html()).toContain('Count: 25')
   await wrapper.find('button').trigger('click')
   expect($store.commit).toHaveBeenCalled()
 })
@@ -133,28 +148,35 @@ test('increment mutation', () => {
 
 ## Presetting the Vuex State
 
-Sometimes it can be useful to have the Vuex store in a specific state for a test. One useful technique you can use, other that `global.mocks`, is to create a function that wraps `createStore` and takes an argument to seed the initial state:
+Sometimes it can be useful to have the Vuex store in a specific state for a test. One useful technique you can use, other that `global.mocks`, is to create a function that wraps `createStore` and takes an argument to seed the initial state. In this example we extend `increment` to take an additional argument, which will be added on to the `state.count`. If that is not provided, we just increment `state.count` by 1.
 
 ```js
-test('increment mutation', () => {
-  const createVuexStore = (initialState) => createStore({
-    state: {
-      count: 0,
-      ...initialState
-    },
-    mutations: {
-      increment(state) {
-        state.count += 1
-      }
+const createVuexStore = (initialState) => createStore({
+  state: {
+    count: 0,
+    ...initialState
+  },
+  mutations: {
+    increment(state, value) {
+      state.count += value
     }
-  })
+  }
+})
 
+test('increment mutation without passing a value', () => {
   const store = createVuexStore({ count: 20 })
   store.commit('increment')
-  
   expect(store.state.count).toBe(21)
 })
+
+test('increment mutation with a value', () => {
+  const store = createVuexStore({ count: -10 })
+  store.commit('increment', 15)
+  expect(store.state.count).toBe(5)
+})
 ```
+
+By creating a `createVuexStore` function that takes an initial state, we can easily set the initial state. This allows us to test all the edge cases, while simplifying our tests.
 
 The [Vue Testing Handbook](https://lmiller1990.github.io/vue-testing-handbook/testing-vuex.html) has more examples for testing Vuex. Note: the examples pertain to Vue.js 2 and Vue Test Utils v1. The ideas and concepts are the same, and the Vue Testing Handbook will be updated for Vue.js 3 and Vue Test Utils 2 in the near future.
 
