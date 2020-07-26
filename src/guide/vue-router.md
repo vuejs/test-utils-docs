@@ -87,7 +87,7 @@ console.warn node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:39
 
 The `<router-link>` and `<router-view>` component are not found. We need to install Vue Router! Since Vue Router is a plugin, we install it using the `global.plugins` mounting option:
 
-```js
+```js {6,7,8}
 import { mount } from '@vue/test-utils'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -112,7 +112,7 @@ Although it's not entirely clear from the warning, it's related to the fact that
 
 Furthermore, the jsdom environment most test runners use will not do an initial navigation to `/` like a regular browser, so we need to handle this ourselves.  Update the test to do the initial navigation to `/`, and ensure the navigation has completed by awaiting `isReady`:
 
-```js
+```js {5,6}
 import { mount } from '@vue/test-utils'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -132,7 +132,7 @@ The test is now passing! If this seems like a lot of work for such a simple, tha
 
 Now the initial setup has been handled, let's navigate to `/posts` and make an assertion to ensure the routing is working as expected:
 
-```js
+```js {14,15}
 import { mount } from '@vue/test-utils'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -147,7 +147,6 @@ test('routing', async () => {
   expect(wrapper.html()).toContain('Welcome to the blogging app')
 
   await wrapper.find('a').trigger('click')
-  // await flushPromises()
   expect(wrapper.html()).toContain('Testing Vue Router')
 })
 ```
@@ -167,7 +166,10 @@ console.error node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:211
 
 Again, due to Vue Router 4's new asynchronous nature, we need to `await` the routing to complete before making any assertions. In this case, however, there is not `router.hasNavigated` hook we can await on. One alternative is to use the `flushPromises` function exported from Vue Test Utils:
 
-```js
+```js {2,15}
+import { mount } from '@vue/test-utils'
+import { createRouter, createWebHistory } from 'vue-router'
+
 test('routing', async () => {
   router.push('/')
   await router.isReady()
