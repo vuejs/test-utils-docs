@@ -199,7 +199,7 @@ console.warn node_modules/vue-router/dist/vue-router.cjs.js:225
   [Vue Router warn]: Unexpected error when starting the router: TypeError: Cannot read property '_history' of null
 ```
 
-Although it's not entirely clear from the warning, it's related to the fact that Vue Router 4 handles routing asynchronously, and before anything is rendered, the router must be in a "ready" state. For this reason Vue Router provides an `isReady` function, which we can `await` to ensure the router is ready and the initial routing has occurred before rendering anything.
+Although it's not entirely clear from the warning, it's related to the fact that Vue Router 4 handles routing asynchronously, and before anything is rendered, the router must be in a "ready" state. For this reason Vue Router provides an `isReady` function, which we can `await` to ensure the router is ready and the initial navigation has finished before rendering anything.
 
 In web mode (which we are using, since we passed the `history: createWebHistory()` option when creating the router), the router will use the initial location to trigger an initial navigation automatically. For this reason, why we need to `await router.isReady()` - to ensure the initial navigation has completed before the test continues.
 
@@ -286,4 +286,3 @@ It *finally* passes. Great! This is all very manual, however - and this is for a
 - For more complex applications, consider mocking the router dependency and focus on testing the underlying logic.
 - Make use of your test runner's stubbing/mocking functionality where possible.
 - Use `global.mocks` to mock global dependencies, such as `this.$route` and `this.$router`.
-
