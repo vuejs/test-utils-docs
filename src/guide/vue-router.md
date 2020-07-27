@@ -2,14 +2,101 @@
 
 Vue Test Utils does not provide any special functions to assist with testing components that rely on Vue Router. This article will present two ways to test an application using Vue Router - using the real Vue Router, which is more production like but also may lead to complexity when testing larger applications, and by using a mock router, allowing for more fine grained control of the testing environment.
 
-## With a Real Router
+Let's look at how you can test with a mock router, since that is generally the simplest way to test components dependening on Vue Router. Then we will take a look at what is involved if you'd like to use are real router. 
 
-First we will look at a test for a blogging application that uses Vue Router. The posts are listed on the `/posts` route. The components are as follows:
+## Using a Mock Router
+
+You can use a mock router to avoid caring about the implementation details of Vue Router in your unit tests. Instead of using a real Vue Router instance, We can create our own minimal mock version which only implements the features we are interested in. We can do this using a combination of `jest.mock` (if you are using Jest), and `global.components`.
+
+When we mock out a dependency, it's usually because we are not interested in testing that dependencies behavior. In this case, we do not want to test clicking `<router-link>` (which is really just an `<a>` tag) navigates to the correct page - of course it does! In this example, we might be interested in ensuring that the `<a>` has the correct `to` attribute, though. This may seem trivial, but in a larger application with much more complex routing, it can be worth ensuring links are correct (especially if they are highly dynamic).
+
+To illustrate this, let's see a different example, where mocking the router becomes much more attractive.
 
 ```js
-import { mount } from '@vue/test-utils'
-import { createRouter, createWebHistory } from 'vue-router'
+const Component = {
+  template: `
+    <button @click="redirect">Click to Edit</button>
+  `,
+  props: ['authenticated'],
+  methods: {
+    redirect() {
+      if (this.authenticated) {
+        this.$router.push(`/posts/${this.$route.params.id}/edit`)
+      } else {
+        this.$router.push('/404')
+      }
+    }
+  }
+}
+```
 
+This component shows a button that will redirect an authenticated user to the edit post page (based on the current route parameters). An unauthenticated user should be redirected to a `/404` route. We could use a real router, then navigate to the correct route for this component, then after clicking the button assert that the correct page is rendered... however, this is a lot of setup for a relatively simple test. At it's core, the test we want to write is "if authenticated, redirect to X, otherwise redirect to Y". Let's see how we might accomplish this by mocking the routing using the `global.mocks` property:
+
+```js
+describe('component handles routing correctly', () => {
+  it('allows authenticated user to edit a post', () => {
+    const mockRoute = {
+      params: {
+        id: 1
+      }
+    }
+    const mockRouter = {
+      push: jest.fn()
+    }
+    const wrapper = mount(Component, {
+      props: {
+        authenticated: true
+      },
+      global: {
+        mocks: {
+          $route: mockRoute,
+          $router: mockRouter
+        }
+      }
+    })
+
+    await wrapper.find('button').trigger('click')
+
+    expect(mockRouter.push).toHaveBeenCalledWith('/posts/1/edit')
+  })
+
+  it('redirect an unauthenticated user to 404', () => {
+    const mockRoute = {
+      params: {
+        id: 1
+      }
+    }
+    const mockRouter = {
+      push: jest.fn()
+    }
+    const wrapper = mount(Component, {
+      props: {
+        authenticated: false
+      },
+      global: {
+        mocks: {
+          $route: mockRoute,
+          $router: mockRouter
+        }
+      }
+    })
+
+    await wrapper.find('button').trigger('click')
+
+    expect(mockRouter.push).toHaveBeenCalledWith('/404')
+  })
+})
+```
+
+By combining `global.mocks` to provide the necessary dependencies (`this.$route` and `this.$router`) we were able to set the test environment in an ideal state for this particular test. We were then able to use `jest.fn()` to monitor how many times, and with which arguments, `this.$router.push` was called with. Best of all, we don't have to deal with the complexity or caveats of Vue Router in our test, when really what we are concerned with testing is the logic behind the routing, not the routing itself.
+
+Of course, you still need to test the entire system in an end-to-end manner with a real router at some point. You could consider a framework like [Cypress](https://www.cypress.io/) for full system tests using a real browser.
+
+## With a Real Router
+
+Now we have seen how to use am ock router, let's take a look at what is involved when using the real Vue Router. We will look at a test for a blogging application that uses Vue Router. The posts are listed on the `/posts` route. The components are as follows:
+
+```js
 const App = {
   template: `
     <router-link to="/posts">Go to posts</router-link>
@@ -34,7 +121,7 @@ const Posts = {
 }
 ```
 
-The root of the app, `/`, displays a `<router-link>` leading to `/posts`, where we list the posts in an unordered list.
+The root of the app displays a `<router-link>` leading to `/posts`, where we list the posts in an unordered list.
 
 The router looks like this:
 
@@ -91,6 +178,10 @@ The `<router-link>` and `<router-view>` component are not found. We need to inst
 import { mount } from '@vue/test-utils'
 import { createRouter, createWebHistory } from 'vue-router'
 
+const router = createRouter({
+  // omitted for brevity
+})
+
 test('routing', () => {
   const wrapper = mount(App, {
     global: {
@@ -110,7 +201,7 @@ console.warn node_modules/vue-router/dist/vue-router.cjs.js:225
 
 Although it's not entirely clear from the warning, it's related to the fact that Vue Router 4 handles routing asynchronously, and before anything is rendered, the router must be in a "ready" state. For this reason Vue Router provides an `isReady` function, which we can `await` to ensure the router is ready and the initial routing has occurred before rendering anything.
 
-Furthermore, the jsdom environment most test runners use will not do an initial navigation to `/` like a regular browser, so we need to handle this ourselves.  Update the test to do the initial navigation to `/`, and ensure the navigation has completed by awaiting `isReady`:
+In web mode (which we are using, since we passed the `history: createWebHistory()` option when creating the router), the router will use the initial location to trigger an initial navigation automatically. For this reason, why we need to `await router.isReady()` - to ensure the initial navigation has completed before the test continues.
 
 ```js {5,6}
 import { mount } from '@vue/test-utils'
@@ -128,7 +219,7 @@ test('routing', () => {
 })
 ```
 
-The test is now passing! If this seems like a lot of work for such a simple, that's because is it. There is an ongoing discussion to include [some helpers](https://github.com/vuejs/vue-test-utils-next/issues/152) to simplify this, but either way, it can be useful to know how things work internally.
+The test is now passing! It was quite a bit of work - this is one of the reasons it might make more sense to use a mock router for your tests.
 
 Now the initial setup has been handled, let's navigate to `/posts` and make an assertion to ensure the routing is working as expected:
 
@@ -186,73 +277,7 @@ test('routing', async () => {
 })
 ```
 
-It *finally* passes. Great! This is all very manual, however - and this is for a tiny, trivial app. Is there an alternative?
-
-## Using a Mock Router
-
-You can use a mock router, instead, to avoid caring about the implementation details of Vue Router in your unit tests. Instead of using Vue Router, we can just create our own minimal mock version which only implements the features we are interested in. We can do this using a combination of `jest.mock` (if you are using Jest), and `global.components`.
-
-When we mock out a dependency, it's usually because we are not interested in testing that dependencies behavior. In this case, we do not want to test clicking `<router-link>` (which is really just an `<a>` tag) navigates to the correct page - of course it does! In this example, we might be interested in ensuring that the `<a>` has the correct `to` attribute, though. This may seem trivial, but in a larger application with much more complex routing, it can be worth ensuring links are correct (especially if they are highly dynamic).
-
-To illustrate this, let's see a different example, where mocking the router becomes much more attractive.
-
-```js
-const Component = {
-  template: `
-    <button @click="redirect">Click to Edit</button>
-  `,
-  props: ['authenticated'],
-  methods: {
-    redirect() {
-      if (this.authenticated) {
-        this.$router.push(`/posts/${this.$route.params.id}/edit`)
-      } else {
-        this.$router.push('/404')
-      }
-    }
-  }
-}
-```
-
-This component shows a button that will redirect an authenticated user to the edit post page (based on the current route parameters). An unauthenticated user should be redirected to a `/404` route. We could use a real router, then navigate to the correct route for this component, then after clicking the button assert that the correct page is rendered... however, this is a lot of setup for a relatively simple test. At it's core, the test we want to write is "if authenticated, redirect to X, otherwise redirect to Y". Let's see how we might accomplish this by mocking the routing using the `global.mocks` property:
-
-```js
-describe('component handles routing correctly', () => {
-  it('allows authenticated user to edit a post', () => {
-    const mockRoute = {
-      params: {
-        id: 1
-      }
-    }
-    const mockRouter = {
-      push: jest.fn()
-    }
-    const wrapper = mount(Component, {
-      props: {
-        authenticated: true,
-      },
-      global: {
-        mocks: {
-          $route: mockRoute,
-          $router: mockRouter
-        }
-      }
-    })
-
-    wrapper.find('button').trigger('click')
-
-    expect(mockRouter.push).toHaveBeenCalledWith('/posts/1/edit')
-  })
-
-  it('redirect an unauthenticated user to 404', () => {
-    // Try writing this yourself! It's a good exercise. You can reuse most of the above test.
-  })
-})
-```
-
-By combining `global.mocks` to provide the necessary dependencies (`this.$route` and `this.$router`) we were able to set the test environment in an ideal state for this particular test. We were then able to use `jest.fn()` to monitor how many times, and with which arguments, `this.$router.push` was called with. Best of all, we don't have to deal with the complexity or caveats of Vue Router in our test, when really what we are concerned with testing is the logic behind the routing, not the routing itself.
-
-Of course, you still need to test the entire system in an end-to-end manner with a real router at some point. You could consider a framework like [Cypress](https://www.cypress.io/) for full system tests using a real browser.
+It *finally* passes. Great! This is all very manual, however - and this is for a tiny, trivial app. This is the reason using a mock router is a common approach when testing Vue components using Vue Test Utils.
 
 ## Conclusion
 
