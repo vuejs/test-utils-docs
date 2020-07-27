@@ -108,7 +108,7 @@ console.warn node_modules/vue-router/dist/vue-router.cjs.js:225
   [Vue Router warn]: Unexpected error when starting the router: TypeError: Cannot read property '_history' of null
 ```
 
-Although it's not entirely clear from the warning, it's related to the fact that Vue Router 4 handles routing asynchronously, and before anything is rendered, the router must be in a "ready" state. For this reason Vue Router provides an `isReady` function, which we can `await` to ensure the router is ready and the initial routing has occurred before rendering anything.
+Although it's not entirely clear from the warning, it's related to the fact that Vue Router 4 handles routing asynchronously, and before anything is rendered, the router must be in a "ready" state. For this reason Vue Router provides an `isReady` function, which we can `await` to ensure the router is ready and the initial navigation has finished before rendering anything.
 
 Furthermore, the jsdom environment most test runners use will not do an initial navigation to `/` like a regular browser, so we need to handle this ourselves.  Update the test to do the initial navigation to `/`, and ensure the navigation has completed by awaiting `isReady`:
 
@@ -192,7 +192,9 @@ It *finally* passes. Great! This is all very manual, however - and this is for a
 
 You can use a mock router, instead, to avoid caring about the implementation details of Vue Router in your unit tests. Instead of using Vue Router, we can just create our own minimal mock version which only implements the features we are interested in. We can do this using a combination of `jest.mock` (if you are using Jest), and `global.components`.
 
-When we mock out a dependency, it's usually because we are not interested in testing that dependencies behavior. In this case, we do not want to test clicking `<router-link>` (which is really just an `<a>` tag) navigates to the correct page - of course it does! In this example, we might be interested in ensuring that the `<a>` has the correct `to` attribute, though. This may seem trivial, but in a larger application with much more complex routing, it can be worth ensuring links are correct (especially if they are highly dynamic).
+When we mock out a dependency, it's usually because we are not interested in testing that dependencies behavior. In this case, we do not want to test clicking `<router-link>` (which is really just an `<a>` tag) navigates to the correct page - of course it does! In this example, we might be interested in ensuring that the `<a>` has the correct `to` attribute, though.
+
+This may seem trivial, but in a larger application with much more complex routing, it can be worth ensuring links are correct (especially if they are highly dynamic).
 
 To illustrate this, let's see a different example, where mocking the router becomes much more attractive.
 
@@ -214,7 +216,9 @@ const Component = {
 }
 ```
 
-This component shows a button that will redirect an authenticated user to the edit post page (based on the current route parameters). An unauthenticated user should be redirected to a `/404` route. We could use a real router, then navigate to the correct route for this component, then after clicking the button assert that the correct page is rendered... however, this is a lot of setup for a relatively simple test. At it's core, the test we want to write is "if authenticated, redirect to X, otherwise redirect to Y". Let's see how we might accomplish this by mocking the routing using the `global.mocks` property:
+This component shows a button that will redirect an authenticated user to the edit post page (based on the current route parameters). An unauthenticated user should be redirected to a `/404` route. We could use a real router, then navigate to the correct route for this component, then after clicking the button assert that the correct page is rendered... however, this is a lot of setup for a relatively simple test. At its core, the test we want to write is "if authenticated, redirect to X, otherwise redirect to Y".
+
+ Let's see how we might accomplish this by mocking the routing using the `global.mocks` property:
 
 ```js
 describe('component handles routing correctly', () => {
@@ -261,4 +265,3 @@ Of course, you still need to test the entire system in an end-to-end manner with
 - For more complex applications, consider mocking the router dependency and focus on testing the underlying logic.
 - Make use of your test runner's stubbing/mocking functionality where possible.
 - Use `global.mocks` to mock global dependencies, such as `this.$route` and `this.$router`.
-
