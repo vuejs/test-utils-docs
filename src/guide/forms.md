@@ -226,6 +226,10 @@ Native event modifiers such as `.prevent` and `.stop` are Vue-specific and as su
 
 We then make a simple assertion, whether the form emitted the correct event and payload.
 
+#### Native form submission
+
+Triggering a `submit` event on a `<form>` element mimics browser behavior during form submission. If we wanted to trigger form submission more naturally, we could trigger a `click` event on the submit button instead. However, this necessitates the use of the [`attachTo`](/api/#attachto) mounting option, which connects the wrapper's element to the document. Form elements not connected to the `document` cannot be submitted, as per the [HTML specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-submission-algorithm).
+
 #### Multiple modifiers on the same event
 
 Let's assume you have a very detailed and complex form, with special interaction handling. How can we go about testing that?
