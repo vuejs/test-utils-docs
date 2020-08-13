@@ -27,6 +27,8 @@ test('mounts a component', () => {
 
 Specify where to mount the component. Useful when testing Vue as part of a larger application.
 
+Can be a valid CSS selector, or an [`Element`](https://developer.mozilla.org/en-US/docs/Web/API/Element) connected to the document.
+
 `Component.vue`
 
 ```vue
@@ -44,7 +46,7 @@ export default {}
 ```js
 test('mounts on a specific element', () => {
   // in a JSDOM environment, such as Jest
-  document.getElementsByTagName('html')[0].innerHTML = `
+  document.body.innerHTML = `
     <div>
       <h1>Non Vue app</h1>
       <div id="app"></div>
@@ -60,7 +62,7 @@ test('mounts on a specific element', () => {
    *   <h1>Non Vue app</h1>
    *   <div>Vue Component</div>
    * </div>
-  */
+   */
 })
 ```
 
@@ -1027,7 +1029,7 @@ test('text', () => {
 Since events often cause a re-render, `trigger` returns `Vue.nextTick`. You should use `await` when you call `trigger` to ensure that Vue updates the DOM before you make an assertion.
 :::
 
-Triggers an event, for example `click`, `submit` or `keyup`.
+Triggers a DOM event, for example `click`, `submit` or `keyup`.
 
 `Component.vue`:
 
