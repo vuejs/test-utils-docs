@@ -755,7 +755,7 @@ test('findAllComponents', () => {
 
 ### `get`
 
-Similar to `find`, `get` looks for an element and returns a `DOMWrapper` if one is found. Otherwise it throws an error.
+Similar to `find`, `get` looks for an element and returns a `DOMWrapper` if one is found. Otherwise it throws an error. As a rule of thumb, always use get except when you are asserting something doesn't exist. In that case use [`find`](#find).
 
 `Component.vue`:
 
@@ -773,12 +773,9 @@ test('get', () => {
   const wrapper = mount(Component)
 
   wrapper.get('span') //=> found; returns DOMWrapper
-  wrapper.get('[data-test="span"]') //=> found; returns DOMWrapper
-
-  expect(() => wrapper.getComponent('p')).toThrowError()
+  wrapper.get('[data-test="span"]') //=> found; returns DOMWrapper, fails if no matching element is found
 })
 ```
-
 
 ### `getComponent`
 
