@@ -8,8 +8,6 @@ Let's jump right into it, and learn Vue Test Utils (VTU) by building a simple To
 - filling out forms
 - triggering events
 
-A working repository with this example can be found [here](https://github.com/lmiller1990/vtu-next-demo). The component file is [here](https://github.com/lmiller1990/vtu-next-demo/blob/master/src/TodoApp.vue) and the the test is [here](https://github.com/lmiller1990/vtu-next-demo/blob/master/src/TodoApp.spec.js).
-
 ## Getting Started
 
 We will start off with a simple `TodoApp` component with a single todo:
