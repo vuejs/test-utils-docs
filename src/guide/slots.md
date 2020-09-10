@@ -151,5 +151,6 @@ test('scoped slots', () => {
 ## Conclusion
 
 - Use the `slots` mounting option to test components using `<slot>` are rendering content correctly.
+- Content can either be a string, a render function or an imported SFC.
 - Use `default` for the default slot, and the correct name for a named slots.
 - scoped slots and the `#` shorthand is also supported.
