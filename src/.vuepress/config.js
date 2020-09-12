@@ -1,11 +1,15 @@
 const sidebar = {
   guide: [
     {
+      title: 'Introduction',
+      collapsable: false,
+      children: ['/guide/introduction', '/guide/write-easy-test']
+    },
+    {
       title: 'Essentials',
       collapsable: false,
       children: [
         '/guide/installation',
-        '/guide/introduction',
         '/guide/a-crash-course',
         '/guide/conditional-rendering',
         '/guide/event-handling',
@@ -71,7 +75,7 @@ module.exports = {
       '/api/': sidebar.api
     },
     nav: [
-      { text: 'Guide', link: '/guide/introduction' },
+      { text: 'Guide', link: '/guide/installation' },
       { text: 'API Reference', link: '/api/' },
       { text: 'Migration from VTU 1', link: '/guide/migration' },
       { text: 'GitHub', link: 'https://github.com/vuejs/vue-test-utils-next' }
