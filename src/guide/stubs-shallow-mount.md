@@ -4,9 +4,9 @@ Vue Test Utils provides some advanced features for *stubbing* components. A *stu
 
 ## Stubbing a single child component
 
-A common example is when you would like to test something in a component that appers very high in the component hierarchy.
+A common example is when you would like to test something in a component that appears very high in the component hierarchy.
 
-In this example, we have an `<App>` that renders a message, as well as a `FetchDataFromApi` component that makes an API call.
+In this example, we have an `<App>` that renders a message, as well as a `FetchDataFromApi` component that makes an API call and renders its result.
 
 ```js
 const FetchDataFromApi = {
@@ -40,8 +40,8 @@ const App = {
 
  We do not want to make the API call in this particular test, we just want to assert the message is rendered. In this case, we could use the `stubs`, which appears in the `global` mounting option.
 
-```js {12}
-test('stubs', () => {
+```js
+test('stubs component with custom template', () => {
   const wrapper = mount(App, {
     global: {
       stubs: {
@@ -52,7 +52,9 @@ test('stubs', () => {
     }
   })
 
-  console.log(wrapper.html()) // <div><h1>Welcome to Vue.js 3</h1><span></span></div>
+  console.log(wrapper.html())
+  // <div><h1>Welcome to Vue.js 3</h1><span></span></div>
+
   expect(wrapper.html()).toContain('Welcome to Vue.js 3')
 })
 ```
@@ -61,8 +63,8 @@ Notice that the template is showing `<span></span>` where `<fetch-data-from-api 
 
 You can also get a default stub, instead of providing your own:
 
-```js {9}
-test('stubs', () => {
+```js
+test('stubs component', () => {
   const wrapper = mount(App, {
     global: {
       stubs: {
@@ -70,7 +72,15 @@ test('stubs', () => {
       }
     }
   })
-  console.log(wrapper.html()) // <div><h1>Welcome to Vue.js 3</h1><fetch-data-from-api-stub></fetch-data-from-api-stub></div>
+
+  console.log(wrapper.html())
+  /*
+    <div>
+      <h1>Welcome to Vue.js 3</h1>
+      <fetch-data-from-api-stub></fetch-data-from-api-stub>
+    </div>
+  */
+
   expect(wrapper.html()).toContain('Welcome to Vue.js 3')
 })
 ```
@@ -111,16 +121,27 @@ const wrapper = mount(ComplexComponent, {
 
 But that's a lot of boilerplate. VTU has a `shallow` mounting option that will automatically stub out all the child components:
 
-```js {5}
-test('shallow', () => {
-  const wrapper = monut(ComplexComponent, {
+```js {3}
+test('shallow stubs out all child components', () => {
+  const wrapper = mount(ComplexComponent, {
     shallow: true
   })
-  console.log(wrapper.html()) // <div><h1>Welcome to Vue.js 3</h1><complex-a-stub></complex-a-stub><complex-b-stub></complex-b-stub><complex-c-stub></complex-c-stub></div>
+
+  console.log(wrapper.html())
+  /*
+    <div>
+      <h1>Welcome to Vue.js 3</h1>
+      <complex-a-stub></complex-a-stub>
+      <complex-b-stub></complex-b-stub>
+      <complex-c-stub></complex-c-stub>
+    </div>
+  */
 })
 ```
 
-> TIP: If you used VTU V1, you may remember this as `shallowMount`. That method is still available, too - it's the same as writing `shallow: true`.
+::: tip
+If you used VTU V1, you may remember this as `shallowMount`. That method is still available, too - it's the same as writing `shallow: true`.
+:::
 
 ## Default Slots and `shallow`
 
@@ -151,7 +172,9 @@ const App = {
 }
 ```
 
-If you are using `shallow`, the `<slot />` will not be rendered, since the render function in `<custom-button />` is stubbed out. That means you won't be able to verify the correct text is rendered! For this use case, you can use `config.renderDefaultStub`, which will render the default `<slot />`, even when using `shallow`:
+If you are using `shallow`, the slot will not be rendered, since the render function in `<custom-button />` is stubbed out. That means you won't be able to verify the correct text is rendered!
+
+For this use case, you can use `config.renderDefaultStub`, which will render the default slot content, even when using `shallow`:
 
 ```js {1,4,8}
 import { config, mount } from '@vue/test-utils'
@@ -178,13 +201,15 @@ test('shallow with stubs', () => {
 
 Since this behavior is global, not on a `mount` by `mount` basis, you need to remember to enable/disable it before and after each test.
 
-:::: tip If you prefer this behavior, you can enable this globally by importing `config` in your test setup file, and setting `renderStubDefaultSlot` to `true`. Unfortunately, due to technical limitations, this behavior is not extended to slots other than the default slot.
+::: tip
+You can also enable this globally by importing `config` in your test setup file, and setting `renderStubDefaultSlot` to `true`. Unfortunately, due to technical limitations, this behavior is not extended to slots other than the default slot.
+:::
 
 ## `mount`, `shallow` and `stubs`: which one and when?
 
-As a rule of thumb, the more your tests resemble the way your software is used, the more confidence they can give you.
+As a rule of thumb, **the more your tests resemble the way your software is used**, the more confidence they can give you.
 
-Tests that use `mount` will render the entire component hierarchy, which is closer to what the user will experience in a real browser. 
+Tests that use `mount` will render the entire component hierarchy, which is closer to what the user will experience in a real browser.
 
 On the other hand, tests using `shallow` are focused on a specific component. `shallow` can be useful for testing advanced components in complete isolation. If you just have one or two components that are not relevant to your tests, consider using `mount` in combination with `stubs` instead of `shallow`. The more you stub, the less production-like your test becomes.
 
