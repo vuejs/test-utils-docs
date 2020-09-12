@@ -1,4 +1,4 @@
-## Vue Test Utils Documentation
+# What is Vue Test Utils?
 
 Welcome to Vue Test Utils, the official testing utility library for Vue.js!
 
@@ -8,8 +8,6 @@ This is the documentation for Vue Test Utils v2, which targets Vue 3.
 In short:
 * [Vue Test Utils 1](https://github.com/vuejs/vue-test-utils/) targets [Vue 2](https://github.com/vuejs/vue/).
 * [Vue Test Utils 2](https://github.com/vuejs/vue-test-utils-next/) targets [Vue 3](https://github.com/vuejs/vue-next/).
-
-## What is Vue Test Utils?
 
 Vue Test Utils (VTU) is a set of utility functions aimed to simplify testing Vue.js components. It provides some methods to mount and interact with Vue components in an isolated manner.
 
