@@ -1,4 +1,4 @@
-# Write code that is easy to test
+# Write components that are easy to test
 
 Vue Test Utils helps you write tests for Vue components. However, there's only so much VTU can do.
 
