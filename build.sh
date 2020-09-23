@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 rm -rf docs
 yarn build
 mv src/.vuepress/dist docs
