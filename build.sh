@@ -1,5 +1,2 @@
-rm -rf docs
-yarn build
-mv src/.vuepress/dist docs
-# git add docs
-# git commit -m "docs: build latest docs"
+yarn build-local
+mv src/.vuepress/dist/assets src/.vuepress/dist/v2/assets
