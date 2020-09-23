@@ -63,11 +63,11 @@ test('does not render an admin link', () => {
 })
 ```
 
-Notice we are calling `exists()` on the value returned from `.find()`? `find()`, like `mount()`, also returns a wrapper, similar to `mount()`. `mount()` has a few extra methods, because it's wrapping a Vue component, and `find()` only returns a regular DOM node, but many of the methods are shared between both. Some other methods include `classes()`, which gets the classes a DOM node has, and `trigger()` for simulating user interaction. You can find a list of methods supported [here](/v2/api/#wrapper-methods).
+Notice we are calling `exists()` on the value returned from `.find()`? `find()`, like `mount()`, also returns a wrapper, similar to `mount()`. `mount()` has a few extra methods, because it's wrapping a Vue component, and `find()` only returns a regular DOM node, but many of the methods are shared between both. Some other methods include `classes()`, which gets the classes a DOM node has, and `trigger()` for simulating user interaction. You can find a list of methods supported [here](.,/api/#wrapper-methods).
 
 ## Using `data`
 
-The final test is to assert that the admin link is rendered when `admin` is `true`. It's `false` by default, but we can override that using the second argument to `mount()`, the [`mounting options`](/v2/api/#mount-options).
+The final test is to assert that the admin link is rendered when `admin` is `true`. It's `false` by default, but we can override that using the second argument to `mount()`, the [`mounting options`](.,/api/#mount-options).
 
 For `data`, we use the aptly named `data` option:
 
@@ -89,7 +89,7 @@ test('renders an admin link', () => {
 
 If you have other properties in `data`, don't worry - Vue Test Utils will merge the two together. The `data` in the mounting options will take priority over any default values.
 
-To learn what other mounting options exist, see [`Passing Data`](/v2/guide/passing-data.html) or see [`mounting options`](/v2/api/#mount-options).
+To learn what other mounting options exist, see [`Passing Data`]./passing-data.html) or see [`mounting options`](.,/api/#mount-options).
 
 ## Conclusion
 

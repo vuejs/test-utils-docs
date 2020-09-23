@@ -38,11 +38,11 @@ test('displays message', () => {
 
 ## What Next?
 
-To see Vue Test Utils in action, [take the Crash Course](/v2/guide/a-crash-course/), where we build a simple Todo app using a test-first approach.
+To see Vue Test Utils in action, [take the Crash Course]./a-crash-course/), where we build a simple Todo app using a test-first approach.
 
 Docs are split into two main sections:
 
 * **Essentials**, to cover common uses cases you'll face when testing Vue components.
 * **Vue Test Utils in Depth**, to explore other advanced features of the library.
 
-Alternatively, you can explore the full [API](/v2/api/).
+Alternatively, you can explore the full [API](.,/api/).

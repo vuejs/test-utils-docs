@@ -6,7 +6,7 @@ You might know Vue updates reactively; when you change a value, the DOM is autom
 
 ## A Simple Example - Updating with `trigger`
 
-Let's re-use the `<Counter>` component from [event handling](/v2/guide/event-handling) with one change; we now render the `count` in the `template`.
+Let's re-use the `<Counter>` component from [event handling]./event-handling) with one change; we now render the `count` in the `template`.
 
 ```js
 const Counter = {
@@ -104,7 +104,7 @@ test('uses a mocked axios HTTP client and flush-promises', async () => {
 
 ```
 
-> If you haven't tested Components with API requests before, you can learn more in [HTTP Requests](/v2/guide/http-requests).
+> If you haven't tested Components with API requests before, you can learn more in [HTTP Requests]./http-requests).
 ## Conclusion
 
 - Vue updates the DOM asynchronously; tests runner execute code synchronously.

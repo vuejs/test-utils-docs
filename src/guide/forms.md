@@ -78,7 +78,7 @@ test('trigger', async () => {
 })
 ```
 
-> If you haven't seen `emitted()` before, don't worry. It's used to assert the emitted events of a Component. You can learn more in [Event Handling](/v2/guide/event-handling).
+> If you haven't seen `emitted()` before, don't worry. It's used to assert the emitted events of a Component. You can learn more in [Event Handling]./event-handling).
 
 We trigger the `click` event listener, so that the Component executes the `submit` method. As we did with `setValue`, we use `await` to make sure the action is being reflected by Vue.
 
@@ -228,7 +228,7 @@ We then make a simple assertion, whether the form emitted the correct event and 
 
 #### Native form submission
 
-Triggering a `submit` event on a `<form>` element mimics browser behavior during form submission. If we wanted to trigger form submission more naturally, we could trigger a `click` event on the submit button instead. Since form elements not connected to the `document` cannot be submitted, as per the [HTML specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-submission-algorithm), we need to use [`attachTo`](/v2/api/#attachto) to connect the wrapper's element.
+Triggering a `submit` event on a `<form>` element mimics browser behavior during form submission. If we wanted to trigger form submission more naturally, we could trigger a `click` event on the submit button instead. Since form elements not connected to the `document` cannot be submitted, as per the [HTML specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-submission-algorithm), we need to use [`attachTo`](.,/api/#attachto) to connect the wrapper's element.
 
 #### Multiple modifiers on the same event
 
