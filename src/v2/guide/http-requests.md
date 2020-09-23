@@ -169,7 +169,7 @@ A typical scenario for more complex applications is to trigger a Vuex action tha
 
 This is no different from the example outlined above. We might want to load the store as is and mock services such as `axios`. This way, we're mocking our system's boundaries, thus achieving a higher degree of confidence in our tests.
 
-You can check out the [Testing Vuex](../guide/vuex.md) docs for more information on testing Vuex with Vue Test Utils.
+You can check out the [Testing Vuex](vuex.md) docs for more information on testing Vuex with Vue Test Utils.
 
 ## Conclusion
 
