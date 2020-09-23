@@ -55,7 +55,7 @@ const sidebar = {
 }
 
 module.exports = {
-  base: '/vue-test-utils-next-docs/',
+  base: '/',
   title: 'Vue Test Utils',
   locales: {
     '/': {
