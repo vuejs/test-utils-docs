@@ -40,7 +40,7 @@ test('emits an event when clicked', () => {
 })
 ```
 
-> If you haven't seen `trigger()` before, don't worry. It's used to simulate user interaction. You can learn more in [Forms](/guide/forms).
+> If you haven't seen `trigger()` before, don't worry. It's used to simulate user interaction. You can learn more in [Forms](/v2/guide/forms).
 
 The first thing to notice is that `emitted()` returns an object, where each key matches an emitted event. In this case, `increment`.
 

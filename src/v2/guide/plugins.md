@@ -42,7 +42,7 @@ Some plugins automatically call `config.plugins.VueWrapper.install()` when
  they're imported. This is common if they're extending multiple interfaces at
   once. Follow the instructions of the plugin you're installing.
 
-Check out the [Vue Community Guide](https://vue-community.org/guide/ecosystem/testing.html) or [awesome-vue](https://github.com/vuejs/awesome-vue#test
+Check out the [Vue Community Guide](https://vue-community.org/v2/guide/ecosystem/testing.html) or [awesome-vue](https://github.com/vuejs/awesome-vue#test
 ) for a collection of community-contributed plugins and libraries.
 
 ## Writing a Plugin
@@ -126,4 +126,4 @@ config.plugins.VueWrapper.install(DataTestIdPlugin)
 ## Featuring Your Plugin
 
 If you're missing functionality, consider writing a plugin to extend Vue Test
- Utils and submit it to be featured at [Vue Community Guide](https://vue-community.org/guide/ecosystem/testing.html) or [awesome-vue](https://github.com/vuejs/awesome-vue#test).
+ Utils and submit it to be featured at [Vue Community Guide](https://vue-community.org/v2/guide/ecosystem/testing.html) or [awesome-vue](https://github.com/vuejs/awesome-vue#test).
