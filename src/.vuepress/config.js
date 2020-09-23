@@ -55,7 +55,7 @@ const sidebar = {
 }
 
 module.exports = {
-  base: '/v2/',
+  base: '/',
   title: 'Vue Test Utils',
   locales: {
     '/': {
