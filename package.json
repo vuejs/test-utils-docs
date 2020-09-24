@@ -6,7 +6,7 @@
   },
   "scripts": {
     "serve": "vuepress dev src",
-    "build-local": "vuepress build src",
+    "build:dev": "vuepress build src",
     "build": "./build.sh"
   }
 }
