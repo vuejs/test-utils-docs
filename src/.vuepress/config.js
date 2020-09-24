@@ -6,38 +6,38 @@ const sidebar = {
       children: [
         '/guide/installation',
         '/guide/introduction',
-        '/a-crash-course',
-        '/conditional-rendering',
-        '/event-handling',
-        '/passing-data',
-        '/forms'
+        '/guide/a-crash-course',
+        '/guide/conditional-rendering',
+        '/guide/event-handling',
+        '/guide/passing-data',
+        '/guide/forms'
       ]
     },
     {
       title: 'Vue Test Utils in depth',
       collapsable: false,
       children: [
-        '/slots',
-        '/async-suspense',
-        '/http-requests',
-        '/transitions',
-        '/component-instance',
-        '/reusability-composition',
-        '/vuex',
-        '/vue-router',
-        '/third-party',
-        '/stubs-shallow-mount'
+        '/guide/slots',
+        '/guide/async-suspense',
+        '/guide/http-requests',
+        '/guide/transitions',
+        '/guide/component-instance',
+        '/guide/reusability-composition',
+        '/guide/vuex',
+        '/guide/vue-router',
+        '/guide/third-party',
+        '/guide/stubs-shallow-mount'
       ]
     },
     {
       title: 'Extending Vue Test Utils',
       collapsable: false,
-      children: ['/plugins', '/community-learning']
+      children: ['/guide/plugins', '/guide/community-learning']
     },
     {
       title: 'Migration to Vue Test Utils 2',
       collapsable: false,
-      children: ['/migration']
+      children: ['/guide/migration']
     },
     {
       title: 'API Reference',
@@ -56,6 +56,14 @@ const sidebar = {
 
 module.exports = {
   base: '/v2/',
+  configureWebpack(config) {
+    return {
+      output: {
+        publicPath: '/v2/'
+      }
+
+    }
+  },
   title: 'Vue Test Utils',
   locales: {
     '/': {
@@ -67,13 +75,13 @@ module.exports = {
     editLinks: true,
     sidebarDepth: 2,
     sidebar: {
-      '/': sidebar.guide,
+      '/guide/': sidebar.guide,
       '/api/': sidebar.api
     },
     nav: [
-      { text: 'Guide', link: '/introduction' },
+      { text: 'Guide', link: '/guide/introduction' },
       { text: 'API Reference', link: '/api/' },
-      { text: 'Migration from VTU 1', link: '/migration' },
+      { text: 'Migration from VTU 1', link: '/guide/migration' },
       { text: 'GitHub', link: 'https://github.com/vuejs/vue-test-utils-next' }
     ]
   }
