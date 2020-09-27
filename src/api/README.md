@@ -1088,3 +1088,9 @@ test('unmount', () => {
   wrapper.unmount() // removed from DOM
 })
 ```
+
+## Wrapper properties
+
+### `vm`
+
+This is the ```Vue``` instance. You can access all of the [instance methods and properties of a vm](https://vuejs.org/v2/api/#Instance-Properties) with ```wrapper.vm```. This only exists on ```VueWrapper```. 
