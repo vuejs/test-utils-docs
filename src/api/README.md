@@ -1093,4 +1093,4 @@ test('unmount', () => {
 
 ### `vm`
 
-This is the ```Vue``` instance. You can access all of the [instance methods and properties of a vm](https://vuejs.org/v2/api/#Instance-Properties) with ```wrapper.vm```. This only exists on ```VueWrapper```. 
+This is the ```Vue``` instance. You can access all of the [instance methods and properties of a vm](https://v3.vuejs.org/api/instance-properties.html) with ```wrapper.vm```. This only exists on ```VueWrapper```. 
