@@ -39,7 +39,7 @@ test('increments by 1', () => {
 })
 ```
 
-Surprisingly, this fails! The reason is although `count` is increased, Vue will not update the DOM until the next "tick" or "render cycle". For this reason, the assertion will be called before Vue updates the DOM. This has to do with the concept of "marcotasks", "microtasks" and the JavaScript Event Loop. You can read more details and see a simple example [here](https://javascript.info/event-loop#macrotasks-and-microtasks).
+Surprisingly, this fails! The reason is although `count` is increased, Vue will not update the DOM until the next "tick" or "render cycle". For this reason, the assertion will be called before Vue updates the DOM. This has to do with the concept of "macrotasks", "microtasks" and the JavaScript Event Loop. You can read more details and see a simple example [here](https://javascript.info/event-loop#macrotasks-and-microtasks).
 
 Implementation details aside, how can we fix this? Vue actually provides a way for us to wait until the DOM is updated: `nextTick`:
 
