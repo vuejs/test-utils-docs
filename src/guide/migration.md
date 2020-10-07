@@ -145,3 +145,10 @@ const mount(App, {
 
 TODO: Write about this
 
+### `destroy` is now `unmount` to match Vue 3 
+
+TODO: Write about this
+
+### `scopedSlots` is now merged with `slots` 
+
+TODO: Write about this
