@@ -145,7 +145,7 @@ const mount(App, {
 
 ### `shallowMount` and `renderDefaultStubSlot`
 
-`shallowMount` is intended to stub out any custom components. While this was the case in Vue Test Utils v1, stubbed components would still render their default `<slot />`. While this was unintended, some users came to enjoy this feature. This behavior is corrected in v2 - the slot content for a stubbed component is not rendered. If you prefer the old behavior, it is still available via globally via `config`.
+`shallowMount` is intended to stub out any custom components. While this was the case in Vue Test Utils v1, stubbed components would still render their default `<slot />`. While this was unintended, some users came to enjoy this feature. This behavior is corrected in v2 - the slot content for a stubbed component is not rendered.
 
 Given this code:
 
@@ -216,4 +216,3 @@ Vue 3 renamed the `vm.$destroy` to `vm.$unmount`. Vue Test Utils has followed su
 ### `scopedSlots` is now merged with `slots` 
 
 Vue 3 united the `slot` and `scoped-slot` syntax under a single syntax, `v-slot`, which you can read about in the [RFC](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0001-new-slot-syntax.md). Since `slot` and `scoped-slot` are now merged, the `scopedSlots` mounting option is now deprecated - just use the `slots` mounting option for everything.
-
