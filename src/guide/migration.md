@@ -215,4 +215,4 @@ Vue 3 renamed the `vm.$destroy` to `vm.$unmount`. Vue Test Utils has followed su
 
 ### `scopedSlots` is now merged with `slots` 
 
-Vue 3 united the `slot` and `scoped-slot` syntax under a single syntax, `v-slot`, which you can read about in the [RFC](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0001-new-slot-syntax.md). Since `slot` and `scoped-slot` are now merged, the `scopedSlots` mounting option is now deprecated - just use the `slots` mounting option for everything.
+Vue 3 united the `slot` and `scoped-slot` syntax under a single syntax, `v-slot`, which you can read about in the [RFC](https://v3.vuejs.org/guide/migration/slots-unification.html#overview). Since `slot` and `scoped-slot` are now merged, the `scopedSlots` mounting option is now deprecated - just use the `slots` mounting option for everything.
