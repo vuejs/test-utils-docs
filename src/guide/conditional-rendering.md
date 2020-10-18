@@ -102,7 +102,7 @@ const Nav = {
   template: `
     <nav>
       <a id="user" href="/profile">My Profile</a>
-      <ul v-show="shouldShowDropdown" id="user-dropdwn">
+      <ul v-show="shouldShowDropdown" id="user-dropdown">
         <!-- dropdown content -->
       </ul>
     </nav>
@@ -126,7 +126,7 @@ test('does not show the user dropdown', () => {
   const wrapper = mount(Nav)
 
   // using `get()` works as well
-  expect(wrapper.find('#user-dropdwn').isVisible()).toBe(false)
+  expect(wrapper.find('#user-dropdown').isVisible()).toBe(false)
 })
 ```
 
