@@ -119,13 +119,13 @@ In this scenario, the element is not visible but always rendered. `get()` or `fi
 
 ## Using `isVisible()`
 
-`isVisible()` gives you the capacity to check whether an element is the DOM is hidden. `isVisible()` will check if:
+`isVisible()` gives the capacity to check for hidden elements. In particular `isVisible()` will check if:
                                                                                   
 - an element or its ancestors have `display: none`, `visibility: hidden`, `opacity :0` style
 - an element or its ancestors are located inside collapsed `<details>` tag
 - an element or its ancestors have the `hidden` attribute
 
-For any of these cases, `isVisible()` will return `false`.
+For any of these cases, `isVisible()` returns `false`.
 
 Testing scenarios using `v-show` will look like:
 
