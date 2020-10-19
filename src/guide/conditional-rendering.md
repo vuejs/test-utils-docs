@@ -119,7 +119,15 @@ In this scenario, the element is not visible but always rendered. `get()` or `fi
 
 ## Using `isVisible()`
 
-`isVisible()` gives you the capacity to check whether an element is hidden/shown by using `v-show`.
+`isVisible()` gives you the capacity to check whether an element is the DOM is hidden. `isVisible()` will check if:
+                                                                                  
+- an element or its ancestors have `display: none`, `visibility: hidden`, `opacity :0` style
+- an element or its ancestors are located inside collapsed `<details>` tag
+- an element or its ancestors have the `hidden` attribute
+
+For any of these cases, `isVisible()` will return `false`.
+
+Testing scenarios using `v-show` will look like:
 
 ```js
 test('does not show the user dropdown', () => {
@@ -127,15 +135,7 @@ test('does not show the user dropdown', () => {
 
   expect(wrapper.get('#user-dropdown').isVisible()).toBe(false)
 })
-```
-
-Note that `isVisible()` is not limited to scenarios using `v-show` as it will check if:
-
-- an element or its ancestors have `display: none`, `visibility: hidden`, `opacity :0` style
-- an element or its ancestors are located inside collapsed `<details>` tag
-- an element or its ancestors have the `hidden` attribute
-
-For any of these cases, `isVisible()` will return `false`.
+``` 
 
 ## Conclusion
 
