@@ -4,7 +4,7 @@ Vue Test Utils has a range of features for rendering and making assertions about
 
 ## Finding Elements
 
-One of the most basic features of Vue is the ability to dynamically show, hide by removing elements with `v-if`. Let's look at how to test a component that uses `v-if`.
+One of the most basic features of Vue is the ability to dynamically insert and remove elements with `v-if`. Let's look at how to test a component that uses `v-if`.
 
 ```js
 const Nav = {
@@ -93,7 +93,7 @@ To learn what other mounting options exist, see [`Passing Data`](./passing-data.
 
 ## Checking Elements visibility
 
-Sometimes you only want to hide/show an element while keeping it in the DOM. Vue offers `v-show` for scenarios as such. (You can check the differences between `v-if` and `v-show` [here](https://vuejs.org/v2/guide/conditional.html#v-if-vs-v-show)).
+Sometimes you only want to hide/show an element while keeping it in the DOM. Vue offers `v-show` for scenarios as such. (You can check the differences between `v-if` and `v-show` [here](https://v3.vuejs.org/guide/conditional.html#v-if-vs-v-show)).
 
 This is how a component with `v-show` looks like:
 
@@ -115,7 +115,7 @@ const Nav = {
 }
 ```
 
-In this scenario, the element is not visible but but it always rendered. `get()` or `find()` will always return a `Wrapper` – `find()` with `.exists()` always return `true` – because the **element is still in the DOM**. 
+In this scenario, the element is not visible but always rendered. `get()` or `find()` will always return a `Wrapper` – `find()` with `.exists()` always return `true` – because the **element is still in the DOM**. 
 
 ## Using `isVisible()`
 
@@ -125,8 +125,7 @@ In this scenario, the element is not visible but but it always rendered. `get()`
 test('does not show the user dropdown', () => {
   const wrapper = mount(Nav)
 
-  // using `get()` works as well
-  expect(wrapper.find('#user-dropdown').isVisible()).toBe(false)
+  expect(wrapper.get('#user-dropdown').isVisible()).toBe(false)
 })
 ```
 
@@ -143,4 +142,4 @@ For any of these cases, `isVisible()` will return `false`.
 - Use `find()` along with `exists()` to verify whether an element is in the DOM.
 - Use `get()` if you expect the element to be in the DOM.
 - The `data` mounting option can be used to set default values on a component.
-- Use `find()` (or `get()`) with `isVisible()` to verify the visibility of an element that is in the DOM
+- Use `get()` with `isVisible()` to verify the visibility of an element that is in the DOM
