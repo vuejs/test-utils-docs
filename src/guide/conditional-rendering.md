@@ -4,7 +4,7 @@ Vue Test Utils has a range of features for rendering and making assertions about
 
 ## Finding Elements
 
-One of the most basic features of Vue is the ability to dynamically show, hide and remove elements with `v-if`. Let's look at how to test a component that uses `v-if`.
+One of the most basic features of Vue is the ability to dynamically insert and remove elements with `v-if`. Let's look at how to test a component that uses `v-if`.
 
 ```js
 const Nav = {
@@ -50,7 +50,7 @@ If `get()` does not return an element matching the selector, it will raise an er
 
 ## Using `find()` and `exists()`
 
-`get()` works for asserting elements do exist. However, as we mentioned, it throws an error when it can't find an element, so you can't use it to assert whether if elements exist.
+`get()` works on the assumption that elements do exist and throws an error when they do not. It is _not_ recommended to use it for asserting existence.
 
 To do so, we use `find()` and `exists()`. The next test asserts that if `admin` is `false` (which is it by default), the admin link is not present:
 
@@ -63,7 +63,7 @@ test('does not render an admin link', () => {
 })
 ```
 
-Notice we are calling `exists()` on the value returned from `.find()`? `find()`, like `mount()`, also returns a wrapper, similar to `mount()`. `mount()` has a few extra methods, because it's wrapping a Vue component, and `find()` only returns a regular DOM node, but many of the methods are shared between both. Some other methods include `classes()`, which gets the classes a DOM node has, and `trigger()` for simulating user interaction. You can find a list of methods supported [here](.,/api/#wrapper-methods).
+Notice we are calling `exists()` on the value returned from `.find()`? `find()`, like `mount()`, also returns a `wrapper`, similar to `mount()`. `mount()` has a few extra methods, because it's wrapping a Vue component, and `find()` only returns a regular DOM node, but many of the methods are shared between both. Some other methods include `classes()`, which gets the classes a DOM node has, and `trigger()` for simulating user interaction. You can find a list of methods supported [here](.,/api/#wrapper-methods).
 
 ## Using `data`
 
@@ -89,10 +89,57 @@ test('renders an admin link', () => {
 
 If you have other properties in `data`, don't worry - Vue Test Utils will merge the two together. The `data` in the mounting options will take priority over any default values.
 
-To learn what other mounting options exist, see [`Passing Data`]./passing-data.html) or see [`mounting options`](.,/api/#mount-options).
+To learn what other mounting options exist, see [`Passing Data`](./passing-data.html) or see [`mounting options`](.,/api/#mount-options).
+
+## Checking Elements visibility
+
+Sometimes you only want to hide/show an element while keeping it in the DOM. Vue offers `v-show` for scenarios as such. (You can check the differences between `v-if` and `v-show` [here](https://v3.vuejs.org/guide/conditional.html#v-if-vs-v-show)).
+
+This is how a component with `v-show` looks like:
+
+```js
+const Nav = {
+  template: `
+    <nav>
+      <a id="user" href="/profile">My Profile</a>
+      <ul v-show="shouldShowDropdown" id="user-dropdown">
+        <!-- dropdown content -->
+      </ul>
+    </nav>
+  `,
+  data() {
+    return {
+      shouldShowDropdown: false
+    }
+  }
+}
+```
+
+In this scenario, the element is not visible but always rendered. `get()` or `find()` will always return a `Wrapper` – `find()` with `.exists()` always return `true` – because the **element is still in the DOM**. 
+
+## Using `isVisible()`
+
+`isVisible()` gives the capacity to check for hidden elements. In particular `isVisible()` will check if:
+                                                                                  
+- an element or its ancestors have `display: none`, `visibility: hidden`, `opacity :0` style
+- an element or its ancestors are located inside collapsed `<details>` tag
+- an element or its ancestors have the `hidden` attribute
+
+For any of these cases, `isVisible()` returns `false`.
+
+Testing scenarios using `v-show` will look like:
+
+```js
+test('does not show the user dropdown', () => {
+  const wrapper = mount(Nav)
+
+  expect(wrapper.get('#user-dropdown').isVisible()).toBe(false)
+})
+``` 
 
 ## Conclusion
 
-- Use `find()` along with `exists()` to verify whether if an element is in the DOM.
-- Use `get()` if you expect the DOM element to be in the DOM.
+- Use `find()` along with `exists()` to verify whether an element is in the DOM.
+- Use `get()` if you expect the element to be in the DOM.
 - The `data` mounting option can be used to set default values on a component.
+- Use `get()` with `isVisible()` to verify the visibility of an element that is in the DOM
