@@ -61,14 +61,13 @@ module.exports = {
       output: {
         publicPath: '/v2/'
       }
-
     }
   },
   title: 'Vue Test Utils',
   locales: {
     '/': {
       lang: 'en-US',
-      title: 'Vue Test Utils (2.0.0-beta.0)'
+      title: 'Vue Test Utils (2.0.0-beta.7)'
     }
   },
   themeConfig: {
