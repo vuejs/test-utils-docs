@@ -44,5 +44,6 @@ Docs are split into two main sections:
 
 * **Essentials**, to cover common uses cases you'll face when testing Vue components.
 * **Vue Test Utils in Depth**, to explore other advanced features of the library.
+- Alternatively, if you prefer to learn via video, there is [a number of lectures available here](https://www.youtube.com/playlist?list=PLC2LZCNWKL9ahK1IoODqYxKu5aA9T5IOA).
 
 Alternatively, you can explore the full [API](.,/api/).

@@ -2,6 +2,8 @@
 
 Vue components interact with each other via props and by emitting events by calling `$emit`. In this guide, we look at how to verify events are correctly emitted using the `emitted()` function.
 
+This article is also available as a [short video](https://www.youtube.com/watch?v=U_j-nDur4oU&list=PLC2LZCNWKL9ahK1IoODqYxKu5aA9T5IOA&index=14).
+
 ## The Counter component
 
 Here is a simple `<Counter>` component. It features a button that, when clicked, increments an internal count variable and emits its value:
