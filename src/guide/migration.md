@@ -15,7 +15,7 @@ const App = {
   props: ['foo']
 }
 
-const mount(App, {
+const wrapper = mount(App, {
   propsData: {
     foo: 'bar'
   }
@@ -29,7 +29,7 @@ const App = {
   props: ['foo']
 }
 
-const mount(App, {
+const wrapper = mount(App, {
   props: {
     foo: 'bar'
   }
@@ -112,7 +112,7 @@ const $route = {
   }
 }
 
-const mount(App, {
+const wrapper = mount(App, {
   stubs: {
     Foo: true
   },
@@ -131,7 +131,7 @@ const $route = {
   }
 }
 
-const mount(App, {
+const wrapper = mount(App, {
   global: {
     stubs: {
       Foo: true
