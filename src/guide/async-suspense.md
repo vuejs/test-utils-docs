@@ -78,7 +78,7 @@ jest.mock('axios', () => ({
 }))
 ```
 
-In this case, Vue has no knowledge of the unresolved Promise, so calling `nextTick` will not work - your assertion may run before it is resolved. For scenarios like this, you can use `[flush-promises](https://www.npmjs.com/package/flush-promises)`, which causes all outstanding promises to resolve immediately. 
+In this case, Vue has no knowledge of the unresolved Promise, so calling `nextTick` will not work - your assertion may run before it is resolved. For scenarios like this, you can use `[flush-promises](https://www.npmjs.com/package/flush-promises)`, which causes all outstanding promises to resolve immediately.
 
 Let's see an example:
 
@@ -97,8 +97,8 @@ test('uses a mocked axios HTTP client and flush-promises', async () => {
   // some component that makes a HTTP called in `created` using `axios`
   const wrapper = mount(AxiosComponent)
 
-  await flushPromses() // axios promise is resolved immediately!
-  
+  await flushPromises() // axios promise is resolved immediately!
+
   // assertions!
 })
 
@@ -110,4 +110,4 @@ test('uses a mocked axios HTTP client and flush-promises', async () => {
 - Vue updates the DOM asynchronously; tests runner execute code synchronously.
 - Use `await nextTick()` to ensure the DOM has updated before the test continues
 - Functions that might update the DOM, like `trigger` and `setValue` return `nextTick`, so you should `await` them.
-- Use `flush-promises` to resolve any unresolved promises from non-Vue dependencies. 
+- Use `flush-promises` to resolve any unresolved promises from non-Vue dependencies.
