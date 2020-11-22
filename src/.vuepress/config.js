@@ -67,7 +67,7 @@ module.exports = {
   locales: {
     '/': {
       lang: 'en-US',
-      title: 'Vue Test Utils (2.0.0-beta.7)'
+      title: 'Vue Test Utils (2.0.0-beta.10)'
     }
   },
   themeConfig: {
