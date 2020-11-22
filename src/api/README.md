@@ -66,6 +66,45 @@ test('mounts on a specific element', () => {
 })
 ```
 
+### `attrs`
+
+Assigns attributes to component.
+
+```js
+test('assigns extra attributes on components', () => {
+  const wrapper = mount(Component, {
+    attrs: {
+      id: 'hello',
+      disabled: true
+    }
+  })
+
+  expect(wrapper.attributes()).toEqual({
+    disabled: 'true',
+    id: 'hello'
+  })
+})
+```
+
+Notice that setting a prop will always trump an attribute:
+
+```js
+test('attribute is overridden by a prop with the same name', () => {
+  const wrapper = mount(Component, {
+    props: {
+      message: 'Hello World'
+    },
+    attrs: {
+      message: 'this will get overridden'
+    }
+  })
+
+  expect(wrapper.props()).toEqual({ message: 'Hello World' })
+
+  expect(wrapper.attributes()).toEqual({})
+})
+```
+
 ### `data`
 
 Overrides a component's default `data`. Must be a function.
@@ -463,6 +502,74 @@ test('stubs a component using a custom component', () => {
 })
 ```
 
+### `global.config`
+
+Configures [Vue's application global configuration](https://v3.vuejs.org/api/application-config.html#application-config).
+
+### `global.renderStubDefaultSlot`
+
+Renders the `default` slot content, even when using `shallow` or `shallowMount`.
+
+Due to technical limitations, this behavior cannot be extended to slots other than the default one.
+
+```js
+import { config, mount } from '@vue/test-utils'
+
+beforeAll(() => {
+  config.renderStubDefaultSlot = true
+})
+
+afterAll(() => {
+  config.renderStubDefaultSlot = false
+})
+
+test('shallow with stubs', () => {
+  const Component = {
+    template: `<div><slot /></div>`
+  }
+
+  const wrapper = mount(Component, {
+    shallow: true
+  })
+
+  expect(wrapper.html()).toContain('Content from the default slot')
+})
+```
+
+::: tip
+This behavior is global, not on a mount by mount basis. Remember to enable/disable it before and after each test.
+:::
+
+### `shallow`
+
+Stubs out out all child components from the components under testing.
+
+```js
+test('stubs all components automatically using { shallow: true }', () => {
+  const Component = {
+    template: `
+      <custom-component />
+      <another-component />
+    `,
+    components: {
+      CustomComponent,
+      AnotherComponent
+    }
+  }
+
+  const wrapper = mount(Component, { shallow: true })
+
+  expect(wrapper.html()).toEqual(
+    `<custom-component-stub></custom-component-stub><another-component></another-component>`
+  )
+}
+```
+
+::: tip
+`shallowMount` is an alias to mounting a component with `shallow: true`.
+:::
+
+
 ## Wrapper methods
 
 When you use `mount`, a `VueWrapper` is returned with a number of useful methods for testing. A `VueWrapper` is a thin wrapper around your component instance. Methods like `find` return a `DOMWrapper`, which is a thin wrapper around the DOM nodes in your component and it's children. Both implement a similar same API.
@@ -859,6 +966,21 @@ test('html', () => {
 })
 ```
 
+### `isVisible`
+
+Verify whether or not a found element is visible or not.
+
+```js
+test('isVisible', () => {
+  const Comp = {
+    template: `<div v-show="false"><span /></div>`
+  }
+  const wrapper = mount(Comp)
+
+  expect(wrapper.find('span').isVisible()).toBe(false)
+})
+```
+
 ### `props`
 
 Returns props applied on a Vue Component. This should be used mostly to assert props applied to a stubbed component.
@@ -911,6 +1033,37 @@ test('props', () => {
   })
 })
 ```
+
+### `setData`
+
+Updates component data.
+
+::: tip
+You should use `await` when you call `setData` to ensure that Vue updates the DOM before you make an assertion.
+:::
+
+`Component.vue`:
+
+```js
+test('updates component data', async () => {
+  const Component = {
+    template: '<div>Count: {{ count }}</div>',
+    data: () => ({ count: 0 })
+  }
+
+  const wrapper = mount(Component)
+  expect(wrapper.html()).toContain('Count: 0')
+
+  await wrapper.setData({ count: 1 })
+
+  expect(wrapper.html()).toContain('Count: 1')
+})
+```
+
+Notice that `setData` does not allow setting new properties that are not
+defined in the component.
+
+Also, notice that `setData` does not modify composition API `setup()` data.
 
 ### `setProps`
 
@@ -1093,4 +1246,4 @@ test('unmount', () => {
 
 ### `vm`
 
-This is the ```Vue``` instance. You can access all of the [instance methods and properties of a vm](https://v3.vuejs.org/api/instance-properties.html) with ```wrapper.vm```. This only exists on ```VueWrapper```. 
+This is the ```Vue``` instance. You can access all of the [instance methods and properties of a vm](https://v3.vuejs.org/api/instance-properties.html) with ```wrapper.vm```. This only exists on ```VueWrapper```.
