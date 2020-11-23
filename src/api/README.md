@@ -375,7 +375,8 @@ test('installs a plugin via `plugins`', () => {
       installed()
     }
   }
-
+  const options = { option1: true }
+  const testString = 'hello'
   mount(Component, {
     global: {
       plugins: [Plugin]
@@ -385,7 +386,44 @@ test('installs a plugin via `plugins`', () => {
   expect(installed).toHaveBeenCalled()
 })
 ```
+To use plugin with options, an array of options can be passed.
 
+`Component.spec.js`:
+
+```js
+test('installs plugins with and without options', () => {
+  const installed = jest.fn()
+  class Plugin {
+    static install() {
+      installed()
+    }
+  }
+
+  const installedWithOptions = jest.fn()
+  class PluginWithOptions {
+    static install(_app: App, ...args) {
+      installedWithOptions(...args)
+    }
+  }
+
+  const Component = {
+    render() {
+      return h('div')
+    }
+  }
+  mount(Component, {
+    global: {
+      plugins: [Plugin, [PluginWithOptions, 'argument 1', 'another argument']]
+    }
+  })
+
+  expect(installed).toHaveBeenCalled()
+  expect(installedWithOptions).toHaveBeenCalledWith(
+    'argument 1',
+    'another argument'
+  )
+})
+```
 ### `global.provide`
 
 Provides data to be received in a `setup` function via `inject`.
