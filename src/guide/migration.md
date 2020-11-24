@@ -76,7 +76,7 @@ const wrapper = mount(App, {
 
 ```js
 import { createStore } from 'vuex'
-import { createLocalVue, mount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 
 const App = {
   computed: {
