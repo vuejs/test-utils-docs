@@ -170,7 +170,7 @@ const App = {
 
 **Before**:
 
-```
+```js
 describe('App', () => {
   it('renders', () => {
     const wrapper = shallowMount(App)
@@ -187,7 +187,7 @@ describe('App', () => {
 
 **After**:
 
-```
+```js
 describe('App', () => {
   it('renders', () => {
     const wrapper = shallowMount(App)
