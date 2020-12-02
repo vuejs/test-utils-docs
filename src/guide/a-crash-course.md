@@ -64,7 +64,7 @@ Finally, we use another global function common to many tests runner - Jest inclu
 
 ## Making the test pass
 
-If we run this test now, it fails with the following error message: `Cannot call text on an empty wrapper`. That's because we aren't rendering any todo item, so the `find()` call is failing to return a wrapper (remember, VTU wraps all components, and DOM elements, in a "wrapper" with some convenient methods). Let's update `<template>` in `TodoApp.vue` to render the `todos` array:
+If we run this test now, it fails with the following error message: `Unable to get [data-test="todo"]`. That's because we aren't rendering any todo item, so the `get()` call is failing to return a wrapper (remember, VTU wraps all components, and DOM elements, in a "wrapper" with some convenient methods). Let's update `<template>` in `TodoApp.vue` to render the `todos` array:
 
 ```vue
 <template>
