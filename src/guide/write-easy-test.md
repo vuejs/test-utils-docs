@@ -26,7 +26,7 @@ Think in terms of inputs and outputs. Roughly, this is everything you should tak
 
 **side effects**: any other *observable* side effect, such as `console.log`, cookie creation, API calls…
 
-## Everything else are implementation details
+## Everything else is implementation details
 
 Notice how this list does not include elements such as internal methods, or intermediate states or data.
 
