@@ -28,9 +28,9 @@ Think in terms of inputs and outputs. Roughly, this is everything you should tak
 
 ### Everything else is implementation details
 
-Notice how this list does not include elements such as internal methods, or intermediate states or data.
+Notice how this list does not include elements such as internal methods, intermediate states or even data.
 
-The rule of thumb is that **a test should not break on a refactor**, that is, when we change its internal implementation without changing its public API. If that happens, it might mean the test relies on implementation details.
+The rule of thumb is that **a test should not break on a refactor**, that is, when we change its internal implementation without changing its behavior (that is, without changing its public API). If that happens, it might mean the test relies on implementation details.
 
 
 ## Build smaller components
