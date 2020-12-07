@@ -2,7 +2,7 @@
 
 Vue Test Utils helps you write tests for Vue components. However, there's only so much VTU can do.
 
-Following is a list of suggestions to write code that is easier to test, and to write tests that are meaningful and easier to maintain.
+Following is a list of suggestions to write code that is easier to test, and to write tests that are meaningful and simple to maintain.
 
 The following list provide general guidance. It might come in handy in common scenarios.
 
@@ -12,7 +12,7 @@ Think in terms of inputs and outputs. Roughly, this is everything you should tak
 
 ### Inputs
 
-**Props**: the prop values provided.
+**Props**: the provided prop values.
 
 **User inputs**: user interactions such as clicking, scrolling, typing…
 
@@ -22,11 +22,11 @@ Think in terms of inputs and outputs. Roughly, this is everything you should tak
 
 **DOM elements**: anything the component renders to the DOM.
 
-**events**: emitted (through `$emit`) events.
+**events**: emitted events (using `$emit`).
 
-**side effects**: any other *observable* side effect, such as `console.log`, cookie creation, API calls…
+**side effects**: any other *observable* side effect, such as `console.log`, cookies, API calls…
 
-## Everything else is implementation details
+### Everything else is implementation details
 
 Notice how this list does not include elements such as internal methods, or intermediate states or data.
 
@@ -35,7 +35,9 @@ The rule of thumb is that **a test should not break on a refactor**, that is, wh
 
 ## Build smaller components
 
-If a component does less, then it will be easier to test.
+A general rule of thumb is that if a component does less, then it will be easier to test.
+
+That being said
 
 
 ### Extract API calls
@@ -53,8 +55,8 @@ Sometimes a component might feature a complex method, with heavy calculations or
 
 The suggestion here is to extract this method and import it to the component. This way, you can test the method in isolation (if necessary), and you can mock the import when testing your component.
 
-## Write tests before components
+## Write tests before writing the component
 
 There's no way you write untestable code if you write tests before!
 
-In out [Crash Course](../guide/a-crash-course.md) you can see how writing tests before code leads to testable components, and also helps you test edge cases.
+Our [Crash Course](../guide/a-crash-course.md) offers an example of how writing tests before code leads to testable components. It also helps you detect and test edge cases.
