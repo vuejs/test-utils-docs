@@ -1,12 +1,12 @@
 ## Testing with Vue Router
 
-Vue Test Utils does not provide any special functions to assist with testing components that rely on Vue Router. This article will present two ways to test an application using Vue Router - using the real Vue Router, which is more production like but also may lead to complexity when testing larger applications, and by using a mock router, allowing for more fine grained control of the testing environment.
+Vue Test Utils does not provide any special functions to assist with testing components that rely on Vue Router. This article will present two ways to test an application using Vue Router - using the real Vue Router, which is more production like but also may lead to complexity when testing larger applications, and by using a mocked router, allowing for more fine grained control of the testing environment.
 
-Let's look at how you can test with a mock router, since that is generally the simplest way to test components dependening on Vue Router. Then we will take a look at what is involved if you'd like to use are real router.
+Let's look at how you can test with a mocked router, since that is generally the simplest way to test components dependening on Vue Router. Then we will take a look at what is involved if you'd like to use are real router.
 
-## Using a Mock Router
+## Using a Mocked Router
 
-You can use a mock router to avoid caring about the implementation details of Vue Router in your unit tests. Instead of using a real Vue Router instance, We can create our own minimal mock version which only implements the features we are interested in. We can do this using a combination of `jest.mock` (if you are using Jest), and `global.components`.
+You can use a mocked router to avoid caring about the implementation details of Vue Router in your unit tests. Instead of using a real Vue Router instance, We can create our own minimal mock version which only implements the features we are interested in. We can do this using a combination of `jest.mock` (if you are using Jest), and `global.components`.
 
 When we mock out a dependency, it's usually because we are not interested in testing that dependencies behavior. In this case, we do not want to test clicking `<router-link>` (which is really just an `<a>` tag) navigates to the correct page - of course it does! In this example, we might be interested in ensuring that the `<a>` has the correct `to` attribute, though. This may seem trivial, but in a larger application with much more complex routing, it can be worth ensuring links are correct (especially if they are highly dynamic).
 
@@ -94,7 +94,7 @@ Of course, you still need to test the entire system in an end-to-end manner with
 
 ## With a Real Router
 
-Now we have seen how to use a mock router, let's take a look at what is involved when using the real Vue Router. We will look at a test for a blogging application that uses Vue Router. The posts are listed on the `/posts` route. The components are as follows:
+Now we have seen how to use a mocked router, let's take a look at what is involved when using the real Vue Router. We will look at a test for a blogging application that uses Vue Router. The posts are listed on the `/posts` route. The components are as follows:
 
 ```js
 const App = {
@@ -219,7 +219,7 @@ test('routing', () => {
 })
 ```
 
-The test is now passing! It was quite a bit of work - this is one of the reasons it might make more sense to use a mock router for your tests.
+The test is now passing! It was quite a bit of work - this is one of the reasons it might make more sense to use a mocked router for your tests.
 
 Now the initial setup has been handled, let's navigate to `/posts` and make an assertion to ensure the routing is working as expected:
 
@@ -277,7 +277,7 @@ test('routing', async () => {
 })
 ```
 
-It *finally* passes. Great! This is all very manual, however - and this is for a tiny, trivial app. This is the reason using a mock router is a common approach when testing Vue components using Vue Test Utils.
+It *finally* passes. Great! This is all very manual, however - and this is for a tiny, trivial app. This is the reason using a mocked router is a common approach when testing Vue components using Vue Test Utils.
 
 ## Conclusion
 
