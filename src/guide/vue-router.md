@@ -2,7 +2,7 @@
 
 Vue Test Utils does not provide any special functions to assist with testing components that rely on Vue Router. This article will present two ways to test an application using Vue Router - using the real Vue Router, which is more production like but also may lead to complexity when testing larger applications, and by using a mock router, allowing for more fine grained control of the testing environment.
 
-Let's look at how you can test with a mock router, since that is generally the simplest way to test components dependening on Vue Router. Then we will take a look at what is involved if you'd like to use are real router. 
+Let's look at how you can test with a mock router, since that is generally the simplest way to test components dependening on Vue Router. Then we will take a look at what is involved if you'd like to use are real router.
 
 ## Using a Mock Router
 
@@ -94,7 +94,7 @@ Of course, you still need to test the entire system in an end-to-end manner with
 
 ## With a Real Router
 
-Now we have seen how to use am ock router, let's take a look at what is involved when using the real Vue Router. We will look at a test for a blogging application that uses Vue Router. The posts are listed on the `/posts` route. The components are as follows:
+Now we have seen how to use a mock router, let's take a look at what is involved when using the real Vue Router. We will look at a test for a blogging application that uses Vue Router. The posts are listed on the `/posts` route. The components are as follows:
 
 ```js
 const App = {
