@@ -38,7 +38,7 @@ test('displays message', () => {
 
 ## What Next?
 
-To see Vue Test Utils in action, [take the Crash Course]./a-crash-course/), where we build a simple Todo app using a test-first approach.
+To see Vue Test Utils in action, [take the Crash Course](./a-crash-course/), where we build a simple Todo app using a test-first approach.
 
 Docs are split into two main sections:
 
