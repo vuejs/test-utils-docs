@@ -64,7 +64,7 @@ Triggering events is the second most important action when working with forms an
 <button @click="submit">Submit</button>
 ```
 
-To trigger a click event, we can use the `trigger` event.
+To trigger a click event, we can use the `trigger` method.
 
 ```js
 test('trigger', async () => {
