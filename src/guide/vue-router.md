@@ -258,7 +258,7 @@ console.error node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:211
 Again, due to Vue Router 4's new asynchronous nature, we need to `await` the routing to complete before making any assertions. In this case, however, there is not `router.hasNavigated` hook we can await on. One alternative is to use the `flushPromises` function exported from Vue Test Utils:
 
 ```js {2,15}
-import { mount } from '@vue/test-utils'
+import { mount, flushPromises } from '@vue/test-utils'
 import { createRouter, createWebHistory } from 'vue-router'
 
 test('routing', async () => {
