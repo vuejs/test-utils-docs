@@ -1,12 +1,12 @@
 # A Crash Course
 
 Let's jump right into it, and learn Vue Test Utils (VTU) by building a simple Todo app, and writing tests as we go. This
- guide will cover:
+ guide will cover how to:
 
-- mounting components
-- finding elements
-- filling out forms
-- triggering events
+- Mount components
+- Find elements
+- Fill out forms
+- Trigger events
 
 ## Getting Started
 
