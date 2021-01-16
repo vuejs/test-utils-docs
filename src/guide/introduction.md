@@ -1,4 +1,4 @@
-## Vue Test Utils Documentation
+## Introduction
 
 Welcome to Vue Test Utils, the official testing utility library for Vue.js!
 
@@ -44,6 +44,8 @@ Docs are split into two main sections:
 
 * **Essentials**, to cover common uses cases you'll face when testing Vue components.
 * **Vue Test Utils in Depth**, to explore other advanced features of the library.
-- Alternatively, if you prefer to learn via video, there is [a number of lectures available here](https://www.youtube.com/playlist?list=PLC2LZCNWKL9ahK1IoODqYxKu5aA9T5IOA).
 
-Alternatively, you can explore the full [API](../api/).
+You can also explore the full [API](../api/).
+
+Alternatively, if you prefer to learn via video, there is [a number of lectures available here](https://www.youtube.com/playlist?list=PLC2LZCNWKL9ahK1IoODqYxKu5aA9T5IOA).
+
