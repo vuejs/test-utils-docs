@@ -1,4 +1,4 @@
-## Vue Test Utils Next Docs
+# DEPRECATED:
 
-Docs for VTU Next. Find the source code [here](https://github.com/vuejs/vue-test-utils-next/).
+Docs are ported to VTU-next main repo: https://github.com/vuejs/vue-test-utils-next/
 
